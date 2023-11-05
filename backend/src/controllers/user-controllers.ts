@@ -5,8 +5,8 @@ import { ObjectId } from "mongodb";
 import { JWT_SECRET } from "../config/config";
 import { handleCatchError } from "../helpers/controller-helpers";
 import { UserModel } from "../model/models";
-import { User } from "shared-library/declarations/types";
-import { FM } from "shared-library/declarations/constants";
+import { User } from "shared-library/src/declarations/types";
+import { FM } from "shared-library/src/declarations/constants";
 
 export const registerUser = async (req: Request, res: Response) => {
   try {

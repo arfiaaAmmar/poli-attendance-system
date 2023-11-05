@@ -17,9 +17,9 @@ import {
   initialFeedback,
   initialComplaint,
   FM,
-} from "shared-library/declarations/constants";
-import { Feedback, Complaint } from "shared-library/declarations/types";
+} from "shared-library/src/declarations/constants";
 import { useAllComplaints } from "../../hooks/hooks";
+import { Complaint, Feedback } from "shared-library/src/declarations/types";
 
 const ManageComplaint = () => {
   const [feedback, setFeedback] = useState<Feedback>(initialFeedback);

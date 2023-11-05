@@ -1,5 +1,5 @@
-import { API_BASE_URL, FM, HEADER_TYPE } from "shared-library/declarations/constants";
-import { Notification } from "shared-library/declarations/types";
+import { API_BASE_URL, FM, HEADER_TYPE } from "shared-library/src/declarations/constants.js";
+import { Notification } from "shared-library/src/declarations/types.js";
 
 export const getAllNotifications = async (userId: string) => {
   try {

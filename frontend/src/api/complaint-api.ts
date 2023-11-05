@@ -3,8 +3,8 @@ import {
   ENDPOINTS,
   FM,
   HEADER_TYPE,
-} from "shared-library/declarations/constants";
-import { Complaint } from "shared-library/declarations/types";
+} from "shared-library/src/declarations/constants.js";
+import { Complaint } from "shared-library/src/declarations/types.js";
 
 export const postComplaint = async (input: Complaint) => {
   try {

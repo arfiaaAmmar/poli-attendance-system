@@ -12,8 +12,8 @@ import {
 import { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { SidebarRoute } from "../../../../shared-library/declarations/types";
 import { getUserSessionData } from "../../api/user-api";
+import { SidebarRoute } from "shared-library/src/declarations/types";
 
 type SidebarProps = {
   items: SidebarRoute[];

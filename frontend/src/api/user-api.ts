@@ -1,10 +1,5 @@
-import {
-  API_BASE_URL,
-  ENDPOINTS,
-  FM,
-  HEADER_TYPE,
-} from "shared-library/declarations/constants";
-import { User, UserType } from "shared-library/declarations/types";
+import { API_BASE_URL, ENDPOINTS, FM, HEADER_TYPE } from "shared-library/src/declarations/constants.js";
+import { User } from "shared-library/src/declarations/types.js";
 
 export const registerUser = async (input: User) => {
   try {

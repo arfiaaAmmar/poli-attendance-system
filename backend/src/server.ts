@@ -30,7 +30,7 @@ import {
   getNotification,
   updateNotification,
 } from "./controllers/notification-controllers";
-import { ENDPOINTS } from "shared-library/declarations/constants";
+import { ENDPOINTS } from "shared-library/src/declarations/constants";
 import {
   uploadComplaintEvidence,
   uploadRegisterFormFiles,

@@ -1,5 +1,5 @@
 import { createContext, useMemo, useState } from "react";
-import { User } from "../../../shared-library/declarations/types";
+import { User } from "shared-library/src/declarations/types";
 
 interface AuthContextProps {
   user: User | null;

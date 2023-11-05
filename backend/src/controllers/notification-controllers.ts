@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { handleCatchError } from "../helpers/controller-helpers";
 import { NotificationModel } from "../model/models";
-import { INotification } from "../../../shared-library/declarations/types";
-import { FM } from "../../../shared-library/declarations/constants";
+import { INotification } from "shared-library/src/declarations/types";
+import { FM } from "shared-library/src/declarations/constants";
 
 export const postNotification = async (req: Request, res: Response) => {
   const input: INotification = req.body;

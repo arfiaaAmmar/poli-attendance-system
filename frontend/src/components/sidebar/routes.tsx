@@ -4,8 +4,8 @@ import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import PersonIcon from "@mui/icons-material/Person";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import ErrorIcon from "@mui/icons-material/Error";
-import { STUDENT_PAGES_TITLE, STUDENT_PAGES_PATH, ADMIN_PAGES_TITLE, ADMIN_PAGES_PATH } from "../../../../shared-library/declarations/constants";
-import { SidebarRoute } from "../../../../shared-library/declarations/types";
+import { SidebarRoute } from "shared-library/src/declarations/types";
+import { STUDENT_PAGES_TITLE, STUDENT_PAGES_PATH, ADMIN_PAGES_TITLE, ADMIN_PAGES_PATH } from "shared-library/src/declarations/constants";
 
 export const studentSidebarRoutes: SidebarRoute[] = [
   // {

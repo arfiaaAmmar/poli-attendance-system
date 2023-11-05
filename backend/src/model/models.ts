@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { Address, EmergencyContact, IComplaint, INotification, IRegisterForm, IUser, TenantInfo } from "shared-library/declarations/types";
+import { Address, EmergencyContact, IComplaint, INotification, IRegisterForm, IUser, TenantInfo } from "shared-library/src/declarations/types";
 
 const relationshipEnum = ["Ibu", "Bapa", "Saudara"];
 const raceEnum = ["Melayu", "Cina", "India", "Lain-lain"];

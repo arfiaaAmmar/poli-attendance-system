@@ -2,7 +2,6 @@ import { useState } from "react";
 import { postComplaint } from "../../api/complaint-api";
 import { downloadPDF } from "../../utils/pdfGenerate";
 import { isEmptyObject } from "../../helpers/shared-helpers";
-import { sampleComplaints } from "../../dummy/test-data";
 import {
   Button,
   TextField,
@@ -17,14 +16,10 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { Complaint, ComplaintType } from "shared-library/declarations/types";
-import {
-  FM,
-  initialComplaint,
-  initialFeedback,
-} from "shared-library/declarations/constants";
 import { getUserSessionData } from "../../api/user-api";
 import { useAllComplaints } from "../../hooks/hooks";
+import { initialComplaint, initialFeedback, FM } from "shared-library/src/declarations/constants.js";
+import { Complaint, ComplaintType } from "shared-library/src/declarations/types.js";
 
 const StudentComplaints = () => {
   const [complaint, setComplaint] = useState<Complaint>(initialComplaint);

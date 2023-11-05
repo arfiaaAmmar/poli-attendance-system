@@ -6,8 +6,8 @@ import { Box, Checkbox, CssBaseline, FormControlLabel, Typography } from "@mui/m
 import { getAuthorisedUser, loginUser } from "../api/user-api";
 import bgImage from '../assets/login_bg.png'
 import { AuthContext } from "../context/AuthContext";
-import { FM, USER_TYPE, ADMIN_PAGES_PATH, STUDENT_PAGES_PATH, ENDPOINTS } from "shared-library/declarations/constants";
-import { User } from "shared-library/declarations/types";
+import { FM, USER_TYPE, ADMIN_PAGES_PATH, STUDENT_PAGES_PATH, ENDPOINTS } from "shared-library/src/declarations/constants";
+import { User } from "shared-library/src/declarations/types";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");

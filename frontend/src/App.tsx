@@ -12,9 +12,10 @@ import ManageProfile from "./pages/shared/UserProfile";
 import Notifications from "./pages/shared/Notification";
 import StudentComplaints from "./pages/user/StudentComplaints";
 import StudentRegistrationForm from "./pages/user/student-register/StudentRegisterForm";
-import { ADMIN_PAGES_PATH, STUDENT_PAGES_PATH, USER_TYPE } from "../../shared-library/declarations/constants";
 import { AuthContext } from "./context/AuthContext";
 import { getUserSessionData } from "./api/user-api";
+import { USER_TYPE } from "shared-library/src/declarations/constants";
+import { ADMIN_PAGES_PATH, STUDENT_PAGES_PATH } from "shared-library/src/declarations/constants";
 
 function App(): JSX.Element {
   const [sidebar, setSidebar] = useState(true);

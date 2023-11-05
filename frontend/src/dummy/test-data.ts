@@ -1,4 +1,4 @@
-import { Complaint, RegisterForm, User } from "shared-library/declarations/types";
+import { Complaint, RegisterForm, User } from "shared-library/src/declarations/types.js";
 
 export const dummyUserData: User = {
   _id: "12345",

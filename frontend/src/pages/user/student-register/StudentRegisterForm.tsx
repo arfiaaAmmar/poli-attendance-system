@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { Button, Paper, Typography } from "@mui/material";
 import { isEmptyObject } from "../../../helpers/shared-helpers";
 import {
@@ -7,7 +7,7 @@ import {
   FormType,
   RegisterForm,
   TenantInfo,
-} from "shared-library/declarations/types";
+} from "shared-library/src/declarations/types.js";
 import {
   initialTenantInfo,
   initialEmergencyContact,
@@ -15,7 +15,7 @@ import {
   FM,
   initialRegisterForm,
   FORM_TYPE,
-} from "shared-library/declarations/constants";
+} from "shared-library/src/declarations/constants.js";
 import TenantInfoInput from "./TenantInfoInput";
 import EmergencyContactInput from "./EmergencyContactInput";
 import { postRegisterForm } from "frontend/src/api/registration-api";

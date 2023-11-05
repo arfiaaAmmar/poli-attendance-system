@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { ComplaintModel } from "../model/models";
 import { handleCatchError } from "../helpers/controller-helpers";
-import { FM } from "../../../shared-library/declarations/constants";
+import { FM } from "shared-library/src/declarations/constants";
 
 export const getComplaint = async (req: Request, res: Response) => {
   const { id } = req.params;

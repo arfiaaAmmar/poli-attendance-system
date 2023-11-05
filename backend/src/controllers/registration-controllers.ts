@@ -6,8 +6,8 @@ import {
   IRegisterForm,
   TenantInfo,
   UploadedFiles,
-} from "shared-library/declarations/types";
-import { FM } from "shared-library/declarations/constants";
+} from "shared-library/src/declarations/types";
+import { FM } from "shared-library/src/declarations/constants";
 
 export const postRegisterForm = async (req: Request, res: Response) => {
   try {

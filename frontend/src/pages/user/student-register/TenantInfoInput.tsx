@@ -1,7 +1,6 @@
-import { handleInputChange } from "frontend/src/helpers/shared-helpers";
 import { Dispatch, SetStateAction } from "react";
-import { GENDER, RACE } from "shared-library/declarations/constants";
-import { Gender, Race, TenantInfo } from "shared-library/declarations/types";
+import { GENDER, RACE } from "shared-library/src/declarations/constants.js";
+import { Gender, Race, TenantInfo } from "shared-library/src/declarations/types.js";
 
 type TenantInfoProp = {
   tenantInfo: TenantInfo,

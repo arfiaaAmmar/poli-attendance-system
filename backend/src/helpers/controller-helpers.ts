@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { FM } from "shared-library/declarations/constants";
+import { FM } from "shared-library/src/declarations/constants";
 
 
 export const handleCatchError = (res: Response, error: any) => {

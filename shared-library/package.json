@@ -4,6 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc && vite build"
+    "build": "tsc"
+  },
+  "dependencies": {
+    "mongoose": "^7.1.2"
+  },
+  "devDependencies": {
+    "typescript": "5.0.4"
   }
 }

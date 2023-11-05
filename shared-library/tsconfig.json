@@ -3,9 +3,14 @@
     "composite": true,
     "declaration": true,
     "declarationMap": true,
+    "module": "ESNext",
     "esModuleInterop": true,
+    "moduleResolution": "Node",
+    "target": "ESNext",
     "baseUrl": ".",
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "rootDir": "./src",
   },
   "exclude": ["./node_modules"]
+
 }

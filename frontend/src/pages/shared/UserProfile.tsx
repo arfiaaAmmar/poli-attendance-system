@@ -1,7 +1,6 @@
 import { Avatar, Paper, Typography } from "@mui/material";
-import dummyUserData from "../../dummy/test-data";
-import { ADMIN_PAGES_TITLE } from "../../../../shared-library/declarations/constants";
 import { useUserProfile } from "frontend/src/hooks/hooks";
+import { ADMIN_PAGES_TITLE } from "shared-library/src/declarations/constants";
 
 const UserProfile = () => {
   const { data, isLoading, error } = useUserProfile();
