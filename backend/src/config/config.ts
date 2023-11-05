@@ -2,10 +2,12 @@ import dotenv from "dotenv";
 import express from "express";
 import path from 'path';
 
-const envPath = path.resolve(__dirname, ".env");
-const env = dotenv.config({ path: envPath });
+// const envPath = path.resolve(__dirname, ".env");
+// const env = dotenv.config({ path: envPath });
 
-if (env.error) throw env.error;
+dotenv.config()
+
+// if (env.error) throw env.error;
 
 export const app = express();
 export const port = 8888;
