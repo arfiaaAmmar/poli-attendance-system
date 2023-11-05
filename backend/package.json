@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "start": "nodemon --exec ts-node src/server.ts",
-    "build": "npx tsc && mkdir -p dist/functions && cp src/functions/* dist/functions/",
+    "build": "tsc",
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
