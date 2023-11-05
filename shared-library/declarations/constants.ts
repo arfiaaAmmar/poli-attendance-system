@@ -7,7 +7,10 @@ import {
   TenantInfo,
 } from "./types";
 
-export const API_BASE_URL = "http://localhost:8888";
+// For deployment
+export const API_BASE_URL = "https://poli-attendance-system.onrender.com"
+// For development
+// export const API_BASE_URL = "http://localhost:8888";
 export const HEADER_TYPE = { "Content-Type": "application/json" } as const;
 
 export const FORM_TYPE = {
