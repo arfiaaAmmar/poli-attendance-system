@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "baseUrl": "."
+  },
+  "paths": {
+    "shared-library/*": ["./shared-library/**/*.ts"]
+  }, 
+  "exclude": ["./node_modules"],
+}
