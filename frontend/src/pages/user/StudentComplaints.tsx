@@ -18,8 +18,8 @@ import {
 } from "@mui/material";
 import { getUserSessionData } from "../../api/user-api";
 import { useAllComplaints } from "../../hooks/hooks";
-import { initialComplaint, initialFeedback, FM } from "shared-library/src/declarations/constants.js";
-import { Complaint, ComplaintType } from "shared-library/src/declarations/types.js";
+import { initialComplaint, initialFeedback, FM } from "shared-library/src/declarations/constants";
+import { Complaint, ComplaintType } from "shared-library/src/declarations/types";
 
 const StudentComplaints = () => {
   const [complaint, setComplaint] = useState<Complaint>(initialComplaint);

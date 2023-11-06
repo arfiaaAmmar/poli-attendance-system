@@ -1,6 +1,6 @@
-import { DeleteControllerItem } from "shared-library/src/declarations/types.js";
+import { DeleteControllerItem } from "shared-library/src/declarations/types";
 import { makeFirstLetterOfWordUpperCase } from "../helpers/shared-helpers";
-import { API_BASE_URL } from "shared-library/src/declarations/constants.js";
+import { API_BASE_URL } from "shared-library/src/declarations/constants";
 
 /**
  * Handle delete item

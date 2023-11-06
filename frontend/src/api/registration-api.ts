@@ -3,13 +3,13 @@ import {
   ENDPOINTS,
   FM,
   HEADER_TYPE,
-} from "shared-library/src/declarations/constants.js";
+} from "shared-library/src/declarations/constants";
 import {
   EmergencyContact,
   FormType,
   RegisterForm,
   TenantInfo,
-} from "shared-library/src/declarations/types.js";
+} from "shared-library/src/declarations/types";
 
 export const getAllRegistrationForms = async () => {
   try {

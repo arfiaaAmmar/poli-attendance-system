@@ -71,10 +71,10 @@ app.post(
   ]),
   postRegisterForm
 ); // Passed test
-app.get(ENDPOINTS.getAllRegisterForms, getAllRegisterForms); // Not Passed test
-app.get(ENDPOINTS.getRegisterForm, getRegisterForm); // Not Passed test
-app.patch(ENDPOINTS.updateRegisterForm, updateRegisterForm); // Not Passed test
-app.delete(ENDPOINTS.deleteRegisterForm, deleteRegisterForm); // Not Passed test
+app.get(ENDPOINTS.getAllRegisterForms, getAllRegisterForms); // Passed test
+app.get(ENDPOINTS.getRegisterForm, getRegisterForm); // Passed test
+app.patch(ENDPOINTS.updateRegisterForm, updateRegisterForm); // Passed test
+app.delete(ENDPOINTS.deleteRegisterForm, deleteRegisterForm); // Passed test
 
 // Complaints
 app.post(

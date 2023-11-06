@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import { RELATIONSHIP } from "shared-library/src/declarations/constants.js";
-import { EmergencyContact, Relationship } from "shared-library/src/declarations/types.js";
+import { RELATIONSHIP } from "shared-library/src/declarations/constants";
+import { EmergencyContact, Relationship } from "shared-library/src/declarations/types";
 
 type EmergencyContactProp = {
   data: EmergencyContact,

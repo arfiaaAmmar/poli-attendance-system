@@ -7,7 +7,7 @@ import {
   FormType,
   RegisterForm,
   TenantInfo,
-} from "shared-library/src/declarations/types.js";
+} from "shared-library/src/declarations/types";
 import {
   initialTenantInfo,
   initialEmergencyContact,
@@ -15,7 +15,7 @@ import {
   FM,
   initialRegisterForm,
   FORM_TYPE,
-} from "shared-library/src/declarations/constants.js";
+} from "shared-library/src/declarations/constants";
 import TenantInfoInput from "./TenantInfoInput";
 import EmergencyContactInput from "./EmergencyContactInput";
 import { postRegisterForm } from "frontend/src/api/registration-api";

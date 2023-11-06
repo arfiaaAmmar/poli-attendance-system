@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
-import { GENDER, RACE } from "shared-library/src/declarations/constants.js";
-import { Gender, Race, TenantInfo } from "shared-library/src/declarations/types.js";
+import { GENDER, RACE } from "shared-library/src/declarations/constants";
+import { Gender, Race, TenantInfo } from "shared-library/src/declarations/types";
 
 type TenantInfoProp = {
   tenantInfo: TenantInfo,
