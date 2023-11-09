@@ -6,7 +6,7 @@
     "module": "ESNext",
     "esModuleInterop": true,
     "moduleResolution": "Node",
-    "target": "ESNext",
+    "target": "ES6",
     "baseUrl": ".",
     "jsx": "react-jsx",
     "rootDir": "./src",

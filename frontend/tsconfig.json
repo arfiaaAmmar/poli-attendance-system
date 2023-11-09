@@ -1,8 +1,7 @@
 {
   "extends": "../tsconfig.json",
-  // "baseUrl": "./",
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES6",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "outDir": "dist",
@@ -17,7 +16,9 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "declaration": true,
+    "rootDir": "./src"
   },
   "paths": {
     "shared-library/*": ["../shared-library/**/*.ts"]
