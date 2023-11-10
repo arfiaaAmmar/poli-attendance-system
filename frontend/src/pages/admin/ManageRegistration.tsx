@@ -26,7 +26,7 @@ const ManageRegisterForm = () => {
   const _getStudentRegistrationStatus = () => {};
 
   return (
-    <div className="p-8 h-full">
+    <div className="p-8 h-screen bg-yellow-50">
       <Typography variant="h5" className="mb-4">
         User List
       </Typography>

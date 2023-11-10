@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Document, ObjectId } from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 
 export type Race = "Melayu" | "Cina" | "India" | "Lain";
 export type Gender = "Lelaki" | "Perempuan";
@@ -141,7 +141,7 @@ export type NotificationForModel = Omit<Notification, "author">;
 
 export interface INotification extends NotificationForModel, Document {
   _id?: string;
-  author: ObjectId;
+  author: mongoose.Types.ObjectId;
 }
 
 export type DeleteControllerItem =

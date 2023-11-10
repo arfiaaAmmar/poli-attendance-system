@@ -42,6 +42,7 @@ export const USER_TYPE = {
 } as const;
 
 export const STUDENT_PAGES_TITLE = {
+  pendaftaranPelajar: "Pendaftaran Pelajar",
   pengurusanProfil: "Pengurusan Profil",
   borangPendaftaranMasuk: "Borang Pendaftaran Masuk",
   borangPendaftaranKeluar: "Borang Pendaftaran Keluar",
@@ -52,6 +53,7 @@ export const STUDENT_PAGES_TITLE = {
 } as const;
 
 export const STUDENT_PAGES_PATH = {
+  pendaftaranPelajar: "/pelajar/pendaftaran",
   pengurusanProfil: "/pelajar/pengurusan-profil",
   borangPendaftaran: "/pelajar/borang-pendaftaran",
   borangPendaftaranMasuk: "/pelajar/borang-pendaftaran-masuk",
@@ -63,6 +65,7 @@ export const STUDENT_PAGES_PATH = {
 } as const;
 
 export const ADMIN_PAGES_TITLE = {
+  pendaftaranPenyelia: "Pendaftaran Penyelia",
   pengurusanProfil: "Pengurusan Profil",
   pengurusanPendaftaran: "Pengurusan Pendaftaran",
   pendaftaranBaru: "Pendaftaran Baru",
@@ -74,6 +77,7 @@ export const ADMIN_PAGES_TITLE = {
 } as const;
 
 export const ADMIN_PAGES_PATH = {
+  pendaftaranPenyelia: "/penyelia/pendaftaran",
   pengurusanProfil: "/penyelia/pengurusan-profil",
   pengurusanPendaftaran: "/penyelia/pengurusan-pendaftaran",
   pendaftaranBaru: "/penyelia/pengurusan-pendaftaran/pendaftaran-baru",
@@ -118,6 +122,7 @@ export const FM = {
   loggedInSuccessfully: "User logged in successfully",
   loginFailed: "Login failed",
   logoutWarning: "Are you sure you want to leave this page ?",
+  pleaseFillTheResponse: "Please fill the response",
   complaintAdded: "Complaint added successfully",
   complaintUpdateFailed: "Complaint failed to update",
   complaintNotFound: "Complaint not found",
@@ -137,16 +142,16 @@ export const FM = {
 } as const;
 
 export const initialComplaint: Complaint = {
-  email: "--",
-  name: "--",
-  title: "--",
-  phone: "--",
-  roomNo: "--",
-  blockNo: "--",
+  email: "",
+  name: "",
+  title: "",
+  phone: "",
+  roomNo: "",
+  blockNo: "",
   complaintType: "kerosakan fasiliti",
   elaboration: "",
   evidenceFile: null,
-  adminResponse: "--",
+  adminResponse: "",
   adminCheck: false,
   adminActionTaken: false,
   timestamp: null,

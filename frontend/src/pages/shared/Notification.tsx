@@ -15,7 +15,7 @@ const Notifications = () => {
           <Paper
             elevation={3}
             key={notification._id}
-            className="p-4 mb-4 rounded-md bg-gray-100"
+            className="p-4 mb-4 rounded-md bg-gray-100 "
           >
             <Typography variant="h6" className="text-lg">
               {notification.title}
@@ -54,7 +54,7 @@ const Notifications = () => {
   };
 
   return (
-    <Paper className="p-4 bg-white shadow-md rounded-lg">
+    <Paper className="p-4 bg-yellow-50 shadow-md rounded-lg">
       <Typography variant="h5" className="text-xl mb-4">
         Notifikasi
       </Typography>

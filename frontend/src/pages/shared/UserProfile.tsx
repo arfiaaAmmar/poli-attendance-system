@@ -6,7 +6,7 @@ const UserProfile = () => {
   const { data, isLoading, error } = useUserProfile();
 
   return (
-    <Paper className="p-4 bg-white shadow-md rounded-lg">
+    <Paper className="p-4 shadow-md h-screen rounded-lg bg-yellow-50">
       <Typography variant="h5" className="text-xl mb-4">
         {ADMIN_PAGES_TITLE.pengurusanProfil}
       </Typography>

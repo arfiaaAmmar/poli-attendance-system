@@ -1,18 +1,38 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect, useContext } from "react";
+import {
+  useState,
+  useEffect,
+  useContext,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { Box, Checkbox, CssBaseline, FormControlLabel, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Checkbox,
+  CssBaseline,
+  FormControlLabel,
+  Typography,
+} from "@mui/material";
 import { getAuthorisedUser, loginUser } from "../api/user-api";
-import bgImage from '../assets/login_bg.png'
+import bgImage from "../assets/login_bg.png";
 import { AuthContext } from "../context/AuthContext";
-import { FM, USER_TYPE, ADMIN_PAGES_PATH, STUDENT_PAGES_PATH, ENDPOINTS } from "shared-library/src/declarations/constants";
-import { User } from "shared-library/src/declarations/types";
+import {
+  FM,
+  USER_TYPE,
+  ADMIN_PAGES_PATH,
+  STUDENT_PAGES_PATH,
+  ENDPOINTS,
+} from "shared-library/src/declarations/constants";
+import { User, UserType } from "shared-library/src/declarations/types";
 
-const Login = () => {
+export const Login = () => {
+  const [loginType, setLoginType] = useState("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [rememberMe, setRememberMe] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const { setUser, setIsLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -31,10 +51,10 @@ const Login = () => {
     try {
       await loginUser(email, password, rememberMe);
       const data: User = await getAuthorisedUser();
-      console.log('loginUser', loginUser)
-      console.log('data', data)
+      console.log("loginUser", loginUser);
+      console.log("data", data);
       setUser(data);
-      setIsLoggedIn(true)
+      setIsLoggedIn(true);
       if (data?.userType === USER_TYPE.penyelia) {
         navigate(ADMIN_PAGES_PATH.pengurusanProfil);
       }
@@ -43,7 +63,7 @@ const Login = () => {
       }
     } catch (error: any) {
       console.error(FM.loginFailed, error);
-      console.log(error)
+      console.log(error);
       setError(FM.loginFailed);
     }
   };
@@ -87,49 +107,103 @@ const Login = () => {
         </div>
       </div>
       <CssBaseline />
-      <div className="w-2/5 h-max text-center bg-neutral-100 rounded-md p-6 mx-auto my-40 bg-opacity-50 backdrop-blur-0">
-        <input
-          required
-          placeholder="Email Address"
-          onChange={(e: any) => setEmail(e.target.value)}
-          name="email"
-          className="rounded-md px-2 py-1 block my-2 w-full"
-          autoComplete="email"
-          autoFocus
-        />
-        <input
-          required
-          name="password"
-          placeholder="Password"
-          type="password"
-          className="rounded-md px-2 py-1 block my-2 w-full"
-          onChange={(e: any) => setPassword(e.target.value)}
-          autoComplete="current-password"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              value="remember"
-              color="primary"
-              checked={rememberMe}
-              onChange={() => setRememberMe(!rememberMe)}
+      <div className="w-3/5 h-max text-center bg-neutral-100 rounded-md p-6 mx-auto my-40 bg-opacity-50 backdrop-blur-0">
+        <p className="font-bold text-3xl">
+          Polytechnic Technology Hostal (PiTech)
+        </p>
+        {loginType === "" ? (
+          <>
+            <div className="flex gap-4 justify-center mt-8">
+              <div
+                className="bg-white rounded-lg p-4 cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out"
+                onClick={() => setLoginType(USER_TYPE.pelajar)}
+              >
+                <p className="font-bold text-lg">PELAJAR KAMSIS</p>
+                <img
+                  src="https://logowik.com/content/uploads/images/student5651.jpg"
+                  alt=""
+                  className="w-40 h-40 object-contain hover:cursor-pointer"
+                />
+              </div>
+              <div
+                className="bg-white rounded-lg p-4 cursor-pointer transform hover:scale-105 transition duration-300 ease-in-out"
+                onClick={() => setLoginType(USER_TYPE.penyelia)}
+              >
+                <p className="font-bold text-lg">PENYELIA KAMSIS</p>
+                <img
+                  src="https://cdn.vectorstock.com/i/preview-1x/35/93/admin-administration-people-icon-vector-47263593.jpg"
+                  alt=""
+                  className="w-40 h-40 object-contain hover:cursor-pointer"
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="text-2xl font-bold">
+              Daftar Masuk{" "}
+              {loginType.charAt(0).toUpperCase() + loginType.slice(1)}
+            </p>
+            <div className="w-3/5 mx-auto mt-12">
+              <input
+                required
+                placeholder="Email Address"
+                onChange={(e: any) => setEmail(e.target.value)}
+                name="email"
+                className="rounded-md px-2 py-1 block my-2 w-full"
+                autoComplete="email"
+                autoFocus
+              />
+              <input
+                required
+                name="password"
+                placeholder="Password"
+                type="password"
+                className="rounded-md px-2 py-1 block my-2 w-full"
+                onChange={(e: any) => setPassword(e.target.value)}
+                autoComplete="current-password"
+              />
+            </div>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  value="remember"
+                  color="primary"
+                  checked={rememberMe}
+                  onChange={() => setRememberMe(!rememberMe)}
+                />
+              }
+              label="Remember me"
             />
-          }
-          label="Remember me"
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          onClick={handleLogin}
-          sx={{
-            backgroundColor: "#E85969",
-            width: "80%",
-          }}
-        >
-          Login
-        </Button>
-        {error && <Typography sx={{ color: "red" }}>{error}</Typography>}
+            <div className="flex justify-center gap-4">
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                onClick={handleLogin}
+                sx={{
+                  backgroundColor: "#59e899",
+                  width: "80%",
+                }}
+              >
+                Login
+              </Button>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                onClick={() => setLoginType("")}
+                sx={{
+                  backgroundColor: "#E85969",
+                  width: "80%",
+                }}
+              >
+                Kembali
+              </Button>
+            </div>
+            {error && <Typography sx={{ color: "red" }}>{error}</Typography>}
+          </>
+        )}
       </div>
     </Box>
   );

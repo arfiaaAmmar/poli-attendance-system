@@ -87,7 +87,7 @@ export const updateComplaint = async (
 ) => {
   try {
     const response = await fetch(`${API_BASE_URL}/update-complaint/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: HEADER_TYPE,
       body: JSON.stringify(data),
     });
