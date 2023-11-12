@@ -5,10 +5,8 @@ export type Race = "Melayu" | "Cina" | "India" | "Lain";
 export type Gender = "Lelaki" | "Perempuan";
 export type Relationship = "Ibu Bapa" | "Ibu" | "Bapa" | "Saudara" | "Penjaga";
 export type UserType = "penyelia" | "pelajar";
-export type FormType = "keluar" | "masuk";
-export type ComplaintType =
-  | "kerosakan fasiliti"
-  | "disiplin pelajar";
+export type FormType = "default" | "keluar" | "masuk";
+export type ComplaintType = "default" | "kerosakan fasiliti" | "disiplin pelajar";
 
 export type Feedback = {
   success: string;
@@ -65,7 +63,7 @@ export type User = {
   gender: Gender;
   illness?: string;
   profilePicFile?: File | null;
-  profilePicFileName?: string
+  profilePicFileName?: string;
 };
 
 export type UserForModel = Omit<User, "profilePicFile">;
@@ -126,7 +124,11 @@ export interface IComplaint extends ComplaintForModel, Document {
 
 export type Notification = {
   _id?: string;
-  author: {
+  sender: {
+    _id?: string;
+    name: string;
+  };
+  receiver: {
     _id?: string;
     name: string;
   };
@@ -137,11 +139,12 @@ export type Notification = {
   timestamp: number | null;
 };
 
-export type NotificationForModel = Omit<Notification, "author">;
+export type NotificationForModel = Omit<Notification, "sender" | 'receiver'>;
 
 export interface INotification extends NotificationForModel, Document {
   _id?: string;
-  author: mongoose.Types.ObjectId;
+  sender: mongoose.Types.ObjectId;
+  receiver: mongoose.Types.ObjectId;
 }
 
 export type DeleteControllerItem =

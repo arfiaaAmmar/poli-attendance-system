@@ -12,9 +12,16 @@ export const API_BASE_URL = "http://localhost:8888"; // For dev
 export const HEADER_TYPE = { "Content-Type": "application/json" } as const;
 
 export const FORM_TYPE = {
+  default: "default",
   keluar: "keluar",
   masuk: "masuk",
-} as const
+} as const;
+
+export const COMPLAINT_TYPE = {
+  default: "default",
+  kerosakanFasiliti: "kerosakan fasiliti",
+  disiplinPelajar: "disiplin pelajar",
+} as const;
 
 export const RELATIONSHIP = {
   ibu: "Ibu",
@@ -42,29 +49,33 @@ export const USER_TYPE = {
 } as const;
 
 export const STUDENT_PAGES_TITLE = {
+  halamanUtama: "Halaman Utama",
   pendaftaranPelajar: "Pendaftaran Pelajar",
   pengurusanProfil: "Pengurusan Profil",
+  borangPendaftaran: "Borang Pendaftaran",
   borangPendaftaranMasuk: "Borang Pendaftaran Masuk",
   borangPendaftaranKeluar: "Borang Pendaftaran Keluar",
   aduanPelajar: "Aduan Pelajar",
   kerosakanFasiliti: "Kerosakan Fasiliti dan Bilik",
-  aduanDisiplin: "Aduan Disiplin Pelajar",
+  disiplinPelajar: "Masalah Disiplin Pelajar",
   notifikasi: "Notifikasi",
 } as const;
 
 export const STUDENT_PAGES_PATH = {
+  halamanUtama: "/pelajar/halaman-utama",
   pendaftaranPelajar: "/pelajar/pendaftaran",
   pengurusanProfil: "/pelajar/pengurusan-profil",
   borangPendaftaran: "/pelajar/borang-pendaftaran",
   borangPendaftaranMasuk: "/pelajar/borang-pendaftaran-masuk",
-  borangPendaftaranKeluar: "/pelajar/borang-pendaftaran-keluar-",
+  borangPendaftaranKeluar: "/pelajar/borang-pendaftaran-keluar",
   aduanPelajar: "/pelajar/aduan",
   kerosakanFasiliti: "/pelajar/aduan/kerosakan-fasiliti",
-  aduanDisiplin: "/pelajar/aduan/disiplin-pelajar",
+  disiplinPelajar: "/pelajar/aduan/disiplin-pelajar",
   notifikasi: "/pelajar/notifikasi",
 } as const;
 
 export const ADMIN_PAGES_TITLE = {
+  halamanUtama: "Halaman Utama",
   pendaftaranPenyelia: "Pendaftaran Penyelia",
   pengurusanProfil: "Pengurusan Profil",
   pengurusanPendaftaran: "Pengurusan Pendaftaran",
@@ -77,6 +88,7 @@ export const ADMIN_PAGES_TITLE = {
 } as const;
 
 export const ADMIN_PAGES_PATH = {
+  halamanUtama: "/penyelia/halaman-utama",
   pendaftaranPenyelia: "/penyelia/pendaftaran",
   pengurusanProfil: "/penyelia/pengurusan-profil",
   pengurusanPendaftaran: "/penyelia/pengurusan-pendaftaran",

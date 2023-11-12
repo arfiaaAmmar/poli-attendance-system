@@ -118,8 +118,12 @@ const complaintSchema = new Schema<IComplaint>({
 });
 
 const notificationSchema = new Schema<INotification>({
-  title: String,
-  author: {
+  sender: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  receiver: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -128,6 +132,7 @@ const notificationSchema = new Schema<INotification>({
     type: String,
     enum: userTypeEnum,
   },
+  title: String,
   remarks: String,
   isRead: Boolean,
   timestamp: Number,

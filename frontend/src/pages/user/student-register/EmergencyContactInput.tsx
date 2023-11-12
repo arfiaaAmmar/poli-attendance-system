@@ -1,67 +1,66 @@
 import { Dispatch, SetStateAction } from "react";
 import { RELATIONSHIP } from "shared-library/src/declarations/constants";
-import { EmergencyContact, Relationship } from "shared-library/src/declarations/types";
+import {
+  EmergencyContact,
+  Relationship,
+} from "shared-library/src/declarations/types";
 
 type EmergencyContactProp = {
-  data: EmergencyContact,
+  data: EmergencyContact;
   setData: Dispatch<SetStateAction<EmergencyContact>>;
-}
+};
 
-const EmergencyContactInput = ({
-  data,
-  setData,
-}:EmergencyContactProp) => {
-
+const EmergencyContactInput = ({ data, setData }: EmergencyContactProp) => {
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Emergency Contact Name
-        </label>
-        <input
-          type="text"
-          name="emergencyContact.name"
-          value={data?.name!}
-          onChange={(e) => setData({ ...data, name: e.target.value })}
-          className="mt-1 p-2 border rounded w-full"
-        />
+    <div className="flex gap-4 w-full">
+      <div className="w-2/5">
+        <div className="mb-4 flex gap-2">
+          <label className="block w-1/3 font-medium text-gray-700">
+            Emergency Contact Name
+          </label>
+          <input
+            type="text"
+            name="emergencyContact.name"
+            value={data?.name!}
+            onChange={(e) => setData({ ...data, name: e.target.value })}
+            className="mt-1 p-2 border rounded w-full"
+          />
+        </div>
+        <div className="mb-4 flex gap-2">
+          <label className="block w-1/3 font-medium text-gray-700">
+            Emergency Contact Phone
+          </label>
+          <input
+            type="text"
+            name="emergencyContact.phone"
+            value={data?.phone!}
+            onChange={(e) => setData({ ...data, phone: e.target.value })}
+            className="mt-1 p-2 border rounded w-full"
+          />
+        </div>
+        <div className="mb-4 flex gap-2">
+          <label className="block w-1/3 font-medium text-gray-700">
+            Relationship
+          </label>
+          <select
+            name="emergencyContact.relationship"
+            value={data?.relationship!}
+            onChange={(e) =>
+              setData({ ...data, relationship: e.target.value as Relationship })
+            }
+            className="mt-1 p-2 border rounded w-full"
+          >
+            <option value={RELATIONSHIP.bapa}>Bapa</option>
+            <option value={RELATIONSHIP.ibu}>Ibu</option>
+            <option value={RELATIONSHIP.adikBeradik}>Adik Beradik</option>
+            <option value={RELATIONSHIP.penjaga}>Penjaga</option>
+          </select>
+        </div>
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Emergency Contact Phone
-        </label>
-        <input
-          type="text"
-          name="emergencyContact.phone"
-          value={data?.phone!}
-          onChange={(e) => setData({ ...data, phone: e.target.value })}
-          className="mt-1 p-2 border rounded w-full"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-          Relationship
-        </label>
-        <select
-          name="emergencyContact.relationship"
-          value={data?.relationship!}
-          onChange={(e) =>
-            setData({ ...data, relationship: e.target.value as Relationship })
-          }
-          className="mt-1 p-2 border rounded w-full"
-        >
-          <option value={RELATIONSHIP.bapa}>Bapa</option>
-          <option value={RELATIONSHIP.ibu}>Ibu</option>
-          <option value={RELATIONSHIP.adikBeradik}>Adik Beradik</option>
-          <option value={RELATIONSHIP.penjaga}>Penjaga</option>
-        </select>
-      </div>
-
-      <div>
+      <div className="w-3/5">
         <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block font-medium text-gray-700">
             Emergency Contact Address
           </label>
         </div>

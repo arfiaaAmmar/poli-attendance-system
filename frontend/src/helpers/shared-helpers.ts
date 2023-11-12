@@ -49,7 +49,7 @@ export const handleFetchResponse = async (response: Response) => {
   return response.json();
 };
 
-export const makeFirstLetterOfWordUpperCase = (txt: string) => {
+export const firstLetterUppercase = (txt: string) => {
   return txt.charAt(0).toUpperCase() + txt.slice(1);
 };
 

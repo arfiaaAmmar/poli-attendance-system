@@ -27,9 +27,10 @@ import {
   ENDPOINTS,
 } from "shared-library/src/declarations/constants";
 import { User, UserType } from "shared-library/src/declarations/types";
+import { firstLetterUppercase } from "../helpers/shared-helpers.js";
 
 export const Login = () => {
-  const [loginType, setLoginType] = useState('');
+  const [loginType, setLoginType] = useState("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -141,8 +142,7 @@ export const Login = () => {
         ) : (
           <>
             <p className="text-2xl font-bold">
-              Daftar Masuk{" "}
-              {loginType.charAt(0).toUpperCase() + loginType.slice(1)}
+              Daftar Masuk {firstLetterUppercase(loginType)}
             </p>
             <div className="w-3/5 mx-auto mt-12">
               <input

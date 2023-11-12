@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Paper, Typography } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { isEmptyObject } from "../../../helpers/shared-helpers";
 import {
   EmergencyContact,
@@ -15,24 +15,32 @@ import {
   FM,
   initialRegisterForm,
   FORM_TYPE,
+  STUDENT_PAGES_PATH,
 } from "shared-library/src/declarations/constants";
-import TenantInfoInput from "./TenantInfoInput";
-import EmergencyContactInput from "./EmergencyContactInput";
 import { postRegisterForm } from "frontend/src/api/registration-api";
+import CheckInForm from "./CheckInForm";
+import CheckOutForm from "./CheckOutForm";
+import { useNavigate } from "react-router-dom";
+import { firstLetterUppercase } from "frontend/src/helpers/shared-helpers.js";
 
-const StudentRegisterForm = () => {
+type StudentRegisterFormProps = {
+  page: FormType;
+};
+
+const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
   const [feedback, setFeedback] = useState<Feedback>(initialFeedback);
   const [tenantInfo, setTenantInfo] = useState<TenantInfo>(initialTenantInfo);
   const [emergencyContact, setEmergencyContact] = useState<EmergencyContact>(
     initialEmergencyContact
   );
   const [fileUploaded, setFileUploaded] = useState(false);
+  const navigate = useNavigate();
   const [form, setForm] = useState<RegisterForm>({
     tenantInfo: tenantInfo,
     formType: FORM_TYPE.masuk,
-    roomNo: "1",
-    blockNo: "1",
-    resitNo: "123ABC",
+    roomNo: "",
+    blockNo: "",
+    resitNo: "",
     offerLetterFile: null,
     paymentReceiptFile: null,
     emergencyContact: emergencyContact,
@@ -75,115 +83,82 @@ const StudentRegisterForm = () => {
     }
   };
 
+  const renderForms = () => {
+    if (page === FORM_TYPE.default) {
+      return (
+        <div className="flex gap-4 justify-center mt-8 h-[80vh]">
+          <div
+            className="bg-white text-center rounded-lg p-4 cursor-pointer m-auto transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={() => {
+              navigate(STUDENT_PAGES_PATH.borangPendaftaranMasuk);
+            }}
+          >
+            <p className="font-bold text-lg">DAFTAR MASUK</p>
+            <img
+              src="https://logowik.com/content/uploads/images/student5651.jpg"
+              alt=""
+              className="w-80 h-80 object-contain hover:cursor-pointer"
+            />
+          </div>
+          <div
+            className="bg-white rounded-lg text-center p-4 cursor-pointer m-auto transform hover:scale-105 transition duration-300 ease-in-out"
+            onClick={() => {
+              navigate(STUDENT_PAGES_PATH.borangPendaftaranKeluar);
+            }}
+          >
+            <p className="font-bold text-lg">DAFTAR KELUAR</p>
+            <img
+              src="https://cdn.vectorstock.com/i/preview-1x/35/93/admin-administration-people-icon-vector-47263593.jpg"
+              alt=""
+              className="w-80 h-80 object-contain hover:cursor-pointer"
+            />
+          </div>
+        </div>
+      );
+    }
+    if (page === FORM_TYPE.masuk) {
+      return (
+        <CheckInForm
+          form={form}
+          tenantInfo={tenantInfo}
+          emergencyContact={emergencyContact}
+          fileUploaded={fileUploaded}
+          setForm={setForm}
+          setTenantInfo={setTenantInfo}
+          handleFileChange={handleFileChange}
+          setFileUploaded={setFileUploaded}
+          setEmergencyContact={setEmergencyContact}
+          handleSubmit={handleSubmit}
+        />
+      );
+    }
+    if (page === FORM_TYPE.keluar) {
+      return (
+        <CheckOutForm
+          form={form}
+          tenantInfo={tenantInfo}
+          emergencyContact={emergencyContact}
+          fileUploaded={fileUploaded}
+          setForm={setForm}
+          setTenantInfo={setTenantInfo}
+          handleFileChange={handleFileChange}
+          setFileUploaded={setFileUploaded}
+          setEmergencyContact={setEmergencyContact}
+          handleSubmit={handleSubmit}
+        />
+      );
+    }
+  };
+
   return (
     <Paper className="p-4 border rounded-md border-gray-300">
-      <Typography variant="h5" className="text-xl mb-4">
-        Student Registration Form
+      <Typography
+        variant="h5"
+        className="text-3xl text-white rounded-3xl font-semibold mb-4 bg-blue-800 p-2"
+      >
+        Student Registration Form {">"} Borang {firstLetterUppercase(page)}
       </Typography>
-      <form onSubmit={handleSubmit}>
-        <TenantInfoInput
-          tenantInfo={tenantInfo}
-          setTenantInfo={setTenantInfo}
-        />
-        <div className="mb-1">
-          <label className="block text-sm font-medium text-gray-700">
-            Race
-          </label>
-          <select
-            name="tenantInfo.race"
-            value={form.formType}
-            onChange={(e) =>
-              setForm({ ...form, formType: e.target.value as FormType })
-            }
-            className="mt-1 p-2 border rounded w-full"
-          >
-            <option value={FORM_TYPE.masuk}>Daftar Masuk</option>
-            <option value={FORM_TYPE.keluar}>Daftar Keluar</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Room No
-          </label>
-          <input
-            type="text"
-            name="roomNo"
-            value={form?.roomNo || ""!}
-            onChange={(e) => setForm({ ...form, roomNo: e.target.value })}
-            className="mt-1 p-2 border rounded w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Block No
-          </label>
-          <input
-            type="text"
-            name="blockNo"
-            value={form?.blockNo || ""!}
-            onChange={(e) => setForm({ ...form, blockNo: e.target.value })}
-            className="mt-1 p-2 border rounded w-full"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            Resit No
-          </label>
-          <input
-            type="text"
-            name="resitNo"
-            value={form?.resitNo || ""!}
-            onChange={(e) => setForm({ ...form, resitNo: e.target.value })}
-            className="mt-1 p-2 border rounded w-full"
-          />
-        </div>
-        <input
-          type="file"
-          accept="image/jpeg, application/pdf"
-          required
-          className="w-full mb-4"
-          onChange={handleFileChange}
-          multiple
-        />
-        <input
-          type="file"
-          accept="image/jpeg, application/pdf"
-          required
-          className="w-full mb-4"
-          onChange={handleFileChange}
-          multiple
-        />
-        {!fileUploaded && (
-          <p className="text-red-500">Please select at least one file.</p>
-        )}
-
-        <EmergencyContactInput
-          data={emergencyContact}
-          setData={setEmergencyContact}
-        />
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">
-            I agree to the terms and conditions
-          </label>
-          <input
-            type="checkbox"
-            name="tenantAgreement"
-            checked={form?.tenantAgreement!}
-            onChange={(e) =>
-              setForm({ ...form, tenantAgreement: e.target.checked })
-            }
-            className="mt-1 p-2 border rounded w-full"
-          />
-        </div>
-        <Button
-          variant="contained"
-          color="primary"
-          className="bg-blue-500 text-white p-2 rounded cursor-pointer"
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
-      </form>
+      {renderForms()}
     </Paper>
   );
 };

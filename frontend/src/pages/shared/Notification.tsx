@@ -22,7 +22,7 @@ const Notifications = () => {
             </div>
             <div className="w-8/12">
               <Typography className="mb-2 text-xl font-semibold">
-                {notification?.author?.name}
+                {notification?.sender?.name}
               </Typography>
               <Typography variant="h6" className="text-lg font-semibold">
                 {notification.title}

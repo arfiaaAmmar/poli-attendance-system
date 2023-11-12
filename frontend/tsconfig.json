@@ -23,7 +23,7 @@
   "paths": {
     "shared-library/*": ["../shared-library/**/*.ts"]
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["./src/**/*.ts", "src/context/register-form.tsx"],
   "exclude": ["./node_modules"],
   "references": [
     { "path": "./tsconfig.node.json" },

@@ -1,7 +1,7 @@
 import { createContext, useMemo, useState } from "react";
 import { User } from "shared-library/src/declarations/types";
 
-interface AuthContextProps {
+type AuthContextProps = {
   user: User | null;
   isLoggedIn: boolean | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;

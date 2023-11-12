@@ -3,7 +3,10 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Sidebar from "./components/sidebar/Sidebar";
 import { useContext, useEffect, useState } from "react";
-import { adminSidebarRoutes, studentSidebarRoutes } from "./components/sidebar/routes";
+import {
+  adminSidebarRoutes,
+  studentSidebarRoutes,
+} from "./components/sidebar/routes";
 import ManageRegisterForm from "./pages/admin/ManageRegistration";
 import ManageComplaint from "./pages/admin/ManageComplaint";
 import { IconButton } from "@mui/material";
@@ -14,18 +17,24 @@ import StudentComplaints from "./pages/user/StudentComplaints";
 import StudentRegistrationForm from "./pages/user/student-register/StudentRegisterForm";
 import { AuthContext } from "./context/AuthContext";
 import { getUserSessionData } from "./api/user-api";
-import { USER_TYPE } from "shared-library/src/declarations/constants";
-import { ADMIN_PAGES_PATH, STUDENT_PAGES_PATH } from "shared-library/src/declarations/constants";
+import {
+  COMPLAINT_TYPE,
+  FORM_TYPE,
+  USER_TYPE,
+  ADMIN_PAGES_PATH,
+  STUDENT_PAGES_PATH,
+} from "shared-library/src/declarations/constants";
+import HomePage from "./pages/shared/HomePage.js";
 
 function App(): JSX.Element {
   const [sidebar, setSidebar] = useState(true);
-  const { isLoggedIn } = useContext(AuthContext)
-  const user = getUserSessionData()
-  const userSession = sessionStorage.getItem("")
+  const { isLoggedIn } = useContext(AuthContext);
+  const user = getUserSessionData();
+  const userSession = sessionStorage.getItem("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if ( !userSession || !isLoggedIn) {
+    if (!userSession || !isLoggedIn) {
       navigate("/login");
     }
     if (user?.userType === USER_TYPE.penyelia) {
@@ -76,6 +85,8 @@ const AdminRoutes = ({
 
   const renderContent = () => {
     switch (location.pathname) {
+      case ADMIN_PAGES_PATH.halamanUtama:
+        return <HomePage />;
       case ADMIN_PAGES_PATH.pengurusanProfil:
         return <ManageProfile />;
       case ADMIN_PAGES_PATH.pengurusanPendaftaran:
@@ -91,7 +102,11 @@ const AdminRoutes = ({
 
   return (
     <div className="flex h-screen">
-      <Sidebar items={adminSidebarRoutes} sidebar={sidebar} setSidebar={setSidebar} />
+      <Sidebar
+        items={adminSidebarRoutes}
+        sidebar={sidebar}
+        setSidebar={setSidebar}
+      />
       <IconButton
         className={`absolute top-0 left-0 ${sidebar ? "hidden" : "visible"}`}
         onClick={() => setSidebar(true)}
@@ -115,12 +130,22 @@ const UserRoutes = ({ sidebar, setSidebar }: UserRoutesProps): JSX.Element => {
 
   const renderContent = () => {
     switch (location.pathname) {
+      case STUDENT_PAGES_PATH.halamanUtama:
+        return <HomePage />;
       case STUDENT_PAGES_PATH.pengurusanProfil:
         return <ManageProfile />;
       case STUDENT_PAGES_PATH.borangPendaftaran:
-        return <StudentRegistrationForm />;
+        return <StudentRegistrationForm page={FORM_TYPE.default} />;
+      case STUDENT_PAGES_PATH.borangPendaftaranMasuk:
+        return <StudentRegistrationForm page={FORM_TYPE.masuk} />;
+      case STUDENT_PAGES_PATH.borangPendaftaranKeluar:
+        return <StudentRegistrationForm page={FORM_TYPE.keluar} />;
       case STUDENT_PAGES_PATH.aduanPelajar:
-        return <StudentComplaints />;
+        return <StudentComplaints page={COMPLAINT_TYPE.default} />;
+      case STUDENT_PAGES_PATH.kerosakanFasiliti:
+        return <StudentComplaints page={COMPLAINT_TYPE.kerosakanFasiliti} />;
+      case STUDENT_PAGES_PATH.disiplinPelajar:
+        return <StudentComplaints page={COMPLAINT_TYPE.disiplinPelajar} />;
       case STUDENT_PAGES_PATH.notifikasi:
         return <Notifications />;
       default:

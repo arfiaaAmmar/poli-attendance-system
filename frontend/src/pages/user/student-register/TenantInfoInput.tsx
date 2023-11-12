@@ -1,17 +1,31 @@
 import { Dispatch, SetStateAction } from "react";
 import { GENDER, RACE } from "shared-library/src/declarations/constants";
-import { Gender, Race, TenantInfo } from "shared-library/src/declarations/types";
+import {
+  Gender,
+  Race,
+  TenantInfo,
+} from "shared-library/src/declarations/types";
+import { RegisterForm } from "shared-library/src/declarations/types.js";
 
 type TenantInfoProp = {
-  tenantInfo: TenantInfo,
-  setTenantInfo: Dispatch<SetStateAction<TenantInfo>>
-}
+  form: RegisterForm;
+  tenantInfo: TenantInfo;
+  setForm: Dispatch<SetStateAction<RegisterForm>>;
+  setTenantInfo: Dispatch<SetStateAction<TenantInfo>>;
+};
 
-const TenantInfoInput = ({ tenantInfo, setTenantInfo }: TenantInfoProp) => {
+const TenantInfoInput = ({
+  form,
+  tenantInfo,
+  setForm,
+  setTenantInfo,
+}: TenantInfoProp) => {
   return (
-    <div className="grid grid-cols-2 gap-4">
-      <div className="mb-1">
-        <label className="block text-sm font-medium text-gray-700">Name</label>
+    <>
+      <div className="mb-1 flex gap-2">
+        <label className="block text-sm font-medium text-gray-700">
+          Name Penuh
+        </label>
         <input
           type="text"
           name="tenantInfo.name"
@@ -22,21 +36,9 @@ const TenantInfoInput = ({ tenantInfo, setTenantInfo }: TenantInfoProp) => {
           className="mt-1 p-2 border rounded w-full"
         />
       </div>
-      <div className="mb-1">
-        <label className="block text-sm font-medium text-gray-700">NRIC</label>
-        <input
-          type="text"
-          name="tenantInfo.nric"
-          value={tenantInfo?.nric || ""}
-          onChange={(e) =>
-            setTenantInfo({ ...tenantInfo, nric: e.target.value })
-          }
-          className="mt-1 p-2 border rounded w-full"
-        />
-      </div>
-      <div className="mb-1">
+      <div className="mb-1 flex gap-2">
         <label className="block text-sm font-medium text-gray-700">
-          Matriculation No
+          No Matrik
         </label>
         <input
           type="text"
@@ -48,7 +50,43 @@ const TenantInfoInput = ({ tenantInfo, setTenantInfo }: TenantInfoProp) => {
           className="mt-1 p-2 border rounded w-full"
         />
       </div>
-      <div className="mb-1">
+      <div className="mb-4 flex gap-2">
+        <label className="block text-sm font-medium text-gray-700">
+          Room No
+        </label>
+        <input
+          type="text"
+          name="roomNo"
+          value={form?.roomNo || ""!}
+          onChange={(e) => setForm({ ...form, roomNo: e.target.value })}
+          className="mt-1 p-2 border rounded w-full"
+        />
+      </div>
+      <div className="mb-4 flex gap-2">
+        <label className="block text-sm font-medium text-gray-700">
+          Block No
+        </label>
+        <input
+          type="text"
+          name="blockNo"
+          value={form?.blockNo || ""!}
+          onChange={(e) => setForm({ ...form, blockNo: e.target.value })}
+          className="mt-1 p-2 border rounded w-full"
+        />
+      </div>
+      <div className="mb-4 flex gap-2">
+        <label className="block text-sm font-medium text-gray-700">
+          Resit No
+        </label>
+        <input
+          type="text"
+          name="resitNo"
+          value={form?.resitNo || ""!}
+          onChange={(e) => setForm({ ...form, resitNo: e.target.value })}
+          className="mt-1 p-2 border rounded w-full"
+        />
+      </div>
+      <div className="mb-1 flex gap-2">
         <label className="block text-sm font-medium text-gray-700">Phone</label>
         <input
           type="text"
@@ -60,7 +98,7 @@ const TenantInfoInput = ({ tenantInfo, setTenantInfo }: TenantInfoProp) => {
           className="mt-1 p-2 border rounded w-full"
         />
       </div>
-      <div className="mb-1">
+      <div className="mb-1 flex gap-2">
         <label className="block text-sm font-medium text-gray-700">Email</label>
         <input
           type="text"
@@ -72,7 +110,7 @@ const TenantInfoInput = ({ tenantInfo, setTenantInfo }: TenantInfoProp) => {
           className="mt-1 p-2 border rounded w-full"
         />
       </div>
-      <div className="mb-1">
+      <div className="mb-1 flex gap-2">
         <label className="block text-sm font-medium text-gray-700">
           Semester
         </label>
@@ -105,7 +143,7 @@ const TenantInfoInput = ({ tenantInfo, setTenantInfo }: TenantInfoProp) => {
             <option value={RACE.lainLain}>Lain-lain</option>
           </select>
         </div>
-        <div className="mb-1">
+        <div className="mb-1 flex gap-2">
           <label className="block text-sm font-medium text-gray-700">
             Gender
           </label>
@@ -122,7 +160,7 @@ const TenantInfoInput = ({ tenantInfo, setTenantInfo }: TenantInfoProp) => {
           </select>
         </div>
       </div>
-      <div className="mb-1">
+      <div className="mb-1 flex gap-2">
         <label className="block text-sm font-medium text-gray-700">
           Illness
         </label>
@@ -136,86 +174,84 @@ const TenantInfoInput = ({ tenantInfo, setTenantInfo }: TenantInfoProp) => {
           className="mt-1 p-2 border rounded w-full"
         />
       </div>
-      <div>
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-700">
-            Address
-          </label>
-        </div>
-        <div className="mb-1 col-span-2">
-          <input
-            type="text"
-            name="tenantInfo.address.street"
-            value={tenantInfo?.address.street || ""}
-            onChange={(e) =>
-              setTenantInfo({
-                ...tenantInfo,
-                address: {
-                  ...tenantInfo.address,
-                  street: e.target.value,
-                },
-              })
-            }
-            className="mt-1 p-2 border rounded w-full"
-            placeholder="Street"
-          />
-        </div>
-        <div className="mb-1 col-span-2">
-          <input
-            type="text"
-            name="tenantInfo.address.city"
-            value={tenantInfo?.address.city || ""}
-            onChange={(e) =>
-              setTenantInfo({
-                ...tenantInfo,
-                address: {
-                  ...tenantInfo.address,
-                  city: e.target.value,
-                },
-              })
-            }
-            className="mt-1 p-2 border rounded w-full"
-            placeholder="City"
-          />
-        </div>
-        <div className="mb-1 col-span-2">
-          <input
-            type="text"
-            name="tenantInfo.address.state"
-            value={tenantInfo?.address.state || ""}
-            onChange={(e) =>
-              setTenantInfo({
-                ...tenantInfo,
-                address: {
-                  ...tenantInfo.address,
-                  state: e.target.value,
-                },
-              })
-            }
-            className="mt-1 p-2 border rounded w-full"
-            placeholder="State"
-          />
-        </div>
-        <div className="mb-1 col-span-2">
-          <input
-            type="text"
-            name="tenantInfo.address.postalCode"
-            value={tenantInfo?.address.postalCode || ""}
-            onChange={(e) =>
-              setTenantInfo({
-                ...tenantInfo,
-                address: {
-                  ...tenantInfo.address,
-                  postalCode: e.target.value,
-                },
-              })
-            }
-            className="mt-1 p-2 border rounded w-full"
-            placeholder="Postal Code"
-          />
-        </div>
+      <div className="col-span-2">
+        <label className="block text-sm font-medium text-gray-700">
+          Address
+        </label>
       </div>
-    </div>
+      <div className="mb-1 col-span-2">
+        <input
+          type="text"
+          name="tenantInfo.address.street"
+          value={tenantInfo?.address.street || ""}
+          onChange={(e) =>
+            setTenantInfo({
+              ...tenantInfo,
+              address: {
+                ...tenantInfo.address,
+                street: e.target.value,
+              },
+            })
+          }
+          className="mt-1 p-2 border rounded w-full"
+          placeholder="Street"
+        />
+      </div>
+      <div className="mb-1 col-span-2">
+        <input
+          type="text"
+          name="tenantInfo.address.city"
+          value={tenantInfo?.address.city || ""}
+          onChange={(e) =>
+            setTenantInfo({
+              ...tenantInfo,
+              address: {
+                ...tenantInfo.address,
+                city: e.target.value,
+              },
+            })
+          }
+          className="mt-1 p-2 border rounded w-full"
+          placeholder="City"
+        />
+      </div>
+      <div className="mb-1 col-span-2">
+        <input
+          type="text"
+          name="tenantInfo.address.state"
+          value={tenantInfo?.address.state || ""}
+          onChange={(e) =>
+            setTenantInfo({
+              ...tenantInfo,
+              address: {
+                ...tenantInfo.address,
+                state: e.target.value,
+              },
+            })
+          }
+          className="mt-1 p-2 border rounded w-full"
+          placeholder="State"
+        />
+      </div>
+      <div className="mb-1 col-span-2">
+        <input
+          type="text"
+          name="tenantInfo.address.postalCode"
+          value={tenantInfo?.address.postalCode || ""}
+          onChange={(e) =>
+            setTenantInfo({
+              ...tenantInfo,
+              address: {
+                ...tenantInfo.address,
+                postalCode: e.target.value,
+              },
+            })
+          }
+          className="mt-1 p-2 border rounded w-full"
+          placeholder="Postal Code"
+        />
+      </div>
+    </>
   );
 };
 
