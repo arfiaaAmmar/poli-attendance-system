@@ -1,6 +1,6 @@
 import { timeStampFormatter } from "../../helpers/shared-helpers";
 import { useAllNotifications } from "../../hooks/hooks";
-import { Paper, Typography } from "@mui/material";
+import { Avatar, Paper, Typography } from "@mui/material";
 import { getUserSessionData } from "../../api/user-api";
 import { LoadingIndicator } from "../../components/LoadingIndicator";
 
@@ -15,26 +15,35 @@ const Notifications = () => {
           <Paper
             elevation={3}
             key={notification._id}
-            className="p-4 mb-4 rounded-md bg-gray-100 "
+            className="p-4 mb-4 rounded-md bg-gray-100 flex items-center"
           >
-            <Typography variant="h6" className="text-lg">
-              {notification.title}
-            </Typography>
-            <Typography className="mb-2">
-              Date: {timeStampFormatter(notification.timestamp).date}
-            </Typography>
-            <Typography className="mb-2">
-              Time: {timeStampFormatter(notification.timestamp).time}
-            </Typography>
-            <Typography className="mb-2">
-              Author: {notification?.author?.name}
-            </Typography>
-            <Typography className="mb-2">
-              Remarks: {notification.remarks}
-            </Typography>
-            <Typography className="mb-2">
-              Status: {notification.isRead ? "Read" : "Unread"}
-            </Typography>
+            <div className="w-2/12">
+              <Avatar className="m-auto" sx={{ width: 80, height: 80 }} />
+            </div>
+            <div className="w-8/12">
+              <Typography className="mb-2 text-xl font-semibold">
+                {notification?.author?.name}
+              </Typography>
+              <Typography variant="h6" className="text-lg font-semibold">
+                {notification.title}
+              </Typography>
+              <Typography className="mb-2">{notification.remarks}</Typography>
+            </div>
+            <div className="w-2/12 text-right">
+              <Typography className="mb-2 font-semibold">
+                {timeStampFormatter(notification.timestamp).date}
+              </Typography>
+              <Typography className="mb-2 font-semibold">
+                {timeStampFormatter(notification.timestamp).time}
+              </Typography>
+              <Typography className="mb-2 font-semibold">
+                {notification.isRead ? (
+                  <span className="text-green-500">Read</span>
+                ) : (
+                  <span className="text-red-500">Unread</span>
+                )}
+              </Typography>
+            </div>
           </Paper>
         ));
       case isLoading:
@@ -54,8 +63,11 @@ const Notifications = () => {
   };
 
   return (
-    <Paper className="p-4 bg-yellow-50 shadow-md rounded-lg">
-      <Typography variant="h5" className="text-xl mb-4">
+    <Paper className="p-4 h-screen bg-yellow-50 shadow-md rounded-lg">
+      <Typography
+        variant="h5"
+        className="text-4xl mb-4 mt-4 font-semibold bg-blue-800 text-white rounded-2xl p-2"
+      >
         Notifikasi
       </Typography>
       {renderNotifications()}

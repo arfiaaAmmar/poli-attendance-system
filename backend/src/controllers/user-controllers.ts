@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
 import { JWT_SECRET } from "../config/config";
 import { handleCatchError } from "../helpers/controller-helpers";
@@ -25,20 +25,28 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-
-export const login = async (req: Request, res: Response, next: NextFunction) => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const { email, password } = req.body as Pick<User, "email" | "password">;
+    const { email, password, userType } = req.body as Pick<
+      User,
+      "email" | "password" | "userType"
+    >;
     const user = await UserModel.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ message: FM.userNotFound });
+    if (!user) return res.status(401).json({ message: FM.userNotFound });
+
+    if (user.userType !== userType) {
+      return res.status(401).json({
+        message: "Anda menghantar kelayakan untuk jenis pengguna yang berbeza.",
+      });
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      return res.status(401).json({ message: FM.invalidEmailOrPassword });
-    }
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET!);
+    if (!passwordMatch) return res.status(401).json({ message: FM.invalidEmailOrPassword });
 
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET!);
     return res.json({ message: FM.loggedInSuccessfully, token });
   } catch (error) {
     handleCatchError(res, error);
@@ -46,7 +54,11 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 
-export const authoriseUser = async (req: Request, res: Response, next: NextFunction) => {
+export const authoriseUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
@@ -86,7 +98,6 @@ export const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-
 export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
 
@@ -102,4 +113,3 @@ export const deleteUser = async (req: Request, res: Response) => {
     handleCatchError(res, error);
   }
 };
-

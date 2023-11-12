@@ -29,7 +29,7 @@ import {
 import { User, UserType } from "shared-library/src/declarations/types";
 
 export const Login = () => {
-  const [loginType, setLoginType] = useState("");
+  const [loginType, setLoginType] = useState('');
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -49,7 +49,7 @@ export const Login = () => {
       return;
     }
     try {
-      await loginUser(email, password, rememberMe);
+      await loginUser(email, password, rememberMe, loginType);
       const data: User = await getAuthorisedUser();
       console.log("loginUser", loginUser);
       console.log("data", data);
@@ -64,7 +64,7 @@ export const Login = () => {
     } catch (error: any) {
       console.error(FM.loginFailed, error);
       console.log(error);
-      setError(FM.loginFailed);
+      setError(error);
     }
   };
 

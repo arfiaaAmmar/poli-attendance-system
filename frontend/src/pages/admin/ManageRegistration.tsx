@@ -27,8 +27,11 @@ const ManageRegisterForm = () => {
 
   return (
     <div className="p-8 h-screen bg-yellow-50">
-      <Typography variant="h5" className="mb-4">
-        User List
+      <Typography
+        variant="h5"
+        className="mb-4 bg-blue-800 text-white rounded-2xl p-2 text-4xl"
+      >
+        Pengurusan Pendaftaran
       </Typography>
       {registrationForms.isLoading ? (
         <LoadingIndicator />
@@ -37,15 +40,22 @@ const ManageRegisterForm = () => {
           <Tabs labels={labels} defaultTab={0} onTabChange={handleTabChange} />
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>Nama</TableCell>
-                <TableCell>No Matrik</TableCell>
-                <TableCell>NRIC</TableCell>
-                <TableCell>Semester</TableCell>
-                <TableCell>No Resit</TableCell>
-                <TableCell>No Bilik</TableCell>
-                <TableCell>Jenis</TableCell>
-                <TableCell>Date</TableCell>
+              <TableRow className="font-semibold">
+                <TableCell className="font-semibold text-lg">No</TableCell>
+                <TableCell className="font-semibold text-lg">Nama</TableCell>
+                <TableCell className="font-semibold text-lg">Matrik</TableCell>
+                <TableCell className="font-semibold text-lg">NRIC</TableCell>
+                <TableCell className="font-semibold text-lg">
+                  Semester
+                </TableCell>
+                <TableCell className="font-semibold text-lg">
+                  No Resit
+                </TableCell>
+                <TableCell className="font-semibold text-lg">
+                  No Bilik
+                </TableCell>
+                <TableCell className="font-semibold text-lg">Jenis</TableCell>
+                <TableCell className="font-semibold text-lg">Date</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -53,8 +63,9 @@ const ManageRegisterForm = () => {
                 ?.filter(
                   (form) => selectedTab === 0 || form.formType === "masuk"
                 )
-                .map((form) => (
+                .map((form, index) => (
                   <TableRow key={form?._id}>
+                    <TableCell>{index + 1}</TableCell>
                     <TableCell>{form?.tenantInfo?.name}</TableCell>
                     <TableCell>{form?.tenantInfo?.matrikNo}</TableCell>
                     <TableCell>{form?.tenantInfo?.nric}</TableCell>

@@ -7,7 +7,10 @@ const UserProfile = () => {
 
   return (
     <Paper className="p-4 shadow-md h-screen rounded-lg bg-yellow-50">
-      <Typography variant="h5" className="text-xl mb-4">
+      <Typography
+        variant="h5"
+        className="mb-4 bg-blue-800 text-white rounded-2xl p-2 text-4xl"
+      >
         {ADMIN_PAGES_TITLE.pengurusanProfil}
       </Typography>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

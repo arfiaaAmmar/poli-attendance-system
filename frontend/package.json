@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --build && vite build",
+    "build": "cd ../shared-library && yarn build && cd ../frontend && tsc && vite build",
     "build:shared-library": "cd ../shared-library && yarn build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"

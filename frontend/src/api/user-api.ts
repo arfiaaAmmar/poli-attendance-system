@@ -1,5 +1,10 @@
-import { API_BASE_URL, ENDPOINTS, FM, HEADER_TYPE } from "shared-library/src/declarations/constants";
-import { User } from "shared-library/src/declarations/types";
+import {
+  API_BASE_URL,
+  ENDPOINTS,
+  FM,
+  HEADER_TYPE,
+} from "shared-library/src/declarations/constants";
+import { User, UserType } from "shared-library/src/declarations/types";
 
 export const registerUser = async (input: User) => {
   try {
@@ -23,13 +28,14 @@ export const registerUser = async (input: User) => {
 export const loginUser = async (
   email: string,
   password: string,
-  rememberMe: boolean
+  rememberMe: boolean,
+  userType: string
 ) => {
   try {
     const response = await fetch(`${API_BASE_URL}${ENDPOINTS.login}`, {
       method: "POST",
       headers: HEADER_TYPE,
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, userType }),
     });
 
     const data = await response.json();
@@ -88,10 +94,8 @@ export const getAuthorisedUser = async () => {
   }
 };
 
-
 export const getUserSessionData = (): User => {
-  const userData =
-    sessionStorage.getItem("userData");
+  const userData = sessionStorage.getItem("userData");
   return JSON.parse(userData!);
 };
 

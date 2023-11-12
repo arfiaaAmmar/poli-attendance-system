@@ -7,14 +7,7 @@ import { FM } from "shared-library/src/declarations/constants";
 export const postNotification = async (req: Request, res: Response) => {
   const input: INotification = req.body;
   try {
-    await NotificationModel.create({
-      timestamp: input.timestamp,
-      author: input.author,
-      userType: input.userType,
-      title: input.title,
-      remarks: input.remarks,
-      isRead: input.isRead,
-    });
+    await NotificationModel.create({ ...input });
     res.status(201).json({ message: FM.notificationAdded });
   } catch (error) {
     handleCatchError(res, error);

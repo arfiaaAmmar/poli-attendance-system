@@ -56,7 +56,10 @@ const ManageComplaint = () => {
   if (currentPage === "default") {
     return (
       <div className="p-8 h-screen bg-yellow-50">
-        <Typography variant="h4" className="mb-4">
+        <Typography
+          variant="h4"
+          className="mb-4 bg-blue-800 text-white rounded-2xl p-2"
+        >
           Complaint Report
         </Typography>
         <Table>
@@ -223,7 +226,7 @@ const ManageComplaint = () => {
   if (currentPage === "adminResponse") {
     return (
       <div className="p-8 h-screen bg-yellow-50">
-        <Typography className="bg-blue-800 text-white text-lg">
+        <Typography className="bg-blue-800 text-white rounded-2xl p-2">
           <Link to={ADMIN_PAGES_PATH.pengurusanAduan}>Complaint Report</Link>{" "}
           {">"} Maklum Balas Aduan Pelajar
         </Typography>
