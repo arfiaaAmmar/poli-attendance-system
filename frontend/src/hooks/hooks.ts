@@ -2,7 +2,7 @@ import { getAllComplaints } from "../api/complaint-api";
 import { getAllNotifications } from "../api/notification-api";
 import { useDataFetching } from "../helpers/shared-helpers";
 import { getAllRegistrationForms } from "../api/registration-api";
-import { Complaint, Notification, RegisterForm, User } from "shared-library/src/declarations/types";
+import { Complaint, Notification, User, CheckInForm, CheckoutForm } from "shared-library/src/declarations/types";
 import { getAuthorisedUser, getUserSessionData } from "../api/user-api";
 
 export const useUserProfile = () => {
@@ -10,7 +10,7 @@ export const useUserProfile = () => {
 };
 
 export const useAllRegistrationForms = () => {
-  return useDataFetching<RegisterForm[]>(async () => await getAllRegistrationForms());
+  return useDataFetching<CheckInForm[]>(async () => await getAllRegistrationForms());
 }
 
 export const useAllComplaints = () => {

@@ -6,7 +6,10 @@ export type Gender = "Lelaki" | "Perempuan";
 export type Relationship = "Ibu Bapa" | "Ibu" | "Bapa" | "Saudara" | "Penjaga";
 export type UserType = "penyelia" | "pelajar";
 export type FormType = "default" | "keluar" | "masuk";
-export type ComplaintType = "default" | "kerosakan fasiliti" | "disiplin pelajar";
+export type ComplaintType =
+  | "default"
+  | "kerosakan fasiliti"
+  | "disiplin pelajar";
 
 export type Feedback = {
   success: string;
@@ -41,7 +44,7 @@ export type Address = {
   postalCode: string;
 };
 
-export type EmergencyContact = {
+export type Contact = {
   name: string;
   phone: string;
   relationship: Relationship;
@@ -73,29 +76,48 @@ export interface IUser extends UserForModel, Document {
   profilePicFileName: string;
 }
 
-export type RegisterForm = {
+export type CheckInForm = {
   _id?: string;
-  formType: FormType;
   tenantInfo: TenantInfo;
   roomNo: string;
   blockNo: string;
   resitNo: string;
-  offerLetterFile: File | null;
-  paymentReceiptFile: File | null;
-  emergencyContact: EmergencyContact;
+  formType: FormType;
+  offerLetterFile?: File | null;
+  paymentReceiptFile?: File | null;
+  emergencyContact: Contact;
   tenantAgreement: boolean;
   timestamp: number | null;
 };
 
-export type RegisterFormForModel = Omit<
-  RegisterForm,
-  "offerLetterFile" | "paymentReceiptFile"
+export type CheckInForModel = Omit<
+  CheckInForm,
+  "offerLetterFile" | "paymentReceiptFile" | "checkoutEvidenceFile"
 >;
 
-export interface IRegisterForm extends RegisterFormForModel, Document {
+export interface ICheckInForm extends CheckInForModel, Document {
   _id?: string;
-  offerLetterFileName: string;
-  paymentReceiptFileName: string;
+  offerLetterFileName?: string;
+  paymentReceiptFileName?: string;
+}
+
+export type CheckoutForm = {
+  _id?: string;
+  name: string;
+  phone: string;
+  roomNo: string;
+  blockNo: string;
+  formType: FormType;
+  checkoutEvidenceFile?: File | null;
+  checkoutReason?: string;
+  timestamp: number | null;
+};
+
+export type CheckOutForModel = Omit<CheckoutForm, 'checkoutEvidenceFile'>
+
+export interface ICheckOutForm extends CheckOutForModel, Document {
+  _id?: string;
+  checkoutEvidenceFileName: string
 }
 
 export type Complaint = {
@@ -139,7 +161,7 @@ export type Notification = {
   timestamp: number | null;
 };
 
-export type NotificationForModel = Omit<Notification, "sender" | 'receiver'>;
+export type NotificationForModel = Omit<Notification, "sender" | "receiver">;
 
 export interface INotification extends NotificationForModel, Document {
   _id?: string;
@@ -157,6 +179,7 @@ export type NestedState = {
   [key: string]: any;
 };
 
+export type UploadedFile = Record<string, Express.Multer.File>
 export type UploadedFiles = Record<string, Express.Multer.File[]>;
 
 export type FormState<T> = Record<

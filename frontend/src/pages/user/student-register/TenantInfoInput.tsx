@@ -1,16 +1,16 @@
 import { Dispatch, SetStateAction } from "react";
 import { GENDER, RACE } from "shared-library/src/declarations/constants";
 import {
+  CheckInForm,
   Gender,
   Race,
   TenantInfo,
 } from "shared-library/src/declarations/types";
-import { RegisterForm } from "shared-library/src/declarations/types.js";
 
 type TenantInfoProp = {
-  form: RegisterForm;
+  form: CheckInForm;
   tenantInfo: TenantInfo;
-  setForm: Dispatch<SetStateAction<RegisterForm>>;
+  setForm: Dispatch<SetStateAction<CheckInForm>>;
   setTenantInfo: Dispatch<SetStateAction<TenantInfo>>;
 };
 

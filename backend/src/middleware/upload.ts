@@ -4,12 +4,12 @@ import { Request } from "express-jwt";
 
 const uploadDate = new Date().toISOString().slice(0, 10);
 
-const profilePicStorage = multer.diskStorage({
+const checkOutEvidenceStorage = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb) => {
-    cb(null, "./uploads/profilePic/");
+    cb(null, "./uploads/checkoutEvidence/");
   },
   filename: (req: Request, file: Express.Multer.File, cb) => {
-    const fileName = `profilePic-${uploadDate}-${uuidv4()}`;
+    const fileName = `checkout-evidence-${uploadDate}-${uuidv4()}`;
     cb(null, fileName);
   },
 });
@@ -37,7 +37,7 @@ const registerFormFilesStorage = multer.diskStorage({
 
 
 // Create Multer instances for RegisterFormFiles and offerLetter
-export const uploadProfilePic = multer({ storage: profilePicStorage });
+export const uploadCheckOutEvidence = multer({ storage: checkOutEvidenceStorage });
 export const uploadComplaintEvidence = multer({
   storage: complaintEvidenceStorage,
 });

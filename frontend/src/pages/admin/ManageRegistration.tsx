@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import Tabs from "../../components/Tabs";
-import { initialFeedback } from "shared-library/src/declarations/constants";
+import { FORM_TYPE, initialFeedback } from "shared-library/src/declarations/constants";
 import { useAllRegistrationForms } from "../../hooks/hooks";
 import { LoadingIndicator } from "../../components/LoadingIndicator";
 
@@ -61,7 +61,7 @@ const ManageRegisterForm = () => {
             <TableBody>
               {registrationForms?.data
                 ?.filter(
-                  (form) => selectedTab === 0 || form.formType === "masuk"
+                  (form) => selectedTab === 0 || form.formType === FORM_TYPE.masuk
                 )
                 .map((form, index) => (
                   <TableRow key={form?._id}>

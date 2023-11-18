@@ -1,27 +1,34 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Paper, Typography } from "@mui/material";
 import { isEmptyObject } from "../../../helpers/shared-helpers";
 import {
-  EmergencyContact,
+  Contact,
   Feedback,
   FormType,
-  RegisterForm,
   TenantInfo,
 } from "shared-library/src/declarations/types";
 import {
   initialTenantInfo,
   initialEmergencyContact,
   initialFeedback,
+  initialCheckInForm,
+  initialCheckoutForm,
   FM,
-  initialRegisterForm,
   FORM_TYPE,
   STUDENT_PAGES_PATH,
 } from "shared-library/src/declarations/constants";
-import { postRegisterForm } from "frontend/src/api/registration-api";
-import CheckInForm from "./CheckInForm";
-import CheckOutForm from "./CheckOutForm";
+import {
+  postCheckInForm,
+  postCheckOutForm,
+} from "frontend/src/api/registration-api";
+import CheckInFormComponent from "./CheckInFormComponent";
 import { useNavigate } from "react-router-dom";
-import { firstLetterUppercase } from "frontend/src/helpers/shared-helpers.js";
+import { firstLetterUppercase } from "frontend/src/helpers/shared-helpers";
+import {
+  CheckInForm,
+  CheckoutForm,
+} from "shared-library/src/declarations/types";
+import CheckoutFormComponent from "./CheckOutFormComponent";
 
 type StudentRegisterFormProps = {
   page: FormType;
@@ -30,37 +37,44 @@ type StudentRegisterFormProps = {
 const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
   const [feedback, setFeedback] = useState<Feedback>(initialFeedback);
   const [tenantInfo, setTenantInfo] = useState<TenantInfo>(initialTenantInfo);
-  const [emergencyContact, setEmergencyContact] = useState<EmergencyContact>(
+  const [emergencyContact, setEmergencyContact] = useState<Contact>(
     initialEmergencyContact
   );
   const [fileUploaded, setFileUploaded] = useState(false);
   const navigate = useNavigate();
-  const [form, setForm] = useState<RegisterForm>({
-    tenantInfo: tenantInfo,
-    formType: FORM_TYPE.masuk,
-    roomNo: "",
-    blockNo: "",
-    resitNo: "",
-    offerLetterFile: null,
-    paymentReceiptFile: null,
-    emergencyContact: emergencyContact,
-    tenantAgreement: false,
-    timestamp: Date.now(),
-  });
+  const [checkIn, setCheckIn] = useState<CheckInForm>(initialCheckInForm);
+  const [checkout, setCheckOut] = useState<CheckoutForm>(initialCheckoutForm);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckInFormFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const offerLetterFile = e?.target?.files?.[0];
     const paymentReceiptFile = e?.target?.files?.[1];
     if (offerLetterFile) {
-      setForm({ ...form, offerLetterFile: offerLetterFile });
+      setCheckIn({ ...checkIn, offerLetterFile: offerLetterFile });
     }
     if (paymentReceiptFile) {
-      setForm({ ...form, paymentReceiptFile: paymentReceiptFile });
+      setCheckIn({
+        ...checkIn,
+        paymentReceiptFile: paymentReceiptFile,
+      });
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    if (isEmptyObject(form)) {
+  const handleCheckOutFormFileChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const checkoutEvidenceFile = e?.target?.files?.[0];
+    if (checkoutEvidenceFile) {
+      setCheckOut({
+        ...checkout,
+        checkoutEvidenceFile: checkoutEvidenceFile,
+      });
+    }
+  };
+
+  const handleCheckInFormSubmit = async (e: FormEvent) => {
+    if (isEmptyObject(checkIn)) {
       setFeedback({
         ...feedback,
         error: FM.pleaseFillNecessaryInformation,
@@ -68,7 +82,7 @@ const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
       return;
     }
     try {
-      await postRegisterForm(tenantInfo, emergencyContact, form);
+      await postCheckInForm(tenantInfo, emergencyContact, checkIn);
       setFeedback({
         ...feedback,
         success: FM.registerFormAdded,
@@ -77,7 +91,31 @@ const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
       setTimeout(() => {
         setFeedback({ ...feedback, success: "" });
       }, 3000);
-      setForm(initialRegisterForm);
+      setCheckIn(initialCheckInForm);
+    } catch (error: any) {
+      setFeedback({ ...feedback, error: error });
+    }
+  };
+
+  const handleCheckOutFormSubmit = async (e: FormEvent) => {
+    if (isEmptyObject(checkIn)) {
+      setFeedback({
+        ...feedback,
+        error: FM.pleaseFillNecessaryInformation,
+      });
+      return;
+    }
+    try {
+      await postCheckOutForm(checkout);
+      setFeedback({
+        ...feedback,
+        success: FM.registerFormAdded,
+      });
+
+      setTimeout(() => {
+        setFeedback({ ...feedback, success: "" });
+      }, 3000);
+      setCheckIn(initialCheckInForm);
     } catch (error: any) {
       setFeedback({ ...feedback, error: error });
     }
@@ -118,33 +156,29 @@ const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
     }
     if (page === FORM_TYPE.masuk) {
       return (
-        <CheckInForm
-          form={form}
+        <CheckInFormComponent
+          checkInForm={checkIn}
           tenantInfo={tenantInfo}
           emergencyContact={emergencyContact}
           fileUploaded={fileUploaded}
-          setForm={setForm}
+          setCheckInForm={setCheckIn}
           setTenantInfo={setTenantInfo}
-          handleFileChange={handleFileChange}
+          handleFileChange={handleCheckInFormFileChange}
           setFileUploaded={setFileUploaded}
           setEmergencyContact={setEmergencyContact}
-          handleSubmit={handleSubmit}
+          handleSubmit={handleCheckInFormSubmit}
         />
       );
     }
     if (page === FORM_TYPE.keluar) {
       return (
-        <CheckOutForm
-          form={form}
-          tenantInfo={tenantInfo}
-          emergencyContact={emergencyContact}
+        <CheckoutFormComponent
+          checkOutForm={checkout}
           fileUploaded={fileUploaded}
-          setForm={setForm}
-          setTenantInfo={setTenantInfo}
-          handleFileChange={handleFileChange}
+          handleFileChange={handleCheckOutFormFileChange}
+          setCheckOutForm={setCheckOut}
           setFileUploaded={setFileUploaded}
-          setEmergencyContact={setEmergencyContact}
-          handleSubmit={handleSubmit}
+          handleSubmit={handleCheckInFormSubmit}
         />
       );
     }

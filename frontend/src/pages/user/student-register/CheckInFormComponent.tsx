@@ -1,12 +1,11 @@
 import { Button, Typography } from "@mui/material";
 import {
-  EmergencyContact,
-  FormType,
+  CheckInForm,
+  Contact,
   Gender,
   Race,
-  RegisterForm,
   TenantInfo,
-} from "shared-library/src/declarations/types.js";
+} from "shared-library/src/declarations/types";
 import {
   ChangeEvent,
   Dispatch,
@@ -14,38 +13,48 @@ import {
   HTMLInputTypeAttribute,
   SetStateAction,
 } from "react";
-import {
-  FORM_TYPE,
-  GENDER,
-  RACE,
-} from "shared-library/src/declarations/constants.js";
-import EmergencyContactInput from "./EmergencyContactInput.js";
+import { GENDER, RACE } from "shared-library/src/declarations/constants";
+import EmergencyContactInput from "./EmergencyContactInput";
 
 type CheckInFormProp = {
-  form: RegisterForm;
+  checkInForm: CheckInForm;
   tenantInfo: TenantInfo;
-  emergencyContact: EmergencyContact;
+  emergencyContact: Contact;
   fileUploaded: boolean;
-  setForm: Dispatch<SetStateAction<RegisterForm>>;
+  setCheckInForm: Dispatch<SetStateAction<CheckInForm>>;
   setTenantInfo: Dispatch<SetStateAction<TenantInfo>>;
-  setEmergencyContact: Dispatch<SetStateAction<EmergencyContact>>;
+  setEmergencyContact: Dispatch<SetStateAction<Contact>>;
   setFileUploaded: Dispatch<SetStateAction<boolean>>;
   handleSubmit: (e: FormEvent) => Promise<void>;
   handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-const CheckInForm = ({
-  form,
+const CheckInFormComponent = ({
+  checkInForm,
   tenantInfo,
   emergencyContact,
   fileUploaded,
-  setForm,
+  setCheckInForm,
   setTenantInfo,
   setEmergencyContact,
+
   setFileUploaded,
   handleSubmit,
-  handleFileChange,
 }: CheckInFormProp) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const offerLetterFile = e?.target?.files?.[0];
+    const paymentReceiptFile = e?.target?.files?.[1];
+    if (offerLetterFile) {
+      setCheckInForm({ ...checkInForm, offerLetterFile: offerLetterFile });
+    }
+    if (paymentReceiptFile) {
+      setCheckInForm({
+        ...checkInForm,
+        paymentReceiptFile: paymentReceiptFile,
+      });
+    }
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit} className="w-5/6 mx-auto mt-12">
@@ -89,8 +98,10 @@ const CheckInForm = ({
               <input
                 type="text"
                 name="roomNo"
-                value={form?.roomNo || ""!}
-                onChange={(e) => setForm({ ...form, roomNo: e.target.value })}
+                value={checkInForm.roomNo || ""!}
+                onChange={(e) =>
+                  setCheckInForm({ ...checkInForm, roomNo: e.target.value })
+                }
                 className="mt-1 p-2 border rounded w-full"
               />
             </div>
@@ -101,8 +112,10 @@ const CheckInForm = ({
               <input
                 type="text"
                 name="blockNo"
-                value={form?.blockNo || ""!}
-                onChange={(e) => setForm({ ...form, blockNo: e.target.value })}
+                value={checkInForm.blockNo || ""!}
+                onChange={(e) =>
+                  setCheckInForm({ ...checkInForm, blockNo: e.target.value })
+                }
                 className="mt-1 p-2 border rounded w-full"
               />
             </div>
@@ -114,8 +127,10 @@ const CheckInForm = ({
                 type="text"
                 name="resitNo"
                 placeholder="1234ABCD"
-                value={form.resitNo}
-                onChange={(e) => setForm({ ...form, resitNo: e.target.value })}
+                value={checkInForm.resitNo}
+                onChange={(e) =>
+                  setCheckInForm({ ...checkInForm, resitNo: e.target.value })
+                }
                 className="mt-1 p-2 border rounded w-full"
               />
             </div>
@@ -346,9 +361,12 @@ const CheckInForm = ({
           <input
             type="checkbox"
             name="tenantAgreement"
-            checked={form?.tenantAgreement!}
+            checked={checkInForm.tenantAgreement!}
             onChange={(e) =>
-              setForm({ ...form, tenantAgreement: e.target.checked })
+              setCheckInForm({
+                ...checkInForm,
+                tenantAgreement: e.target.checked,
+              })
             }
             className="mt-1 p-2 border rounded w-full"
           />
@@ -366,7 +384,7 @@ const CheckInForm = ({
   );
 };
 
-export default CheckInForm;
+export default CheckInFormComponent;
 
 type Input = {
   type: HTMLInputTypeAttribute | undefined;

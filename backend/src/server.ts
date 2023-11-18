@@ -12,7 +12,8 @@ import {
   deleteRegisterForm,
   getAllRegisterForms,
   getRegisterForm,
-  postRegisterForm,
+  postCheckInForm,
+  postCheckOutForm,
   updateRegisterForm,
 } from "./controllers/registration-controllers";
 import {
@@ -32,6 +33,7 @@ import {
 } from "./controllers/notification-controllers";
 import { ENDPOINTS } from "shared-library/src/declarations/constants";
 import {
+  uploadCheckOutEvidence,
   uploadComplaintEvidence,
   uploadRegisterFormFiles,
 } from "./middleware/upload";
@@ -64,12 +66,17 @@ app.use("/uploads", express.static("uploads"));
 
 // Register Forms
 app.post(
-  ENDPOINTS.postRegisterForm,
+  ENDPOINTS.postCheckInForm,
   uploadRegisterFormFiles.fields([
     { name: "paymentReceiptFile", maxCount: 1 },
     { name: "offerLetterFile", maxCount: 1 },
   ]),
-  postRegisterForm
+  postCheckInForm
+); // Passed test
+app.post(
+  ENDPOINTS.postCheckOutForm,
+  uploadCheckOutEvidence.single("checkoutEvidenceFile"),
+  postCheckOutForm
 ); // Passed test
 app.get(ENDPOINTS.getAllRegisterForms, getAllRegisterForms); // Passed test
 app.get(ENDPOINTS.getRegisterForm, getRegisterForm); // Passed test

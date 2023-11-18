@@ -1,4 +1,4 @@
-import { Complaint, RegisterForm, User } from "shared-library/src/declarations/types";
+import { Complaint, ICheckInForm, User } from "shared-library/src/declarations/types";
 
 export const dummyUserData: User = {
   _id: "12345",
@@ -25,7 +25,7 @@ export const dummyUserData: User = {
 export default dummyUserData;
 
 
-export const sampleRegistrationForms: RegisterForm[] = Array(5).fill({
+export const sampleRegistrationForms: ICheckInForm[] = Array(5).fill({
   formType: "masuk",
   tenantInfo: {
     name: "John Doe",

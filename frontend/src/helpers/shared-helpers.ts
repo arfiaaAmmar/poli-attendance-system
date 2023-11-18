@@ -49,10 +49,6 @@ export const handleFetchResponse = async (response: Response) => {
   return response.json();
 };
 
-export const firstLetterUppercase = (txt: string) => {
-  return txt.charAt(0).toUpperCase() + txt.slice(1);
-};
-
 /**
  * Determine what values are considered empty or default
  *
@@ -234,10 +230,17 @@ export const useDataFetching = <T>(fetchFunction: () => Promise<T | null>) => {
 //   return { data, isLoading, error };
 // };
 
-export const truncateText = (text: string, maxLength: number): string => {
-  if (text.length <= maxLength) {
-    return text;
+
+// STRING RELATED FUNCTIONS 
+
+export const truncateText = (txt: string, maxLength: number): string => {
+  if (txt.length <= maxLength) {
+    return txt;
   } else {
-    return text.substring(0, maxLength) + "...";
+    return txt.substring(0, maxLength) + "...";
   }
 }
+
+export const firstLetterUppercase = (txt: string) => {
+  return txt.charAt(0).toUpperCase() + txt.slice(1);
+};

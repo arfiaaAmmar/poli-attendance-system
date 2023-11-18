@@ -1,10 +1,12 @@
 import {
   Address,
   Complaint,
-  EmergencyContact,
+  Contact,
   Feedback,
-  RegisterForm,
+  ICheckInForm,
   TenantInfo,
+  CheckoutForm,
+  CheckInForm,
 } from "./types";
 
 // export const API_BASE_URL = "https://poli-attendance-system.onrender.com" // For deploy
@@ -107,7 +109,8 @@ export const ENDPOINTS = {
   getAllUsers: "/get-all-users",
   deleteUser: "/delete-user/:id",
   uploads: "/uploads",
-  postRegisterForm: "/post-register-form",
+  postCheckInForm: "/post-checkin-form",
+  postCheckOutForm: "/post-checkout-form",
   getAllRegisterForms: "/get-all-register-forms",
   getRegisterForm: "/get-register-form/:id",
   updateRegisterForm: "/update-register-form/:id",
@@ -153,6 +156,15 @@ export const FM = {
   default: "An error occurred",
 } as const;
 
+export const CHECKOUT_REASONS = {
+  roomChange: "Tukar bilik penginapan",
+  blockChange: "Tukar blok kediaman",
+  semesterBreak: "Cuti Semester",
+  internship: "Latihan Industri",
+  graduated: "Tamat Pengajian",
+  others: "Lain-lain",
+};
+
 export const initialComplaint: Complaint = {
   email: "",
   name: "",
@@ -195,22 +207,33 @@ export const initialTenantInfo: TenantInfo = {
   profilePicFile: null,
 };
 
-export const initialEmergencyContact: EmergencyContact = {
+export const initialEmergencyContact: Contact = {
   name: "",
   phone: "",
   relationship: "Bapa",
   address: initialAddress,
 };
 
-export const initialRegisterForm: RegisterForm = {
-  formType: "masuk",
+export const initialCheckInForm: CheckInForm = {
   tenantInfo: initialTenantInfo,
-  roomNo: "1",
-  blockNo: "1",
-  resitNo: "123ABC",
+  roomNo: "",
+  blockNo: "",
+  resitNo: "",
+  formType: "masuk",
   offerLetterFile: null,
   paymentReceiptFile: null,
   emergencyContact: initialEmergencyContact,
   tenantAgreement: false,
+  timestamp: Date.now(),
+};
+
+export const initialCheckoutForm: CheckoutForm = {
+  name: "",
+  phone: "",
+  roomNo: "",
+  blockNo: "",
+  formType: "masuk",
+  checkoutEvidenceFile: null,
+  checkoutReason: "",
   timestamp: null,
 };

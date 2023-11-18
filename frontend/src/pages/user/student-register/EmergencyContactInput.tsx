@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction } from "react";
 import { RELATIONSHIP } from "shared-library/src/declarations/constants";
 import {
-  EmergencyContact,
+  Contact,
   Relationship,
 } from "shared-library/src/declarations/types";
 
 type EmergencyContactProp = {
-  data: EmergencyContact;
-  setData: Dispatch<SetStateAction<EmergencyContact>>;
+  data: Contact;
+  setData: Dispatch<SetStateAction<Contact>>;
 };
 
 const EmergencyContactInput = ({ data, setData }: EmergencyContactProp) => {

@@ -5,10 +5,10 @@ import {
   HEADER_TYPE,
 } from "shared-library/src/declarations/constants";
 import {
-  EmergencyContact,
-  FormType,
-  RegisterForm,
+  Contact,
   TenantInfo,
+  CheckoutForm,
+  CheckInForm,
 } from "shared-library/src/declarations/types";
 
 export const getAllRegistrationForms = async () => {
@@ -49,24 +49,12 @@ export const getRegistrationForm = async (formId: string) => {
   }
 };
 
-type OtherFormInfo = {
-  _id?: string | undefined;
-  formType: FormType;
-  roomNo: string;
-  blockNo: string;
-  resitNo: string;
-  offerLetterFile: File | null;
-  paymentReceiptFile: File | null;
-  tenantAgreement: boolean;
-  timestamp: number | null | null;
-};
-
-export const postRegisterForm = async (
+export const postCheckInForm = async (
   tenantInfo: TenantInfo,
-  emergencyContact: EmergencyContact,
-  others: OtherFormInfo
+  emergencyContact: Contact,
+  restOfFormData: Partial<CheckInForm>
 ) => {
-  console.log(JSON.stringify(others));
+  console.log(JSON.stringify(restOfFormData));
   try {
     const {
       roomNo,
@@ -76,12 +64,9 @@ export const postRegisterForm = async (
       tenantAgreement,
       paymentReceiptFile,
       offerLetterFile,
-      formType,
-    } = others;
+    } = restOfFormData;
 
     const formData = new FormData();
-    formData.append("formType", formType);
-    console.log("tenantInfo", tenantInfo);
     formData.append("tenantInfo[name]", tenantInfo?.name!);
     formData.append("tenantInfo[nric]", tenantInfo?.nric!);
     formData.append("tenantInfo[matrikNo]", tenantInfo?.matrikNo!);
@@ -92,15 +77,19 @@ export const postRegisterForm = async (
     formData.append("tenantInfo[profilePicFile]", tenantInfo?.profilePicFile!);
 
     const tenantAddress = tenantInfo?.address;
-    console.log('tenantAddress',tenantAddress)
+    console.log("tenantAddress", tenantAddress);
     formData.append("tenantInfo[address][street]", tenantAddress.street!);
     formData.append("tenantInfo[address][city]", tenantAddress.city!);
     formData.append("tenantInfo[address][state]", tenantAddress.state!);
-    formData.append("tenantInfo[address][postalCode]", tenantAddress.postalCode!);
+    formData.append(
+      "tenantInfo[address][postalCode]",
+      tenantAddress.postalCode!
+    );
 
     formData.append("roomNo", roomNo!);
     formData.append("blockNo", blockNo!);
     formData.append("resitNo", resitNo!);
+    formData.append("formType", "masuk");
     formData.append("offerLetterFile", offerLetterFile!);
     formData.append("paymentReceiptFile", paymentReceiptFile!);
 
@@ -129,11 +118,11 @@ export const postRegisterForm = async (
       emergencyContactAddress.postalCode!
     );
 
-    formData.append("tenantAgreement", tenantAgreement?.toString());
+    formData.append("tenantAgreement", tenantAgreement?.toString()!);
     formData.append("timestamp", timestamp?.toString()!);
 
     const response = await fetch(
-      `${API_BASE_URL}${ENDPOINTS.postRegisterForm}`,
+      `${API_BASE_URL}${ENDPOINTS.postCheckInForm}`,
       {
         method: "POST",
         body: formData,
@@ -151,10 +140,37 @@ export const postRegisterForm = async (
   }
 };
 
-export const updateRegistrationForm = async (
-  id: string,
-  input: RegisterForm
-) => {
+export const postCheckOutForm = async (input: CheckoutForm) => {
+  try {
+    const formData = new FormData();
+    formData.append("name", input.name);
+    formData.append("phone", input.phone);
+    formData.append("roomNo", input.roomNo);
+    formData.append("blockNo", input.blockNo);
+    formData.append("checkoutEvidenceFile", input.checkoutEvidenceFile!);
+    formData.append("checkoutReason", input.checkoutReason!);
+    formData.append("timestamp", input.timestamp?.toString()!);
+
+    const response = await fetch(
+      `${API_BASE_URL}${ENDPOINTS.postCheckInForm}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
+
+    return response.json();
+  } catch (error) {
+    throw (error as Error).message;
+  }
+};
+
+export const updateRegisterForm = async (id: string, input: CheckInForm) => {
   const updatedForm = input;
 
   try {

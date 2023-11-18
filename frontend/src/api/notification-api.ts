@@ -1,9 +1,9 @@
 import { API_BASE_URL, FM, HEADER_TYPE } from "shared-library/src/declarations/constants";
 import { Notification, UserType } from "shared-library/src/declarations/types";
 
-export const getAllNotifications = async (userId: string, userType: UserType) => {
+export const getAllNotifications = async (userId: string) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/get-all-notifications/${userType}/${userId}`, {
+    const response = await fetch(`${API_BASE_URL}/get-all-notifications/${userId}`, {
       headers: HEADER_TYPE
     });
     const data = await response.json();

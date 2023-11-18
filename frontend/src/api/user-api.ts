@@ -4,7 +4,7 @@ import {
   FM,
   HEADER_TYPE,
 } from "shared-library/src/declarations/constants";
-import { User, UserType } from "shared-library/src/declarations/types";
+import { User } from "shared-library/src/declarations/types";
 
 export const registerUser = async (input: User) => {
   try {

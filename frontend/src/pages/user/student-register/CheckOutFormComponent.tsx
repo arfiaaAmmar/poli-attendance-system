@@ -1,51 +1,35 @@
 import { Button, Typography } from "@mui/material";
-import {
-  EmergencyContact,
-  FormType,
-  Gender,
-  Race,
-  RegisterForm,
-  TenantInfo,
-} from "shared-library/src/declarations/types.js";
+import { CheckoutForm } from "shared-library/src/declarations/types";
 import {
   ChangeEvent,
   Dispatch,
-  FormEvent,
-  HTMLInputTypeAttribute,
-  SetStateAction,
+  FormEvent, SetStateAction
 } from "react";
 import {
-  FORM_TYPE,
-  GENDER,
-  RACE,
-} from "shared-library/src/declarations/constants.js";
-import EmergencyContactInput from "./EmergencyContactInput.js";
+  CHECKOUT_REASONS
+} from "shared-library/src/declarations/constants";
 
 type CheckOutFormProp = {
-  form: RegisterForm;
-  tenantInfo: TenantInfo;
-  emergencyContact: EmergencyContact;
+  checkOutForm: CheckoutForm;
   fileUploaded: boolean;
-  setForm: Dispatch<SetStateAction<RegisterForm>>;
-  setTenantInfo: Dispatch<SetStateAction<TenantInfo>>;
-  setEmergencyContact: Dispatch<SetStateAction<EmergencyContact>>;
+  setCheckOutForm: Dispatch<SetStateAction<CheckoutForm>>;
   setFileUploaded: Dispatch<SetStateAction<boolean>>;
   handleSubmit: (e: FormEvent) => Promise<void>;
   handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-const CheckOutForm = ({
-  form,
-  tenantInfo,
-  emergencyContact,
+const CheckoutFormComponent = ({
+  checkOutForm,
   fileUploaded,
-  setForm,
-  setTenantInfo,
-  setEmergencyContact,
+  setCheckOutForm,
   setFileUploaded,
   handleSubmit,
-  handleFileChange,
+  handleFileChange
 }: CheckOutFormProp) => {
+  const handleCheckoutReasons = (checkoutReason: string) => {
+    setCheckOutForm({ ...checkOutForm, checkoutReason: checkoutReason });
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit} className="w-5/6 mx-auto mt-12">
@@ -58,29 +42,75 @@ const CheckOutForm = ({
         <ol type="1" className="flex gap-8">
           <div>
             <li>
-              TUKAR BILIK PENGINAPAN :<input className="ml-2" type="checkbox" />
+              {CHECKOUT_REASONS.roomChange.toUpperCase()} :
+              <input
+                className="ml-2"
+                type="checkbox"
+                checked={checkOutForm.checkoutReason === CHECKOUT_REASONS.roomChange}
+                onChange={() =>
+                  handleCheckoutReasons(CHECKOUT_REASONS.roomChange)
+                }
+              />
             </li>
             <li>
-              TUKAR BLOK KEDIAMAN :<input className="ml-2" type="checkbox" />
+              {CHECKOUT_REASONS.blockChange.toUpperCase()} :
+              <input
+                className="ml-2"
+                type="checkbox"
+                checked={checkOutForm.checkoutReason === CHECKOUT_REASONS.blockChange}
+                onChange={() =>
+                  handleCheckoutReasons(CHECKOUT_REASONS.blockChange)
+                }
+              />
             </li>
             <li>
-              CUTI SEMESTER :<input className="ml-2" type="checkbox" />
+              {CHECKOUT_REASONS.semesterBreak.toUpperCase()} :
+              <input
+                className="ml-2"
+                type="checkbox"
+                checked={checkOutForm.checkoutReason === CHECKOUT_REASONS.semesterBreak}
+                onChange={() =>
+                  handleCheckoutReasons(CHECKOUT_REASONS.semesterBreak)
+                }
+              />
             </li>
           </div>
           <div>
             <li>
-              LATIHAN INDUSTRI :<input className="ml-2" type="checkbox" />
+              {CHECKOUT_REASONS.internship.toUpperCase()} :
+              <input
+                className="ml-2"
+                type="checkbox"
+                checked={checkOutForm.checkoutReason === CHECKOUT_REASONS.internship}
+                onChange={() =>
+                  handleCheckoutReasons(CHECKOUT_REASONS.internship)
+                }
+              />
             </li>
             <li>
-              TAMAT PENGAJIAN :<input className="ml-2" type="checkbox" />
+              {CHECKOUT_REASONS.graduated.toUpperCase()} :
+              <input
+                className="ml-2"
+                type="checkbox"
+                checked={checkOutForm.checkoutReason === CHECKOUT_REASONS.graduated}
+                onChange={() =>
+                  handleCheckoutReasons(CHECKOUT_REASONS.graduated)
+                }
+              />
             </li>
             <li>
-              LAIN-LAIN :<input className="ml-2" type="checkbox" />
+              {CHECKOUT_REASONS.others.toUpperCase()} :
+              <input
+                className="ml-2"
+                type="checkbox"
+                checked={checkOutForm.checkoutReason === CHECKOUT_REASONS.others}
+                onChange={() => handleCheckoutReasons(CHECKOUT_REASONS.others)}
+              />
             </li>
           </div>
         </ol>
         <Typography className="text-lg font-bold text-orange-500 my-2">
-          BAHAGIAN A : MAKLUMAT PENGHUNI
+          MAKLUMAT PELAJAR
         </Typography>
         <div className="flex gap-4">
           <div className="w-1/2">
@@ -90,10 +120,10 @@ const CheckOutForm = ({
               </label>
               <input
                 type="text"
-                name="tenantInfo.name"
-                value={tenantInfo.name || ""}
+                name="checkOutForm.name"
+                value={checkOutForm.name || ""}
                 onChange={(e) =>
-                  setTenantInfo({ ...tenantInfo, name: e.target.value })
+                  setCheckOutForm({ ...checkOutForm, name: e.target.value })
                 }
                 className="mt-1 p-2 border rounded w-full"
               />
@@ -105,8 +135,8 @@ const CheckOutForm = ({
               <input
                 type="text"
                 name="roomNo"
-                value={form?.roomNo || ""!}
-                onChange={(e) => setForm({ ...form, roomNo: e.target.value })}
+                value={checkOutForm?.roomNo || ""!}
+                onChange={(e) => setCheckOutForm({ ...checkOutForm, roomNo: e.target.value })}
                 className="mt-1 p-2 border rounded w-full"
               />
             </div>
@@ -117,8 +147,8 @@ const CheckOutForm = ({
               <input
                 type="text"
                 name="blockNo"
-                value={form?.blockNo || ""!}
-                onChange={(e) => setForm({ ...form, blockNo: e.target.value })}
+                value={checkOutForm?.blockNo || ""!}
+                onChange={(e) => setCheckOutForm({ ...checkOutForm, blockNo: e.target.value })}
                 className="mt-1 p-2 border rounded w-full"
               />
             </div>
@@ -128,10 +158,10 @@ const CheckOutForm = ({
               </label>
               <input
                 type="text"
-                name="tenantInfo.phone"
-                value={tenantInfo?.phone || ""}
+                name="checkOutForm.phone"
+                value={checkOutForm?.phone || ""}
                 onChange={(e) =>
-                  setTenantInfo({ ...tenantInfo, phone: e.target.value })
+                  setCheckOutForm({ ...checkOutForm, phone: e.target.value })
                 }
                 className="mt-1 p-2 border rounded w-full"
               />
@@ -165,14 +195,7 @@ const CheckOutForm = ({
           </div>
         </div>
         <Typography className="text-lg font-bold text-orange-500 mt-8 mb-4">
-          BAHAGIAN B : SAUDARA TERDEKAT YANG BOLEH DIHUBUNGI SEMASA KECEMASAN
-        </Typography>
-        <EmergencyContactInput
-          data={emergencyContact}
-          setData={setEmergencyContact}
-        />
-        <Typography className="text-lg font-bold text-orange-500 mt-8 mb-4">
-          BAHAGIAN C : PENGAKUAN PENGHUNI KAMSIS
+          AKUAN PELAJAR
         </Typography>
         <p className="font-bold">
           SAYA SEPERTI PENAMA DIATAS DENGAN INI MEMBUAT AKUAN BAHWASANYA :
@@ -189,15 +212,6 @@ const CheckOutForm = ({
           <label className="w-1/3 text-2xl font-medium text-gray-700">
             Setuju
           </label>
-          <input
-            type="checkbox"
-            name="tenantAgreement"
-            checked={form?.tenantAgreement!}
-            onChange={(e) =>
-              setForm({ ...form, tenantAgreement: e.target.checked })
-            }
-            className="mt-1 p-2 border rounded w-full"
-          />
         </div>
         <Button
           variant="contained"
@@ -212,13 +226,4 @@ const CheckOutForm = ({
   );
 };
 
-export default CheckOutForm;
-
-type Input = {
-  type: HTMLInputTypeAttribute | undefined;
-  name?: string;
-  value: string;
-  label: string;
-  className: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => Dispatch<SetStateAction<any>>;
-};
+export default CheckoutFormComponent;
