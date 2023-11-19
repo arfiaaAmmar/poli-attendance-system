@@ -3,7 +3,6 @@ import {
   CheckInForm,
   Contact,
   Gender,
-  Races,
   TenantInfo,
 } from "shared-library/src/declarations/types";
 import {
@@ -16,9 +15,10 @@ import {
 import {
   GENDER,
   STATES_IN_MALAYSIA,
-  RACES
 } from "shared-library/src/declarations/constants";
 import EmergencyContactInput from "./EmergencyContactInput";
+import { Ethnicity } from "shared-library/src/declarations/types.js";
+import { ETHNICITY } from "shared-library/src/declarations/constants.js";
 
 type CheckInFormProp = {
   checkInForm: CheckInForm;
@@ -189,12 +189,12 @@ const CheckInFormComponent = ({
                   onChange={(e) =>
                     setTenantInfo({
                       ...tenantInfo,
-                      race: e.target.value as Races,
+                      race: e.target.value as Ethnicity,
                     })
                   }
                   className="mt-1 p-2 border rounded w-full"
                 >
-                  {RACES.map((race) => (
+                  {Object.values(ETHNICITY).map((race) => (
                     <option value={race}>{race}</option>
                   ))}
                 </select>
@@ -214,8 +214,9 @@ const CheckInFormComponent = ({
                   }
                   className="mt-1 p-2 border rounded w-full"
                 >
-                  <option value={GENDER.lelaki}>Lelaki</option>
-                  <option value={GENDER.perempuan}>Perempuan</option>
+                  {Object.values(GENDER).map((gender) => (
+                    <option value={gender}>{gender}</option>
+                  ))}
                 </select>
               </div>
             </div>

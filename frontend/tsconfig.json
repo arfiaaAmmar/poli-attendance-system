@@ -27,6 +27,6 @@
   "exclude": ["./node_modules"],
   "references": [
     { "path": "./tsconfig.node.json" },
-    // { "path": "../shared-library" }
+    { "path": "../shared-library" }
   ]
 }

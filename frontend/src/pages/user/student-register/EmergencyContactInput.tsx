@@ -51,10 +51,9 @@ const EmergencyContactInput = ({ data, setData }: EmergencyContactProp) => {
             }
             className="mt-1 p-2 border rounded w-full"
           >
-            <option value={RELATIONSHIP.bapa}>Bapa</option>
-            <option value={RELATIONSHIP.ibu}>Ibu</option>
-            <option value={RELATIONSHIP.adikBeradik}>Adik Beradik</option>
-            <option value={RELATIONSHIP.penjaga}>Penjaga</option>
+            {Object.values(RELATIONSHIP).map((relationship) => (
+              <option value={relationship}>{relationship}</option>
+            ))}
           </select>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 import {
   FM,
   GENDER,
-  RACES,
+  ETHNICITY,
   SHARED_PAGES,
   STATES_IN_MALAYSIA,
   USER_TYPE_ARR,
@@ -225,13 +225,13 @@ const RegisterUser = () => {
                   User Type
                 </label>
                 <select
-                  name="race"
+                  name="userType"
                   onChange={handleInputChange}
                   value={formData.userType}
                   className="mt-1 p-2 border rounded w-full"
                 >
-                  {USER_TYPE_ARR.map((userType) => (
-                    <option value={userType}>{userType}</option>
+                  {USER_TYPE_ARR.map((item) => (
+                    <option value={item}>{item}</option>
                   ))}
                 </select>
               </div>
@@ -245,7 +245,7 @@ const RegisterUser = () => {
                   value={formData.race}
                   className="mt-1 p-2 border rounded w-full"
                 >
-                  {RACES.map((race) => (
+                  {Object.values(ETHNICITY).map((race) => (
                     <option value={race}>{race}</option>
                   ))}
                 </select>
@@ -260,8 +260,9 @@ const RegisterUser = () => {
                   value={formData.gender}
                   className="mt-1 p-2 border rounded w-full"
                 >
-                  <option value={GENDER.lelaki}>Lelaki</option>
-                  <option value={GENDER.perempuan}>Perempuan</option>
+                  {Object.values(GENDER).map((gender) => (
+                    <option value={gender}>{gender}</option>
+                  ))}
                 </select>
               </div>
             </div>

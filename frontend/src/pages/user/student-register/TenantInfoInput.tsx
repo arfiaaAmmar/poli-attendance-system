@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
-import { GENDER, RACE } from "shared-library/src/declarations/constants";
+import { GENDER, ETHNICITY } from "shared-library/src/declarations/constants";
 import {
   CheckInForm,
   Gender,
-  Race,
   TenantInfo,
 } from "shared-library/src/declarations/types";
+import { Ethnicity } from "shared-library/src/declarations/types.js";
 
 type TenantInfoProp = {
   form: CheckInForm;
@@ -133,14 +133,13 @@ const TenantInfoInput = ({
             name="tenantInfo.race"
             value={tenantInfo?.race || ""}
             onChange={(e) =>
-              setTenantInfo({ ...tenantInfo, race: e.target.value as Race })
+              setTenantInfo({ ...tenantInfo, race: e.target.value as Ethnicity })
             }
             className="mt-1 p-2 border rounded w-full"
           >
-            <option value={RACE.melayu}>Melayu</option>
-            <option value={RACE.cina}>Cina</option>
-            <option value={RACE.india}>India</option>
-            <option value={RACE.lainLain}>Lain-lain</option>
+            {Object.values(ETHNICITY).map((race) => (
+              <option value={race}>{race}</option>
+            ))}
           </select>
         </div>
         <div className="mb-1 flex gap-2">

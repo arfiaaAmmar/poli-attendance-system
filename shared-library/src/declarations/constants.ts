@@ -33,7 +33,12 @@ export const RELATIONSHIP = {
   penjaga: "Penjaga",
 } as const;
 
-export const RACES = ["Melayu", "Cina", "India", "Lain-lain"] as const;
+export const ETHNICITY = {
+  melayu: 'Melayu',
+  cina: 'Cina',
+  india: 'India',
+  lainLain: 'Lain-lain',
+} as const
 
 export const GENDER = {
   lelaki: "Lelaki",

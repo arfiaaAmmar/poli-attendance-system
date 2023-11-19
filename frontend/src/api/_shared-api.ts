@@ -1,6 +1,6 @@
-import { DeleteControllerItem } from "shared-library/src/declarations/types";
-import { firstLetterUppercase } from "../helpers/shared-helpers";
 import { API_BASE_URL } from "shared-library/src/declarations/constants";
+import { firstLetterUppercase } from "../helpers/shared-helpers";
+import { DeleteControllerItem } from "shared-library/src/declarations/types";
 
 /**
  * Handle delete item

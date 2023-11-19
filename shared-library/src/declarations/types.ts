@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import mongoose, { Document, ObjectId } from "mongoose";
 
-export type Races = "Melayu" | "Cina" | "India" | "Lain";
+export type Ethnicity = "Melayu" | "Cina" | "India" | "Lain";
 export type Gender = "Lelaki" | "Perempuan";
 export type Relationship = "Ibu Bapa" | "Ibu" | "Bapa" | "Saudara" | "Penjaga";
 export type UserType = "penyelia" | "pelajar";
@@ -62,7 +62,7 @@ export type User = {
   address: Address;
   userType: UserType;
   semester?: string;
-  race: Races;
+  race: Ethnicity;
   gender: Gender;
   illness?: string;
   profilePicFile?: File | null;
