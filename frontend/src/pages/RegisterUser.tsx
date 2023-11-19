@@ -280,7 +280,6 @@ const RegisterUser = () => {
             to={SHARED_PAGES.login.path}
             color="primary"
             className="bg-red-500 text-white p-2 rounded cursor-pointer"
-            onClick={handleSubmit}
           >
             Kembali
           </Link>
