@@ -21,12 +21,12 @@
     "rootDir": "./src"
   },
   "paths": {
-    "shared-library/*": ["../shared-library/**/*.ts"]
+    "shared-library/*": ["../shared-library/src/*"]
   },
   "include": ["./src/**/*.ts", "src/context/register-form.tsx"],
   "exclude": ["./node_modules"],
   "references": [
     { "path": "./tsconfig.node.json" },
-    { "path": "../shared-library" }
+    // { "path": "../shared-library" }
   ]
 }
