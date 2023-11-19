@@ -3,15 +3,15 @@ import {
   Complaint,
   Contact,
   Feedback,
-  ICheckInForm,
   TenantInfo,
   CheckoutForm,
   CheckInForm,
+  User,
 } from "./types";
 
 // export const API_BASE_URL = "https://poli-attendance-system.onrender.com" // For deploy
 export const API_BASE_URL = "http://localhost:8888"; // For dev
-export const HEADER_TYPE = { "Content-Type": "application/json" } as const;
+export const HEADER_TYPE = { "Content-Type": "application/json" };
 
 export const FORM_TYPE = {
   default: "default",
@@ -33,12 +33,7 @@ export const RELATIONSHIP = {
   penjaga: "Penjaga",
 } as const;
 
-export const RACE = {
-  melayu: "Melayu",
-  cina: "Cina",
-  india: "India",
-  lainLain: "Lain-lain",
-} as const;
+export const RACES = ["Melayu", "Cina", "India", "Lain-lain"] as const;
 
 export const GENDER = {
   lelaki: "Lelaki",
@@ -48,6 +43,42 @@ export const GENDER = {
 export const USER_TYPE = {
   penyelia: "penyelia",
   pelajar: "pelajar",
+} as const;
+
+export const USER_TYPE_ARR = Object.values(USER_TYPE)
+
+export const STATES_IN_MALAYSIA = [
+  "Perlis",
+  "Kedah",
+  "Perak",
+  "Johor",
+  "Kelantan",
+  "Melaka",
+  "Negeri Sembilan",
+  "Pahang",
+  "Pulau Pinang",
+  "Sabah",
+  "Sarawak",
+  "Selangor",
+  "Terengganu",
+  "Kuala Lumpur",
+  "Labuan",
+  "Putrajaya",
+] as const;
+
+export const SHARED_PAGES = {
+  login: {
+    title: "Daftar Masuk",
+    path: "/login",
+  },
+  registerUser: {
+    title: "Daftar Pengguna Baru",
+    path: "/daftar-pengguna-baru",
+  },
+  forgotPassword: {
+    title: "Lupa Kata Kunci",
+    path: "/lupa-kata-kunci",
+  },
 } as const;
 
 export const STUDENT_PAGES_TITLE = {
@@ -235,5 +266,20 @@ export const initialCheckoutForm: CheckoutForm = {
   formType: "masuk",
   checkoutEvidenceFile: null,
   checkoutReason: "",
-  timestamp: null,
+  timestamp: Date.now(),
+};
+
+export const initialRegisterUserForm: User = {
+  name: "",
+  nric: "",
+  matrikNo: "",
+  phone: "",
+  email: "",
+  password: "",
+  address: initialAddress,
+  userType: "pelajar",
+  semester: "",
+  race: "Melayu",
+  gender: "Lelaki",
+  illness: "",
 };

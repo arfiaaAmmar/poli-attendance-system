@@ -16,33 +16,11 @@ const genderEnum = ["Lelaki", "Perempuan"];
 const userTypeEnum = ["penyelia", "pelajar"];
 const formType = ["masuk", "keluar"];
 const complaintTypeEnum = ["kerosakan fasiliti", "disiplin pelajar"];
-const malaysiaStatesEnum = [
-  "Johor",
-  "Kedah",
-  "Kelantan",
-  "Melaka",
-  "Negeri Sembilan",
-  "Pahang",
-  "Perak",
-  "Perlis",
-  "Pulau Pinang",
-  "Sabah",
-  "Sarawak",
-  "Selangor",
-  "Terengganu",
-  "Kuala Lumpur",
-  "Labuan",
-  "Putrajaya",
-];
 
 const AddressSchema = new Schema<Address>({
   street: String,
   city: String,
-  state: {
-    type: String,
-    enum: malaysiaStatesEnum,
-    required: true,
-  },
+  state: String,
   postalCode: String,
 });
 

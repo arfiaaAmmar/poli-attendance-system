@@ -23,8 +23,11 @@ import {
   USER_TYPE,
   ADMIN_PAGES_PATH,
   STUDENT_PAGES_PATH,
+  SHARED_PAGES,
 } from "shared-library/src/declarations/constants";
-import HomePage from "./pages/shared/HomePage.js";
+import ForgotPassword from "./pages/ForgotPassword";
+import RegisterUser from "./pages/RegisterUser";
+import HomePage from './pages/shared/HomePage';
 
 function App(): JSX.Element {
   const [sidebar, setSidebar] = useState(true);
@@ -47,7 +50,9 @@ function App(): JSX.Element {
 
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+      <Route path={SHARED_PAGES.login.path} element={<Login />} />
+      <Route path={SHARED_PAGES.registerUser.path} element={<RegisterUser />} />
+      <Route path={SHARED_PAGES.forgotPassword.path} element={<ForgotPassword />} />
 
       {user?.userType === USER_TYPE.penyelia && (
         <>
@@ -90,9 +95,17 @@ const AdminRoutes = ({
       case ADMIN_PAGES_PATH.pengurusanProfil:
         return <ManageProfile />;
       case ADMIN_PAGES_PATH.pengurusanPendaftaran:
-        return <ManageRegisterForm />;
+        return <ManageRegisterForm type={FORM_TYPE.default} />;
+      case ADMIN_PAGES_PATH.pendaftaranBaru:
+        return <ManageRegisterForm type={FORM_TYPE.masuk} />;
+      case ADMIN_PAGES_PATH.pendaftaranKeluar:
+        return <ManageRegisterForm type={FORM_TYPE.keluar} />;
       case ADMIN_PAGES_PATH.pengurusanAduan:
-        return <ManageComplaint />;
+        return <ManageComplaint type={COMPLAINT_TYPE.default} />;
+      case ADMIN_PAGES_PATH.kerosakanFasiliti:
+        return <ManageComplaint type={COMPLAINT_TYPE.kerosakanFasiliti} />;
+      case ADMIN_PAGES_PATH.masalahDisiplin:
+        return <ManageComplaint type={COMPLAINT_TYPE.disiplinPelajar} />;
       case ADMIN_PAGES_PATH.notifikasi:
         return <Notifications />;
       default:

@@ -67,7 +67,6 @@ export const postCheckInForm = async (req: Request, res: Response) => {
 export const postCheckOutForm = async (
   req: Request,
   res: Response,
-  next: NextFunction
 ) => {
   try {
     const input: CheckoutForm = req.body;

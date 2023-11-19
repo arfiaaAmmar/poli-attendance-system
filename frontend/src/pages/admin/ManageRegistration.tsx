@@ -11,8 +11,9 @@ import Tabs from "../../components/Tabs";
 import { FORM_TYPE, initialFeedback } from "shared-library/src/declarations/constants";
 import { useAllRegistrationForms } from "../../hooks/hooks";
 import { LoadingIndicator } from "../../components/LoadingIndicator";
+import { FormType } from "shared-library/src/declarations/types";
 
-const ManageRegisterForm = () => {
+const ManageRegisterForm = ({type}:{type: FormType}) => {
   const [feedback, setFeedback] = useState(initialFeedback);
   const labels = ["Masuk", "Keluar"];
   const [selectedTab, setSelectedTab] = useState(0);
@@ -22,7 +23,7 @@ const ManageRegisterForm = () => {
     setSelectedTab(tabIndex);
   };
 
-  // TODO: Implement this function to get the student registration status.1
+  // TODO: Implement this function to get the student registration status
   const _getStudentRegistrationStatus = () => {};
 
   return (

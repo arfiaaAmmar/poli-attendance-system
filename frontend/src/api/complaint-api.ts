@@ -4,9 +4,9 @@ import {
   FM,
   HEADER_TYPE,
 } from "shared-library/src/declarations/constants";
-import { Complaint } from "shared-library/src/declarations/types";
+import { Complaint, ComplaintType } from "shared-library/src/declarations/types";
 
-export const postComplaint = async (input: Complaint) => {
+export const postComplaint = async (input: Complaint, type: ComplaintType) => {
   try {
     const formData = new FormData();
     formData.append("email", input.email!);

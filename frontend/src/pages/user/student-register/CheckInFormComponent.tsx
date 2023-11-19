@@ -3,7 +3,7 @@ import {
   CheckInForm,
   Contact,
   Gender,
-  Race,
+  Races,
   TenantInfo,
 } from "shared-library/src/declarations/types";
 import {
@@ -13,7 +13,11 @@ import {
   HTMLInputTypeAttribute,
   SetStateAction,
 } from "react";
-import { GENDER, RACE } from "shared-library/src/declarations/constants";
+import {
+  GENDER,
+  STATES_IN_MALAYSIA,
+  RACES
+} from "shared-library/src/declarations/constants";
 import EmergencyContactInput from "./EmergencyContactInput";
 
 type CheckInFormProp = {
@@ -37,8 +41,6 @@ const CheckInFormComponent = ({
   setCheckInForm,
   setTenantInfo,
   setEmergencyContact,
-
-  setFileUploaded,
   handleSubmit,
 }: CheckInFormProp) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -187,15 +189,14 @@ const CheckInFormComponent = ({
                   onChange={(e) =>
                     setTenantInfo({
                       ...tenantInfo,
-                      race: e.target.value as Race,
+                      race: e.target.value as Races,
                     })
                   }
                   className="mt-1 p-2 border rounded w-full"
                 >
-                  <option value={RACE.melayu}>Melayu</option>
-                  <option value={RACE.cina}>Cina</option>
-                  <option value={RACE.india}>India</option>
-                  <option value={RACE.lainLain}>Lain-lain</option>
+                  {RACES.map((race) => (
+                    <option value={race}>{race}</option>
+                  ))}
                 </select>
               </div>
               <div className="items-center mb-1 flex gap-2">
@@ -276,8 +277,7 @@ const CheckInFormComponent = ({
               />
             </div>
             <div className="items-center mb-1 col-span-2">
-              <input
-                type="text"
+              <select
                 name="tenantInfo.address.state"
                 value={tenantInfo?.address.state || ""}
                 onChange={(e) =>
@@ -290,8 +290,11 @@ const CheckInFormComponent = ({
                   })
                 }
                 className="mt-1 p-2 border rounded w-full"
-                placeholder="State"
-              />
+              >
+                {STATES_IN_MALAYSIA.map((state) => (
+                  <option value={state}>{state}</option>
+                ))}
+              </select>
             </div>
             <div className="items-center col-span-2 mb-8">
               <input

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import mongoose, { Document, ObjectId } from "mongoose";
 
-export type Race = "Melayu" | "Cina" | "India" | "Lain";
+export type Races = "Melayu" | "Cina" | "India" | "Lain";
 export type Gender = "Lelaki" | "Perempuan";
 export type Relationship = "Ibu Bapa" | "Ibu" | "Bapa" | "Saudara" | "Penjaga";
 export type UserType = "penyelia" | "pelajar";
@@ -62,7 +62,7 @@ export type User = {
   address: Address;
   userType: UserType;
   semester?: string;
-  race: Race;
+  race: Races;
   gender: Gender;
   illness?: string;
   profilePicFile?: File | null;
@@ -109,7 +109,7 @@ export type CheckoutForm = {
   blockNo: string;
   formType: FormType;
   checkoutEvidenceFile?: File | null;
-  checkoutReason?: string;
+  checkoutReason: string;
   timestamp: number | null;
 };
 

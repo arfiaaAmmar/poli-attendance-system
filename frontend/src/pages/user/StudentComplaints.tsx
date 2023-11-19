@@ -27,6 +27,7 @@ import {
 import {
   Complaint,
   ComplaintType,
+  FormType,
 } from "shared-library/src/declarations/types";
 import {
   COMPLAINT_TYPE,
@@ -48,7 +49,7 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleComplaintSubmit = async (complaintType: ComplaintType) => {
     if (isEmptyObject(complaint)) {
       setFeedback({
         ...feedback,
@@ -60,7 +61,7 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
       await postComplaint({
         ...complaint,
         email: userData?.email ?? "",
-      });
+      }, complaintType);
       setFeedback({
         ...feedback,
         success: FM.complaintAdded,
@@ -210,25 +211,6 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
                   className="w-full"
                 />
               </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <Select
-                  label="Complaint Type"
-                  required
-                  value={complaint.complaintType}
-                  onChange={(e) =>
-                    setComplaint({
-                      ...complaint,
-                      complaintType: e.target.value as ComplaintType,
-                    })
-                  }
-                  className="w-full"
-                >
-                  <MenuItem value="kerosakan fasiliti">
-                    Kerosakan Fasiliti
-                  </MenuItem>
-                  <MenuItem value="disiplin pelajar">Disiplin Pelajar</MenuItem>
-                </Select>
-              </div>
             </div>
             <div className="mb-4 border rounded-lg p-2">
               <TextareaAutosize
@@ -258,7 +240,7 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
                 {feedback.success}
               </Typography>
             ) : null}
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
+            <Button variant="contained" color="primary" onClick={() => handleComplaintSubmit("kerosakan fasiliti" )}>
               Submit
             </Button>
           </Paper>
@@ -326,25 +308,6 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
                   className="w-full"
                 />
               </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <Select
-                  label="Complaint Type"
-                  required
-                  value={complaint.complaintType}
-                  onChange={(e) =>
-                    setComplaint({
-                      ...complaint,
-                      complaintType: e.target.value as ComplaintType,
-                    })
-                  }
-                  className="w-full"
-                >
-                  <MenuItem value="kerosakan fasiliti">
-                    Kerosakan Fasiliti
-                  </MenuItem>
-                  <MenuItem value="disiplin pelajar">Disiplin Pelajar</MenuItem>
-                </Select>
-              </div>
             </div>
             <div className="mb-4 border rounded-lg p-2">
               <TextareaAutosize
@@ -374,7 +337,7 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
                 {feedback.success}
               </Typography>
             ) : null}
-            <Button variant="contained" color="primary" onClick={handleSubmit}>
+            <Button variant="contained" color="primary" onClick={() => handleComplaintSubmit("disiplin pelajar")}>
               Submit
             </Button>
           </Paper>

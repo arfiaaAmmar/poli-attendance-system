@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { RELATIONSHIP } from "shared-library/src/declarations/constants";
+import { STATES_IN_MALAYSIA } from "shared-library/src/declarations/constants.js";
 import {
   Contact,
   Relationship,
@@ -95,8 +96,7 @@ const EmergencyContactInput = ({ data, setData }: EmergencyContactProp) => {
           />
         </div>
         <div className="mb-1 col-span-2">
-          <input
-            type="text"
+          <select
             name="emergencyContact.address.state"
             value={data?.address?.state!}
             onChange={(e) =>
@@ -106,8 +106,11 @@ const EmergencyContactInput = ({ data, setData }: EmergencyContactProp) => {
               })
             }
             className="mt-1 p-2 border rounded w-full"
-            placeholder="State"
-          />
+          >
+            {STATES_IN_MALAYSIA.map((state) => (
+              <option value={state}>{state}</option>
+            ))}
+          </select>
         </div>
         <div className="mb-1 col-span-2">
           <input

@@ -54,7 +54,6 @@ export const postCheckInForm = async (
   emergencyContact: Contact,
   restOfFormData: Partial<CheckInForm>
 ) => {
-  console.log(JSON.stringify(restOfFormData));
   try {
     const {
       roomNo,
@@ -143,16 +142,19 @@ export const postCheckInForm = async (
 export const postCheckOutForm = async (input: CheckoutForm) => {
   try {
     const formData = new FormData();
-    formData.append("name", input.name);
-    formData.append("phone", input.phone);
-    formData.append("roomNo", input.roomNo);
-    formData.append("blockNo", input.blockNo);
+    formData.append("name", input.name!);
+    formData.append("phone", input.phone!);
+    formData.append("roomNo", input.roomNo!);
+    formData.append("blockNo", input.blockNo!);
+    formData.append("formType", "keluar");
     formData.append("checkoutEvidenceFile", input.checkoutEvidenceFile!);
     formData.append("checkoutReason", input.checkoutReason!);
     formData.append("timestamp", input.timestamp?.toString()!);
 
+    console.log('formData', formData)
+
     const response = await fetch(
-      `${API_BASE_URL}${ENDPOINTS.postCheckInForm}`,
+      `${API_BASE_URL}${ENDPOINTS.postCheckOutForm}`,
       {
         method: "POST",
         body: formData,

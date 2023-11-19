@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Paper, Typography } from "@mui/material";
 import { isEmptyObject } from "../../../helpers/shared-helpers";
 import {
@@ -46,7 +46,7 @@ const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
   const [checkout, setCheckOut] = useState<CheckoutForm>(initialCheckoutForm);
 
   const handleCheckInFormFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement>
   ) => {
     const offerLetterFile = e?.target?.files?.[0];
     const paymentReceiptFile = e?.target?.files?.[1];
@@ -62,7 +62,7 @@ const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
   };
 
   const handleCheckOutFormFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement>
   ) => {
     const checkoutEvidenceFile = e?.target?.files?.[0];
     if (checkoutEvidenceFile) {
@@ -178,7 +178,7 @@ const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
           handleFileChange={handleCheckOutFormFileChange}
           setCheckOutForm={setCheckOut}
           setFileUploaded={setFileUploaded}
-          handleSubmit={handleCheckInFormSubmit}
+          handleSubmit={handleCheckOutFormSubmit}
         />
       );
     }

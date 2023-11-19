@@ -2,22 +2,18 @@
 import {
   useState,
   useEffect,
-  useContext,
-  Dispatch,
-  SetStateAction,
+  useContext
 } from "react";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
-  Avatar,
   Box,
   Checkbox,
   CssBaseline,
   FormControlLabel,
-  Typography,
+  Typography
 } from "@mui/material";
 import { getAuthorisedUser, loginUser } from "../api/user-api";
-import bgImage from "../assets/login_bg.png";
 import { AuthContext } from "../context/AuthContext";
 import {
   FM,
@@ -25,14 +21,16 @@ import {
   ADMIN_PAGES_PATH,
   STUDENT_PAGES_PATH,
   ENDPOINTS,
+  SHARED_PAGES,
 } from "shared-library/src/declarations/constants";
-import { User, UserType } from "shared-library/src/declarations/types";
-import { firstLetterUppercase } from "../helpers/shared-helpers.js";
+import { User } from "shared-library/src/declarations/types";
+import { firstLetterUppercase } from "../helpers/shared-helpers";
+import IMAGES from "../assets/assets";
 
 export const Login = () => {
   const [loginType, setLoginType] = useState("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const { setUser, setIsLoggedIn } = useContext(AuthContext);
@@ -92,7 +90,7 @@ export const Login = () => {
     <Box
       sx={{
         height: "100vh",
-        backgroundImage: `url(${bgImage})`,
+        backgroundImage: `url(${IMAGES.loginBgImage})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -137,6 +135,28 @@ export const Login = () => {
                   className="w-40 h-40 object-contain hover:cursor-pointer"
                 />
               </div>
+            </div>
+            <div className="flex justify-center gap-4 w-5/6 mx-auto mt-8">
+              <Link
+                to={SHARED_PAGES.registerUser.path}
+                type="submit"
+                style={{
+                  backgroundColor: "#59e899",
+                  width: "80%",
+                }}
+              >
+                Pengguna Baru
+              </Link>
+              <Link
+                to={SHARED_PAGES.forgotPassword.path}
+                type="submit"
+                style={{
+                  backgroundColor: "#E85969",
+                  width: "80%",
+                }}
+              >
+                Lupa Kata Kunci
+              </Link>
             </div>
           </>
         ) : (

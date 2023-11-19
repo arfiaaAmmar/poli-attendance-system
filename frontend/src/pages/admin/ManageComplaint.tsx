@@ -21,13 +21,17 @@ import {
   FM,
 } from "shared-library/src/declarations/constants";
 import { useAllComplaints } from "../../hooks/hooks";
-import { Complaint, Feedback } from "shared-library/src/declarations/types";
+import {
+  Complaint,
+  ComplaintType,
+  Feedback,
+} from "shared-library/src/declarations/types";
 import { ADMIN_PAGES_PATH } from "shared-library/src/declarations/constants.js";
 import { Link } from "react-router-dom";
 
 type ComplaintCurrentPage = "default" | "viewComplaint" | "adminResponse";
 
-const ManageComplaint = () => {
+const ManageComplaint = ({ type }: { type: ComplaintType }) => {
   const [currentPage, setCurrentPage] =
     useState<ComplaintCurrentPage>("default");
   const [feedback, setFeedback] = useState<Feedback>(initialFeedback);
