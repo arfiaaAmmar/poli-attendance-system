@@ -1,70 +1,90 @@
 import { Button, Typography } from "@mui/material";
 import {
-  CheckInForm,
-  Contact,
-  Feedback,
   Gender,
-  TenantInfo,
+  RestOfCheckInForm,
 } from "shared-library/src/declarations/types";
-import {
-  ChangeEvent,
-  Dispatch,
-  FormEvent,
-  HTMLInputTypeAttribute,
-  SetStateAction,
-} from "react";
+import { FormEvent } from "react";
 import {
   GENDER,
   STATES_IN_MALAYSIA,
+  initialEmergencyContact,
+  initialFeedback,
+  initialTenantInfo,
+  FM,
+  initialCheckInForm,
+  initialRestOfCheckInForm,
 } from "shared-library/src/declarations/constants";
 import EmergencyContactInput from "./EmergencyContactInput";
-import { Ethnicity } from "shared-library/src/declarations/types.js";
-import { ETHNICITY } from "shared-library/src/declarations/constants.js";
+import { Ethnicity } from "shared-library/src/declarations/types";
+import { ETHNICITY } from "shared-library/src/declarations/constants";
 import FeedbackMessage from "../../../components/ResponseMessage";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { getUserSessionData } from "../../../api/user-api";
+import {
+  isEmptyObject,
+  sendNotification,
+} from "../../../helpers/shared-helpers";
+import { postCheckInForm } from "../../../api/registration-api";
 
-type CheckInFormProp = {
-  feedback: Feedback;
-  checkInForm: CheckInForm;
-  tenantInfo: TenantInfo;
-  emergencyContact: Contact;
-  fileUploaded: boolean;
-  setCheckInForm: Dispatch<SetStateAction<CheckInForm>>;
-  setTenantInfo: Dispatch<SetStateAction<TenantInfo>>;
-  setEmergencyContact: Dispatch<SetStateAction<Contact>>;
-  setFileUploaded: Dispatch<SetStateAction<boolean>>;
-  handleSubmit: (e: FormEvent) => Promise<void>;
-  handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
-};
+const formFormComponent = () => {
+  const user = getUserSessionData();
+  const [feedback, setFeedback] = useState(initialFeedback);
+  const [tenantInfo, setTenantInfo] = useState(initialTenantInfo);
+  const [emergencyContact, setEmergencyContact] = useState(
+    initialEmergencyContact
+  );
+  const [restOfForm, setRestOfForm] = useState<RestOfCheckInForm>({
+    ...initialRestOfCheckInForm,
+    authorId: user._id,
+  });
+  const [fileUploaded, setFileUploaded] = useState(false);
 
-const CheckInFormComponent = ({
-  feedback,
-  checkInForm,
-  tenantInfo,
-  emergencyContact,
-  fileUploaded,
-  setCheckInForm,
-  setTenantInfo,
-  setEmergencyContact,
-  handleSubmit,
-}: CheckInFormProp) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const offerLetterFile = e?.target?.files?.[0];
     const paymentReceiptFile = e?.target?.files?.[1];
     if (offerLetterFile) {
-      setCheckInForm({ ...checkInForm, offerLetterFile: offerLetterFile });
+      setRestOfForm({ ...restOfForm, offerLetterFile });
+      setFileUploaded(true);
     }
     if (paymentReceiptFile) {
-      setCheckInForm({
-        ...checkInForm,
-        paymentReceiptFile: paymentReceiptFile,
+      setRestOfForm({ ...restOfForm, paymentReceiptFile });
+      setFileUploaded(true);
+    }
+  };
+
+  const handleFormSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    console.log(JSON.stringify(restOfForm, null, 2));
+    // TODO: Need to fix this.. had to disable first
+    // if (
+    //   isEmptyObject(tenantInfo) ||
+    //   isEmptyObject(emergencyContact) ||
+    //   isEmptyObject(restOfForm)
+    // ) {
+    //   setFeedback({ ...feedback, error: FM.pleaseFillNecessaryInformation });
+    //   return;
+    // }
+    try {
+      await postCheckInForm(tenantInfo, emergencyContact, restOfForm);
+      await sendNotification({
+        title: `${user.name} - Daftar Masuk`,
+        remarks: "Sila semak pendaftaran ini.",
       });
+      setFeedback({ ...feedback, success: FM.registerFormAdded });
+
+      setTimeout(() => {
+        setFeedback(initialFeedback);
+      }, 3000);
+      setRestOfForm(initialCheckInForm);
+      setFileUploaded(false);
+    } catch (error: any) {
+      setFeedback({ ...feedback, error });
     }
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="w-5/6 mx-auto mt-12">
+      <form onSubmit={handleFormSubmit} className="w-5/6 mx-auto mt-12">
         <Typography className="text-lg font-bold text-orange-500 my-2">
           BAHAGIAN A : MAKLUMAT PENGHUNI
         </Typography>
@@ -105,9 +125,9 @@ const CheckInFormComponent = ({
               <input
                 type="text"
                 name="roomNo"
-                value={checkInForm.roomNo || ""!}
+                value={restOfForm.roomNo || ""!}
                 onChange={(e) =>
-                  setCheckInForm({ ...checkInForm, roomNo: e.target.value })
+                  setRestOfForm({ ...restOfForm, roomNo: e.target.value })
                 }
                 className="mt-1 p-2 border rounded w-full"
               />
@@ -119,9 +139,9 @@ const CheckInFormComponent = ({
               <input
                 type="text"
                 name="blockNo"
-                value={checkInForm.blockNo || ""!}
+                value={restOfForm.blockNo || ""!}
                 onChange={(e) =>
-                  setCheckInForm({ ...checkInForm, blockNo: e.target.value })
+                  setRestOfForm({ ...restOfForm, blockNo: e.target.value })
                 }
                 className="mt-1 p-2 border rounded w-full"
               />
@@ -134,9 +154,9 @@ const CheckInFormComponent = ({
                 type="text"
                 name="resitNo"
                 placeholder="1234ABCD"
-                value={checkInForm.resitNo}
+                value={restOfForm.resitNo}
                 onChange={(e) =>
-                  setCheckInForm({ ...checkInForm, resitNo: e.target.value })
+                  setRestOfForm({ ...restOfForm, resitNo: e.target.value })
                 }
                 className="mt-1 p-2 border rounded w-full"
               />
@@ -370,10 +390,10 @@ const CheckInFormComponent = ({
           <input
             type="checkbox"
             name="tenantAgreement"
-            checked={checkInForm.tenantAgreement!}
+            checked={restOfForm.tenantAgreement!}
             onChange={(e) =>
-              setCheckInForm({
-                ...checkInForm,
+              setRestOfForm({
+                ...restOfForm,
                 tenantAgreement: e.target.checked,
               })
             }
@@ -385,7 +405,7 @@ const CheckInFormComponent = ({
           variant="contained"
           color="primary"
           className="bg-blue-500 text-white p-2 rounded cursor-pointer"
-          onClick={handleSubmit}
+          onClick={handleFormSubmit}
         >
           Submit
         </Button>
@@ -394,13 +414,4 @@ const CheckInFormComponent = ({
   );
 };
 
-export default CheckInFormComponent;
-
-type Input = {
-  type: HTMLInputTypeAttribute | undefined;
-  name?: string;
-  value: string;
-  label: string;
-  className: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => Dispatch<SetStateAction<any>>;
-};
+export default formFormComponent;

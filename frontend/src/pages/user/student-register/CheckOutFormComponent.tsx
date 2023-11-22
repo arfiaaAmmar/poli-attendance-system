@@ -1,35 +1,70 @@
 import { Button, Typography } from "@mui/material";
-import { CheckoutForm, Feedback } from "shared-library/src/declarations/types";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction } from "react";
-import { CHECKOUT_REASONS, initialCheckoutForm } from "shared-library/src/declarations/constants";
+import { ChangeEvent, FormEvent, useState } from "react";
+import {
+  CHECKOUT_REASONS,
+  FM,
+  initialCheckoutForm,
+  initialFeedback,
+} from "shared-library/src/declarations/constants";
 import FeedbackMessage from "../../../components/ResponseMessage";
+import { isEmptyObject } from "../../../helpers/shared-helpers";
+import { postCheckOutForm } from "../../../api/registration-api";
+import { getUserSessionData } from "../../../api/user-api";
 
-type CheckOutFormProp = {
-  feedback: Feedback;
-  checkOutForm: CheckoutForm;
-  fileUploaded: boolean;
-  setCheckOutForm: Dispatch<SetStateAction<CheckoutForm>>;
-  setFileUploaded: Dispatch<SetStateAction<boolean>>;
-  handleSubmit: (e: FormEvent) => Promise<void>;
-  handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
-};
+const formComponent = () => {
+  const user = getUserSessionData();
+  const [form, setForm] = useState({
+    ...initialCheckoutForm,
+    authorId: user._id,
+  });
+  const [feedback, setFeedback] = useState(initialFeedback);
+  const [fileUploaded, setFileUploaded] = useState(false);
 
-const CheckoutFormComponent = ({
-  feedback,
-  checkOutForm,
-  fileUploaded,
-  setCheckOutForm,
-  handleSubmit,
-  handleFileChange,
-}: CheckOutFormProp) => {
-  const [form, setForm ] = useState(initialCheckoutForm)
-  const handleCheckoutReasons = (checkoutReason: string) => {
-    setCheckOutForm({ ...checkOutForm, checkoutReason: checkoutReason });
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const checkoutEvidenceFile = e?.target?.files?.[0];
+    if (checkoutEvidenceFile) {
+      setForm({ ...form, checkoutEvidenceFile });
+    }
   };
+
+  const handleCheckoutReasons = (checkoutReason: string) => {
+    setForm({ ...form, checkoutReason });
+  };
+
+  const handleFormSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (isEmptyObject(form)) {
+      setFeedback({ ...feedback, error: FM.pleaseFillNecessaryInformation });
+      return;
+    }
+    try {
+      await postCheckOutForm(form);
+      setFeedback({ ...feedback, success: FM.registerFormAdded });
+
+      setTimeout(() => {
+        setFeedback(initialFeedback);
+      }, 3000);
+      setForm(initialCheckoutForm);
+    } catch (error: any) {
+      setFeedback({ ...feedback, error: error });
+    }
+  };
+
+  const {
+    roomChange,
+    blockChange,
+    graduated,
+    internship,
+    others,
+    semesterBreak,
+  } = CHECKOUT_REASONS;
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="w-5/6 mx-auto mt-12 h-screen">
+      <form
+        onSubmit={handleFormSubmit}
+        className="w-5/6 mx-auto mt-12 h-screen"
+      >
         <Typography className="text-lg font-bold text-orange-500 my-2">
           BUTIRAN PERMOHONAN
         </Typography>
@@ -39,81 +74,59 @@ const CheckoutFormComponent = ({
         <ol type="1" className="flex gap-8">
           <div>
             <li>
-              {CHECKOUT_REASONS.roomChange.toUpperCase()} :
+              {roomChange.toUpperCase()} :
               <input
                 className="ml-2"
                 type="checkbox"
-                checked={
-                  checkOutForm.checkoutReason === CHECKOUT_REASONS.roomChange
-                }
-                onChange={() =>
-                  handleCheckoutReasons(CHECKOUT_REASONS.roomChange)
-                }
+                checked={form.checkoutReason === roomChange}
+                onChange={() => handleCheckoutReasons(roomChange)}
               />
             </li>
             <li>
-              {CHECKOUT_REASONS.blockChange.toUpperCase()} :
+              {blockChange.toUpperCase()} :
               <input
                 className="ml-2"
                 type="checkbox"
-                checked={
-                  checkOutForm.checkoutReason === CHECKOUT_REASONS.blockChange
-                }
-                onChange={() =>
-                  handleCheckoutReasons(CHECKOUT_REASONS.blockChange)
-                }
+                checked={form.checkoutReason === blockChange}
+                onChange={() => handleCheckoutReasons(blockChange)}
               />
             </li>
             <li>
-              {CHECKOUT_REASONS.semesterBreak.toUpperCase()} :
+              {semesterBreak.toUpperCase()} :
               <input
                 className="ml-2"
                 type="checkbox"
-                checked={
-                  checkOutForm.checkoutReason === CHECKOUT_REASONS.semesterBreak
-                }
-                onChange={() =>
-                  handleCheckoutReasons(CHECKOUT_REASONS.semesterBreak)
-                }
+                checked={form.checkoutReason === semesterBreak}
+                onChange={() => handleCheckoutReasons(semesterBreak)}
               />
             </li>
           </div>
           <div>
             <li>
-              {CHECKOUT_REASONS.internship.toUpperCase()} :
+              {internship.toUpperCase()} :
               <input
                 className="ml-2"
                 type="checkbox"
-                checked={
-                  checkOutForm.checkoutReason === CHECKOUT_REASONS.internship
-                }
-                onChange={() =>
-                  handleCheckoutReasons(CHECKOUT_REASONS.internship)
-                }
+                checked={form.checkoutReason === internship}
+                onChange={() => handleCheckoutReasons(internship)}
               />
             </li>
             <li>
-              {CHECKOUT_REASONS.graduated.toUpperCase()} :
+              {graduated.toUpperCase()} :
               <input
                 className="ml-2"
                 type="checkbox"
-                checked={
-                  checkOutForm.checkoutReason === CHECKOUT_REASONS.graduated
-                }
-                onChange={() =>
-                  handleCheckoutReasons(CHECKOUT_REASONS.graduated)
-                }
+                checked={form.checkoutReason === graduated}
+                onChange={() => handleCheckoutReasons(graduated)}
               />
             </li>
             <li>
-              {CHECKOUT_REASONS.others.toUpperCase()} :
+              {others.toUpperCase()} :
               <input
                 className="ml-2"
                 type="checkbox"
-                checked={
-                  checkOutForm.checkoutReason === CHECKOUT_REASONS.others
-                }
-                onChange={() => handleCheckoutReasons(CHECKOUT_REASONS.others)}
+                checked={form.checkoutReason === others}
+                onChange={() => handleCheckoutReasons(others)}
               />
             </li>
           </div>
@@ -129,11 +142,9 @@ const CheckoutFormComponent = ({
               </label>
               <input
                 type="text"
-                name="checkOutForm.name"
-                value={checkOutForm.name || ""}
-                onChange={(e) =>
-                  setCheckOutForm({ ...checkOutForm, name: e.target.value })
-                }
+                name="form.name"
+                value={form.name || ""}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="mt-1 p-2 border rounded w-full"
               />
             </div>
@@ -144,10 +155,8 @@ const CheckoutFormComponent = ({
               <input
                 type="text"
                 name="roomNo"
-                value={checkOutForm?.roomNo || ""!}
-                onChange={(e) =>
-                  setCheckOutForm({ ...checkOutForm, roomNo: e.target.value })
-                }
+                value={form?.roomNo || ""!}
+                onChange={(e) => setForm({ ...form, roomNo: e.target.value })}
                 className="mt-1 p-2 border rounded w-full"
               />
             </div>
@@ -158,10 +167,8 @@ const CheckoutFormComponent = ({
               <input
                 type="text"
                 name="blockNo"
-                value={checkOutForm?.blockNo || ""!}
-                onChange={(e) =>
-                  setCheckOutForm({ ...checkOutForm, blockNo: e.target.value })
-                }
+                value={form?.blockNo || ""!}
+                onChange={(e) => setForm({ ...form, blockNo: e.target.value })}
                 className="mt-1 p-2 border rounded w-full"
               />
             </div>
@@ -171,11 +178,9 @@ const CheckoutFormComponent = ({
               </label>
               <input
                 type="text"
-                name="checkOutForm.phone"
-                value={checkOutForm?.phone || ""}
-                onChange={(e) =>
-                  setCheckOutForm({ ...checkOutForm, phone: e.target.value })
-                }
+                name="form.phone"
+                value={form?.phone || ""}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="mt-1 p-2 border rounded w-full"
               />
             </div>
@@ -226,7 +231,7 @@ const CheckoutFormComponent = ({
           variant="contained"
           color="primary"
           className="bg-blue-500 text-white p-2 rounded cursor-pointer mt-12"
-          onClick={handleSubmit}
+          onClick={handleFormSubmit}
         >
           Submit
         </Button>
@@ -235,4 +240,4 @@ const CheckoutFormComponent = ({
   );
 };
 
-export default CheckoutFormComponent;
+export default formComponent;

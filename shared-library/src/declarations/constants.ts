@@ -1,3 +1,4 @@
+import { getUserSessionData } from "../../../frontend/src/api/user-api";
 import {
   Address,
   Complaint,
@@ -8,6 +9,7 @@ import {
   CheckInForm,
   User,
   ChangePasswordForm,
+  RestOfCheckInForm,
 } from "./types";
 
 // export const API_BASE_URL = "https://poli-attendance-system.onrender.com" // For deploy
@@ -270,6 +272,16 @@ export const initialCheckInForm: CheckInForm = {
   offerLetterFile: null,
   paymentReceiptFile: null,
   emergencyContact: initialEmergencyContact,
+  tenantAgreement: false,
+  timestamp: Date.now(),
+};
+
+export const initialRestOfCheckInForm: RestOfCheckInForm = {
+  authorId: "",
+  blockNo: "",
+  formType: "default",
+  resitNo: "",
+  roomNo: "",
   tenantAgreement: false,
   timestamp: Date.now(),
 };

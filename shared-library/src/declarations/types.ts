@@ -96,6 +96,11 @@ export type CheckInForm = {
   timestamp: number | null;
 };
 
+export type RestOfCheckInForm = Omit<
+  CheckInForm,
+"tenantInfo" | "emergencyContact"
+>;
+
 export type CheckInForModel = Omit<
   CheckInForm,
   "offerLetterFile" | "paymentReceiptFile" | "checkoutEvidenceFile"
@@ -189,9 +194,9 @@ export type SendNotification = Pick<
 >;
 
 export type ChangePasswordForm = {
-  email: string,
-  newPassword: string,
-  repeatPassword: string,
-}
+  email: string;
+  newPassword: string;
+  repeatPassword: string;
+};
 
 export type EmptyObject<T> = Record<keyof T, unknown>;

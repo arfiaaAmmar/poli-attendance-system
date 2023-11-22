@@ -9,6 +9,7 @@ import {
   TenantInfo,
   CheckoutForm,
   CheckInForm,
+  RestOfCheckInForm,
 } from "shared-library/src/declarations/types";
 
 export const getAllRegistrationForms = async () => {
@@ -52,7 +53,7 @@ export const getRegistrationForm = async (formId: string) => {
 export const postCheckInForm = async (
   tenantInfo: TenantInfo,
   emergencyContact: Contact,
-  restOfFormData: Partial<CheckInForm>
+  restOfFormData: RestOfCheckInForm
 ) => {
   try {
     const {
@@ -155,7 +156,7 @@ export const postCheckOutForm = async (input: CheckoutForm) => {
     formData.append("checkoutReason", input.checkoutReason!);
     formData.append("timestamp", input.timestamp?.toString()!);
 
-    console.log('formData', formData)
+    console.log("formData", formData);
 
     const response = await fetch(
       `${API_BASE_URL}${ENDPOINTS.postCheckOutForm}`,
