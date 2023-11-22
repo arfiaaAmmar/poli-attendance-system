@@ -1,12 +1,18 @@
-import { timeStampFormatter } from "../../helpers/shared-helpers";
-import { useAllNotifications } from "../../hooks/hooks";
 import { Avatar, Paper, Typography } from "@mui/material";
 import { getUserSessionData } from "../../api/user-api";
 import { LoadingIndicator } from "../../components/LoadingIndicator";
+import { timeStampFormatter } from "../../helpers/shared-helpers";
+import { useAllNotifications } from "../../hooks/hooks";
+import { handleDelete } from "../../api/_shared-api";
 
 const Notifications = () => {
   const user = getUserSessionData();
-  const { data, isLoading, error } = useAllNotifications(user?._id);
+  const { data, isLoading, error, refetch } = useAllNotifications();
+
+  const handleDeleteNotification = async (_id: string) => {
+    await handleDelete(_id, "notification");
+    refetch();
+  };
 
   const renderNotifications = () => {
     switch (true) {
@@ -22,7 +28,7 @@ const Notifications = () => {
             </div>
             <div className="w-8/12">
               <Typography className="mb-2 text-xl font-semibold">
-                {notification?.sender?.name}
+                {/* {notification?.sender?.name} */} Ahmad
               </Typography>
               <Typography variant="h6" className="text-lg font-semibold">
                 {notification.title}
@@ -43,6 +49,11 @@ const Notifications = () => {
                   <span className="text-red-500">Unread</span>
                 )}
               </Typography>
+              <button
+                onClick={() => handleDeleteNotification(notification._id)}
+              >
+                Delete
+              </button>
             </div>
           </Paper>
         ));

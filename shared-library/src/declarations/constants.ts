@@ -7,11 +7,17 @@ import {
   CheckoutForm,
   CheckInForm,
   User,
+  CurrentUser,
 } from "./types";
 
-export const API_BASE_URL = "https://poli-attendance-system.onrender.com" // For deploy
-// export const API_BASE_URL = "http://localhost:8888"; // For dev
+// export const API_BASE_URL = "https://poli-attendance-system.onrender.com" // For deploy
+export const API_BASE_URL = "http://localhost:8888"; // For dev
 export const HEADER_TYPE = { "Content-Type": "application/json" };
+
+export const STORAGE = {
+  token: 'token',
+  userData: 'userData',
+} as const
 
 export const FORM_TYPE = {
   default: "default",
@@ -202,6 +208,7 @@ export const CHECKOUT_REASONS = {
 };
 
 export const initialComplaint: Complaint = {
+  authorId: '',
   email: "",
   name: "",
   title: "",
@@ -251,6 +258,7 @@ export const initialEmergencyContact: Contact = {
 };
 
 export const initialCheckInForm: CheckInForm = {
+  authorId: '',
   tenantInfo: initialTenantInfo,
   roomNo: "",
   blockNo: "",
@@ -264,6 +272,7 @@ export const initialCheckInForm: CheckInForm = {
 };
 
 export const initialCheckoutForm: CheckoutForm = {
+  authorId: '',
   name: "",
   phone: "",
   roomNo: "",

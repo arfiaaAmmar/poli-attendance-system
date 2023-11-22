@@ -1,30 +1,23 @@
 import { NextFunction, Request, Response } from "express";
 import { handleCatchError } from "../helpers/controller-helpers";
 import { NotificationModel } from "../model/models";
-import { INotification } from "shared-library/src/declarations/types";
 import { FM } from "shared-library/src/declarations/constants";
 
 export const postNotification = async (req: Request, res: Response) => {
-  const input: INotification = req.body;
   try {
-    await NotificationModel.create({ ...input });
+    const input = req.body;
+    await NotificationModel.create(input);
     res.status(201).json({ message: FM.notificationAdded });
   } catch (error) {
     handleCatchError(res, error);
   }
 };
 
-export const getAllNotifications = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const getAllNotifications = async (req: Request, res: Response) => {
   const { userId } = req.params;
 
   try {
-    const notifications = await NotificationModel.find({ author: userId })
-      .populate("author", "name")
-      .exec();
+    const notifications = await NotificationModel.find({ receiver: userId });
     if (!notifications) {
       return res.status(400).json({ message: FM.notificationNotFound });
     }

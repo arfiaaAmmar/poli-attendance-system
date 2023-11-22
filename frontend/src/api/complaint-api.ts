@@ -4,11 +4,20 @@ import {
   FM,
   HEADER_TYPE,
 } from "shared-library/src/declarations/constants";
-import { Complaint, ComplaintType } from "shared-library/src/declarations/types";
+import {
+  Complaint,
+  ComplaintType,
+  CurrentUser,
+} from "shared-library/src/declarations/types";
 
-export const postComplaint = async (input: Complaint, type: ComplaintType) => {
+export const postComplaint = async (
+  input: Complaint,
+  complaintType: ComplaintType
+) => {
   try {
     const formData = new FormData();
+    const currentUser: CurrentUser = JSON.parse(sessionStorage.getItem("userData")!);
+    formData.append("authorId", currentUser._id!);
     formData.append("email", input.email!);
     formData.append("name", input.name!);
     formData.append("title", input.title!);
@@ -21,7 +30,7 @@ export const postComplaint = async (input: Complaint, type: ComplaintType) => {
       "adminActionTaken",
       input.adminActionTaken.toString() ?? "false"
     );
-    formData.append("complaintType", input.complaintType!);
+    formData.append("complaintType", complaintType);
     formData.append("elaboration", input.elaboration!);
     formData.append("timestamp", Date.now().toString()!);
     formData.append("evidenceFile", input.evidenceFile!);
@@ -36,7 +45,7 @@ export const postComplaint = async (input: Complaint, type: ComplaintType) => {
       throw new Error(errorData.message);
     }
 
-    return response.json;
+    return response.json();
   } catch (error) {
     throw (error as Error).message;
   }

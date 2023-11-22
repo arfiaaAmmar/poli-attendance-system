@@ -14,7 +14,7 @@ export const registerUser = async (req: Request, res: Response) => {
     const { email } = userData;
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ message: FM.userAlreadyExist });
+      return res.status(409).json({ message: FM.default });
     }
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     await UserModel.create({ ...userData, password: hashedPassword });

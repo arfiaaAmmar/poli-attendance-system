@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { ComplaintModel } from "../model/models";
 import { handleCatchError } from "../helpers/controller-helpers";
 import { FM } from "shared-library/src/declarations/constants";
@@ -49,7 +49,7 @@ export const postComplaint = async (req: Request, res: Response) => {
   }
 };
 
-export const updateComplaint = async (req: Request, res: Response) => {
+export const updateComplaint = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const updateInput = req.body;
   try {

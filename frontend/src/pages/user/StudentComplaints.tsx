@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { postComplaint } from "../../api/complaint-api";
-import { downloadPDF } from "../../utils/pdfGenerate";
 import { isEmptyObject } from "../../helpers/shared-helpers";
 import {
   Button,
@@ -12,9 +11,7 @@ import {
   TableRow,
   TableCell,
   Paper,
-  Typography,
-  MenuItem,
-  Select,
+  Typography
 } from "@mui/material";
 import { getUserSessionData } from "../../api/user-api";
 import { useAllComplaints } from "../../hooks/hooks";
@@ -26,8 +23,7 @@ import {
 } from "shared-library/src/declarations/constants";
 import {
   Complaint,
-  ComplaintType,
-  FormType,
+  ComplaintType
 } from "shared-library/src/declarations/types";
 import {
   COMPLAINT_TYPE,

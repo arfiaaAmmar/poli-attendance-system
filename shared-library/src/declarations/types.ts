@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import mongoose, { Document, ObjectId } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 
 export type Ethnicity = "Melayu" | "Cina" | "India" | "Lain";
 export type Gender = "Lelaki" | "Perempuan";
@@ -69,6 +69,11 @@ export type User = {
   profilePicFileName?: string;
 };
 
+export type CurrentUser = Pick<
+  User,
+  "_id" | "email" | "name" | "phone" | "userType"
+>;
+
 export type UserForModel = Omit<User, "profilePicFile">;
 export type TenantInfo = Omit<User, "password" | "userType">;
 export interface IUser extends UserForModel, Document {
@@ -78,6 +83,7 @@ export interface IUser extends UserForModel, Document {
 
 export type CheckInForm = {
   _id?: string;
+  authorId: string;
   tenantInfo: TenantInfo;
   roomNo: string;
   blockNo: string;
@@ -103,6 +109,7 @@ export interface ICheckInForm extends CheckInForModel, Document {
 
 export type CheckoutForm = {
   _id?: string;
+  authorId: string;
   name: string;
   phone: string;
   roomNo: string;
@@ -113,15 +120,16 @@ export type CheckoutForm = {
   timestamp: number | null;
 };
 
-export type CheckOutForModel = Omit<CheckoutForm, 'checkoutEvidenceFile'>
+export type CheckOutForModel = Omit<CheckoutForm, "checkoutEvidenceFile">;
 
 export interface ICheckOutForm extends CheckOutForModel, Document {
   _id?: string;
-  checkoutEvidenceFileName: string
+  checkoutEvidenceFileName: string;
 }
 
 export type Complaint = {
   _id?: string;
+  authorId: string;
   email: string;
   name: string;
   title: string;
@@ -146,14 +154,8 @@ export interface IComplaint extends ComplaintForModel, Document {
 
 export type Notification = {
   _id?: string;
-  sender: {
-    _id?: string;
-    name: string;
-  };
-  receiver: {
-    _id?: string;
-    name: string;
-  };
+  sender: string;
+  receiver: string;
   userType: UserType;
   title: string;
   remarks: string;
@@ -161,13 +163,7 @@ export type Notification = {
   timestamp: number | null;
 };
 
-export type NotificationForModel = Omit<Notification, "sender" | "receiver">;
-
-export interface INotification extends NotificationForModel, Document {
-  _id?: string;
-  sender: mongoose.Types.ObjectId;
-  receiver: mongoose.Types.ObjectId;
-}
+export type INotification = Notification & Document
 
 export type DeleteControllerItem =
   | "complaint"
@@ -179,7 +175,7 @@ export type NestedState = {
   [key: string]: any;
 };
 
-export type UploadedFile = Record<string, Express.Multer.File>
+export type UploadedFile = Record<string, Express.Multer.File>;
 export type UploadedFiles = Record<string, Express.Multer.File[]>;
 
 export type FormState<T> = Record<

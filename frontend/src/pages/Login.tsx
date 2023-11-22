@@ -108,7 +108,7 @@ export const Login = () => {
       <CssBaseline />
       <div className="w-3/5 h-max text-center bg-neutral-100 rounded-md p-6 mx-auto my-40 bg-opacity-50 backdrop-blur-0">
         <p className="font-bold text-3xl">
-          Polytechnic Technology Hostal (PiTech)
+          Polytechnic Technology Hostel (PiTecH)
         </p>
         {loginType === "" ? (
           <>

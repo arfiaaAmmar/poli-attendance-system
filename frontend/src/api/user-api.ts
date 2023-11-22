@@ -3,8 +3,11 @@ import {
   ENDPOINTS,
   FM,
   HEADER_TYPE,
+  STORAGE,
 } from "shared-library/src/declarations/constants";
 import { User } from "shared-library/src/declarations/types";
+
+const { userData, token } = STORAGE;
 
 export const registerUser = async (input: User) => {
   try {
@@ -46,14 +49,12 @@ export const loginUser = async (
     }
 
     if (rememberMe) {
-      localStorage.setItem("token", data.token);
-      sessionStorage.removeItem("token");
+      localStorage.setItem(STORAGE.token, data.token);
+      sessionStorage.removeItem(STORAGE.token);
     } else {
-      sessionStorage.setItem("token", data.token);
-      localStorage.removeItem("token");
+      sessionStorage.setItem(STORAGE.token, data.token);
+      localStorage.removeItem(STORAGE.token);
     }
-
-    console.log(data);
 
     return data;
   } catch (error) {
@@ -63,8 +64,8 @@ export const loginUser = async (
 
 export const getAuthorisedUser = async () => {
   try {
-    const rememberedToken = localStorage.getItem("token");
-    const sessionToken = sessionStorage.getItem("token");
+    const rememberedToken = localStorage.getItem(STORAGE.token);
+    const sessionToken = sessionStorage.getItem(STORAGE.token);
 
     const token = sessionToken || rememberedToken;
     if (!token) {
@@ -85,7 +86,6 @@ export const getAuthorisedUser = async () => {
 
     const data = await response.json();
     sessionStorage.setItem("userData", JSON.stringify(data));
-    console.log("userData", data);
 
     return data;
   } catch (error) {
@@ -95,8 +95,7 @@ export const getAuthorisedUser = async () => {
 };
 
 export const getUserSessionData = (): User => {
-  const userData = sessionStorage.getItem("userData");
-  return JSON.parse(userData!);
+  return JSON.parse(sessionStorage.getItem(userData!)!);
 };
 
 export const getAllUsers = async () => {

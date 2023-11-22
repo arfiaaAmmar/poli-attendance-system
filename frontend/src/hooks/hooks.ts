@@ -17,6 +17,6 @@ export const useAllComplaints = () => {
   return useDataFetching<Complaint[]>(async () => await getAllComplaints());
 };
 
-export const useAllNotifications = (userId: string) => {
-  return useDataFetching<Notification[]>(async () => await getAllNotifications(userId));
+export const useAllNotifications = () => {
+  return useDataFetching<Notification[]>(async () => await getAllNotifications());
 };

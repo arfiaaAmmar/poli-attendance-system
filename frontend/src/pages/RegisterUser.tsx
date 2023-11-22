@@ -5,20 +5,20 @@ import {
   ETHNICITY,
   SHARED_PAGES,
   STATES_IN_MALAYSIA,
-  USER_TYPE_ARR,
-  initialFeedback,
-  initialRegisterUserForm,
+  USER_TYPE_ARR, initialRegisterUserForm, initialFeedback
 } from "shared-library/src/declarations/constants";
 import { useState } from "react";
 import { Feedback, User } from "shared-library/src/declarations/types";
 import { isEmptyObject } from "../helpers/shared-helpers";
 import { registerUser } from "../api/user-api";
 import IMAGES from "../assets/assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import FeedbackMessage from '../components/ResponseMessage';
 
 const RegisterUser = () => {
   const [formData, setFormData] = useState<User>(initialRegisterUserForm);
   const [feedback, setFeedback] = useState<Feedback>(initialFeedback);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -44,7 +44,7 @@ const RegisterUser = () => {
     if (isEmptyObject(formData)) {
       setFeedback({
         ...feedback,
-        error: FM.pleaseFillNecessaryInformation,
+        error: FM.userRegistered,
       });
       return;
     }
@@ -59,6 +59,7 @@ const RegisterUser = () => {
         setFeedback({ ...feedback, success: "" });
       }, 3000);
       setFormData(initialRegisterUserForm);
+      navigate("/login");
     } catch (error: any) {
       setFeedback({ ...feedback, error: error });
     }
@@ -269,6 +270,11 @@ const RegisterUser = () => {
           </div>
         </div>
         <div className="absolute right-4 bottom-4">
+          <FeedbackMessage
+            className="font-bold"
+            success={feedback.success}
+            error={feedback.error}
+          />
           <Button
             variant="contained"
             color="primary"

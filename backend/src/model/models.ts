@@ -75,6 +75,7 @@ const userSchema = new Schema<IUser>({
 });
 
 const checkInFormSchema = new Schema<ICheckInForm>({
+  authorId: String,
   tenantInfo: TenantInfoSchema,
   roomNo: String,
   blockNo: String,
@@ -91,6 +92,7 @@ const checkInFormSchema = new Schema<ICheckInForm>({
 });
 
 const checkOutFormSchema = new Schema<ICheckOutForm>({
+  authorId: String,
   name: String,
   phone: String,
   roomNo: String,
@@ -105,6 +107,7 @@ const checkOutFormSchema = new Schema<ICheckOutForm>({
 });
 
 const complaintSchema = new Schema<IComplaint>({
+  authorId: String,
   email: String,
   name: String,
   title: String,
@@ -124,16 +127,8 @@ const complaintSchema = new Schema<IComplaint>({
 });
 
 const notificationSchema = new Schema<INotification>({
-  sender: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  receiver: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
+  sender: String,
+  receiver: String,
   userType: {
     type: String,
     enum: userTypeEnum,

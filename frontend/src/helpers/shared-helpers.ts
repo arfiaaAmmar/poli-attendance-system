@@ -1,8 +1,9 @@
+import { useCallback, useEffect, useState } from "react";
 import {
-  useCallback,
-  useEffect,
-  useState
-} from "react";
+  CurrentUser,
+  Notification,
+} from "shared-library/src/declarations/types";
+import { postNotification } from "../api/notification-api";
 
 /**
  * Format timestamp according to locale
@@ -30,10 +31,34 @@ export const timeStampFormatter = (timestamp: number | string | null) => {
 };
 
 /**
- * Get Unix/Epoch timestamp i.e 163728576275
+ * Sends notification to student or admin
  *
+ * @param {string} receiverId
+ * @param {string} title
+ * @param {string} remarks
  */
-const getTimestamp = () => new Date().getTime();
+export const sendNotification = async (
+  receiverId: string,
+  title: string,
+  remarks: string
+) => {
+  try {
+    const currentUserData: CurrentUser = JSON.parse(
+      sessionStorage.getItem("userData")!
+    );
+    await postNotification({
+      sender: currentUserData._id!,
+      receiver: receiverId,
+      userType: currentUserData.userType,
+      title,
+      remarks,
+      isRead: false,
+      timestamp: Date.now(),
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 /**
  * Handle fetch response
@@ -70,7 +95,7 @@ export const isEmpty = (value: any): boolean =>
  * @return {boolean}
  */
 export const isEmptyObject = (obj: Record<string, any>): boolean =>
-  Object.values(obj).every(isEmpty);
+  Object.values(obj).some((value) => isEmpty(value));
 
 // TODO: Not yet working
 /**
@@ -195,43 +220,7 @@ export const useDataFetching = <T>(fetchFunction: () => Promise<T | null>) => {
   return { data, isLoading, error, refetch };
 };
 
-// /**
-//  * Helper function for creating data fetching hooks.
-//  *
-//  * @template T
-//  * @param {() => Promise<T | null>} fetchFunction - The function that fetches the data.
-//  * @returns {{ data: T | null, isLoading: boolean, error: Error | null }}
-//  */
-// export const useDataFetching = <T>(fetchFunction: () => Promise<T | null>) => {
-//   const [data, setData] = useState<T | null>(null);
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [error, setError] = useState<Error | null>(null);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       setIsLoading(true);
-//       setError(null);
-
-//       try {
-//         const result = await fetchFunction();
-//         if (result !== null) {
-//           setData(result);
-//         }
-//       } catch (error: any) {
-//         setError(error);
-//       }
-
-//       setIsLoading(false);
-//     };
-
-//     fetchData();
-//   }, [fetchFunction]);
-
-//   return { data, isLoading, error };
-// };
-
-
-// STRING RELATED FUNCTIONS 
+// STRING RELATED FUNCTIONS
 
 export const truncateText = (txt: string, maxLength: number): string => {
   if (txt.length <= maxLength) {
@@ -239,7 +228,7 @@ export const truncateText = (txt: string, maxLength: number): string => {
   } else {
     return txt.substring(0, maxLength) + "...";
   }
-}
+};
 
 export const firstLetterUppercase = (txt: string) => {
   return txt.charAt(0).toUpperCase() + txt.slice(1);

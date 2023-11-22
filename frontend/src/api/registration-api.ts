@@ -66,6 +66,8 @@ export const postCheckInForm = async (
     } = restOfFormData;
 
     const formData = new FormData();
+    const authorId = JSON.parse(sessionStorage.getItem("userData")!);
+    formData.append("authorId", authorId);
     formData.append("tenantInfo[name]", tenantInfo?.name!);
     formData.append("tenantInfo[nric]", tenantInfo?.nric!);
     formData.append("tenantInfo[matrikNo]", tenantInfo?.matrikNo!);
@@ -142,6 +144,8 @@ export const postCheckInForm = async (
 export const postCheckOutForm = async (input: CheckoutForm) => {
   try {
     const formData = new FormData();
+    const authorId = JSON.parse(sessionStorage.getItem("userData")!);
+    formData.append("authorId", authorId);
     formData.append("name", input.name!);
     formData.append("phone", input.phone!);
     formData.append("roomNo", input.roomNo!);

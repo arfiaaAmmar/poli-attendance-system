@@ -1,33 +1,38 @@
-import { useState } from "react";
+import MessageIcon from "@mui/icons-material/Message";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
+  Button,
+  Checkbox,
   Table,
+  TableBody,
+  TableCell,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
-  Button,
-  Typography,
   TextareaAutosize,
-  Checkbox,
+  Typography,
 } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import MessageIcon from "@mui/icons-material/Message";
-import { updateComplaint } from "../../api/complaint-api";
-import { handleDelete } from "../../api/_shared-api";
-import { isEmpty, truncateText } from "../../helpers/shared-helpers";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import {
-  initialFeedback,
-  initialComplaint,
+  ADMIN_PAGES_PATH,
   FM,
+  initialComplaint,
+  initialFeedback,
 } from "shared-library/src/declarations/constants";
-import { useAllComplaints } from "../../hooks/hooks";
 import {
   Complaint,
   ComplaintType,
   Feedback,
 } from "shared-library/src/declarations/types";
-import { ADMIN_PAGES_PATH } from "shared-library/src/declarations/constants.js";
-import { Link } from "react-router-dom";
+import { handleDelete } from "../../api/_shared-api";
+import { updateComplaint } from "../../api/complaint-api";
+import {
+  isEmpty,
+  sendNotification,
+  truncateText,
+} from "../../helpers/shared-helpers";
+import { useAllComplaints } from "../../hooks/hooks";
+import { postNotification } from "../../api/notification-api";
 
 type ComplaintCurrentPage = "default" | "viewComplaint" | "adminResponse";
 
@@ -38,22 +43,34 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
   const [complaint, setComplaint] = useState<Complaint>(initialComplaint);
   const fetchedComplaints = useAllComplaints();
 
-  const handleSubmitResponse = async (id: string | undefined) => {
-    if (isEmpty(complaint.adminResponse)) {
-      setFeedback({ ...feedback, error: FM.pleaseFillTheResponse });
-      return;
-    }
+  const handleSubmitResponse = async (
+    complaintId: string,
+    complaintAuthorId: string
+  ) => {
     try {
-      await updateComplaint(id, { adminResponse: complaint?.adminResponse! });
-      setComplaint(initialComplaint);
-      setFeedback({ ...feedback, success: FM.complaintAdded });
+      if (isEmpty(complaint.adminResponse)) {
+        setFeedback({ ...feedback, error: FM.pleaseFillTheResponse });
+        return;
+      }
+      await updateComplaint(complaintId, {
+        adminResponse: complaint?.adminResponse!,
+      });
+      await sendNotification(
+        complaintAuthorId,
+        complaint?.title,
+        "Response has been submitted by admin"
+      );
 
       setTimeout(() => {
         setFeedback({ ...feedback, success: "" });
       }, 3000);
+      setComplaint(initialComplaint);
+      setCurrentPage("default");
+      setFeedback({ ...feedback, success: FM.complaintAdded });
       fetchedComplaints.refetch();
     } catch (error: any) {
       setFeedback(error);
+      console.error(error);
     }
   };
 
@@ -217,6 +234,7 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
             style={{ cursor: "pointer", fontWeight: "bold" }}
             onClick={async () => {
               await handleDelete(complaint._id, "complaint");
+              setCurrentPage("default");
               fetchedComplaints.refetch();
             }}
           >
@@ -266,7 +284,9 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
         <Button
           variant="contained"
           color="success"
-          onClick={() => handleSubmitResponse(complaint._id)}
+          onClick={() => {
+            handleSubmitResponse(complaint._id, complaint.authorId);
+          }}
           className="mt-4"
         >
           Hantar
