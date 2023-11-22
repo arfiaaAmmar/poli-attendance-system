@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { handleCatchError } from "../helpers/controller-helpers";
 import { NotificationModel } from "../model/models";
-import { FM } from "shared-library/src/declarations/constants";
+import { FM, USER_TYPE } from "shared-library/src/declarations/constants";
 
 export const postNotification = async (req: Request, res: Response) => {
   try {
@@ -14,11 +14,17 @@ export const postNotification = async (req: Request, res: Response) => {
 };
 
 export const getAllNotifications = async (req: Request, res: Response) => {
-  const { userId } = req.params;
+  const { userType, userId } = req.params;
 
   try {
-    const notifications = await NotificationModel.find({ receiver: userId });
-    if (!notifications) {
+    let notifications;
+    const { penyelia, pelajar } = USER_TYPE;
+    const propToSeach =
+      userType === penyelia
+        ? { senderUserType: pelajar }
+        : { receiverId: userId, senderUserType: penyelia };
+    notifications = await NotificationModel.find(propToSeach);
+    if (!notifications || notifications.length === 0) {
       return res.status(400).json({ message: FM.notificationNotFound });
     }
 

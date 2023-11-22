@@ -9,7 +9,7 @@ const FeedbackMessage = ({
   success,
   error,
   className,
-}: FeedbackMessageProp) => {
+}: Partial<FeedbackMessageProp>) => {
   let textStyle = "";
   const responseMessage = success ? success : error;
   if (success) textStyle = "text-green-500";

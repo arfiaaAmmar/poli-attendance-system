@@ -7,6 +7,7 @@ import {
   login,
   registerUser,
   authoriseUser,
+  changeUserPassword,
 } from "./controllers/user-controllers";
 import {
   deleteRegisterForm,
@@ -59,6 +60,7 @@ app.post(ENDPOINTS.register, registerUser); // Passed test
 app.post(ENDPOINTS.login, login); // Passed test
 app.get(ENDPOINTS.authoriseUser, authoriseUser); // Passed test
 app.get(ENDPOINTS.getAllUsers, getAllUsers); // Passed test
+app.put(ENDPOINTS.changeUserPassword, changeUserPassword); // Passed test
 app.delete(ENDPOINTS.deleteUser, deleteUser); // Passed test
 
 // Multer and File Uploads
@@ -88,7 +90,7 @@ app.post(
   ENDPOINTS.postComplaint,
   uploadComplaintEvidence.single("evidenceFile"),
   postComplaint
-); // Passed test w/h file
+); // Passed test
 app.get(ENDPOINTS.getAllComplaints, getAllComplaints); // Passed test
 app.get(ENDPOINTS.getComplaint, getComplaint); // Passed test
 app.patch(ENDPOINTS.updateComplaint, updateComplaint); // Passed test

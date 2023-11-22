@@ -44,7 +44,8 @@ export const login = async (
       });
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) return res.status(401).json({ message: FM.invalidEmailOrPassword });
+    if (!passwordMatch)
+      return res.status(401).json({ message: FM.invalidEmailOrPassword });
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET!);
     return res.json({ message: FM.loggedInSuccessfully, token });
@@ -52,7 +53,6 @@ export const login = async (
     handleCatchError(res, error);
   }
 };
-
 
 export const authoriseUser = async (
   req: Request,
@@ -95,6 +95,22 @@ export const getAllUsers = async (req: Request, res: Response) => {
     return res.json(users);
   } catch (error) {
     handleCatchError(res, error);
+  }
+};
+
+export const changeUserPassword = async (req: Request, res: Response) => {
+  const { email, newPassword } = req.body;
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) return res.status(404).json({ message: FM.userNotFound });
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(200).json({ message: FM.passwordChangeSuccess });
+  } catch (error) {
+    console.error("Error changing password:", error);
+    return res.status(500).json({ message: FM.passwordChangeFailed });
   }
 };
 

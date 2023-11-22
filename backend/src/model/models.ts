@@ -127,9 +127,9 @@ const complaintSchema = new Schema<IComplaint>({
 });
 
 const notificationSchema = new Schema<INotification>({
-  sender: String,
-  receiver: String,
-  userType: {
+  senderId: String,
+  receiverId: String,
+  senderUserType: {
     type: String,
     enum: userTypeEnum,
   },

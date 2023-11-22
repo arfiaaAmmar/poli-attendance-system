@@ -1,6 +1,9 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Paper, Typography } from "@mui/material";
-import { isEmptyObject } from "../../../helpers/shared-helpers";
+import {
+  isEmptyObject,
+  sendNotification,
+} from "../../../helpers/shared-helpers";
 import {
   Contact,
   Feedback,
@@ -29,6 +32,7 @@ import {
   CheckoutForm,
 } from "shared-library/src/declarations/types";
 import CheckoutFormComponent from "./CheckOutFormComponent";
+import { getUserSessionData } from "../../../api/user-api";
 
 type StudentRegisterFormProps = {
   page: FormType;
@@ -44,52 +48,37 @@ const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
   const navigate = useNavigate();
   const [checkIn, setCheckIn] = useState<CheckInForm>(initialCheckInForm);
   const [checkout, setCheckOut] = useState<CheckoutForm>(initialCheckoutForm);
+  const userData = getUserSessionData();
 
-  const handleCheckInFormFileChange = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleCheckInFormFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const offerLetterFile = e?.target?.files?.[0];
     const paymentReceiptFile = e?.target?.files?.[1];
     if (offerLetterFile) {
       setCheckIn({ ...checkIn, offerLetterFile: offerLetterFile });
     }
     if (paymentReceiptFile) {
-      setCheckIn({
-        ...checkIn,
-        paymentReceiptFile: paymentReceiptFile,
-      });
+      setCheckIn({ ...checkIn, paymentReceiptFile: paymentReceiptFile });
     }
   };
 
-  const handleCheckOutFormFileChange = (
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleCheckOutFormFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const checkoutEvidenceFile = e?.target?.files?.[0];
     if (checkoutEvidenceFile) {
-      setCheckOut({
-        ...checkout,
-        checkoutEvidenceFile: checkoutEvidenceFile,
-      });
+      setCheckOut({ ...checkout, checkoutEvidenceFile: checkoutEvidenceFile });
     }
   };
 
   const handleCheckInFormSubmit = async (e: FormEvent) => {
     if (isEmptyObject(checkIn)) {
-      setFeedback({
-        ...feedback,
-        error: FM.pleaseFillNecessaryInformation,
-      });
+      setFeedback({ ...feedback, error: FM.pleaseFillNecessaryInformation });
       return;
     }
     try {
       await postCheckInForm(tenantInfo, emergencyContact, checkIn);
-      setFeedback({
-        ...feedback,
-        success: FM.registerFormAdded,
-      });
+      setFeedback({ ...feedback, success: FM.registerFormAdded });
 
       setTimeout(() => {
-        setFeedback({ ...feedback, success: "" });
+        setFeedback(initialFeedback);
       }, 3000);
       setCheckIn(initialCheckInForm);
     } catch (error: any) {
@@ -99,21 +88,19 @@ const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
 
   const handleCheckOutFormSubmit = async (e: FormEvent) => {
     if (isEmptyObject(checkIn)) {
-      setFeedback({
-        ...feedback,
-        error: FM.pleaseFillNecessaryInformation,
-      });
+      setFeedback({ ...feedback, error: FM.pleaseFillNecessaryInformation });
       return;
     }
     try {
       await postCheckOutForm(checkout);
-      setFeedback({
-        ...feedback,
-        success: FM.registerFormAdded,
+      setFeedback({ ...feedback, success: FM.registerFormAdded });
+      await sendNotification({
+        title: ` ${firstLetterUppercase(userData.name)} - Pendaftaran Keluar`,
+        remarks: "New checkout form sent",
       });
 
       setTimeout(() => {
-        setFeedback({ ...feedback, success: "" });
+        setFeedback(initialFeedback);
       }, 3000);
       setCheckIn(initialCheckInForm);
     } catch (error: any) {
@@ -131,7 +118,7 @@ const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
               navigate(STUDENT_PAGES_PATH.borangPendaftaranMasuk);
             }}
           >
-            <p className="font-bold text-lg">DAFTAR MASUK</p>
+          <p className="font-bold text-lg">DAFTAR MASUK</p>
             <img
               src="https://logowik.com/content/uploads/images/student5651.jpg"
               alt=""
@@ -157,6 +144,7 @@ const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
     if (page === FORM_TYPE.masuk) {
       return (
         <CheckInFormComponent
+          feedback={feedback}
           checkInForm={checkIn}
           tenantInfo={tenantInfo}
           emergencyContact={emergencyContact}
@@ -173,6 +161,7 @@ const StudentRegisterForm = ({ page }: StudentRegisterFormProps) => {
     if (page === FORM_TYPE.keluar) {
       return (
         <CheckoutFormComponent
+          feedback={feedback}
           checkOutForm={checkout}
           fileUploaded={fileUploaded}
           handleFileChange={handleCheckOutFormFileChange}

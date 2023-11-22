@@ -5,19 +5,21 @@ import {
   ETHNICITY,
   SHARED_PAGES,
   STATES_IN_MALAYSIA,
-  USER_TYPE_ARR, initialRegisterUserForm, initialFeedback
+  USER_TYPE_ARR,
+  initialRegisterUserForm,
+  initialFeedback,
 } from "shared-library/src/declarations/constants";
 import { useState } from "react";
-import { Feedback, User } from "shared-library/src/declarations/types";
-import { isEmptyObject } from "../helpers/shared-helpers";
-import { registerUser } from "../api/user-api";
-import IMAGES from "../assets/assets";
+import { isEmptyObject, sendNotification } from "../helpers/shared-helpers";
+import { getUserSessionData, registerUser } from "../api/user-api";
+import IMAGES from "../assets/_assets";
 import { Link, useNavigate } from "react-router-dom";
-import FeedbackMessage from '../components/ResponseMessage';
+import FeedbackMessage from "../components/ResponseMessage";
 
 const RegisterUser = () => {
-  const [formData, setFormData] = useState<User>(initialRegisterUserForm);
-  const [feedback, setFeedback] = useState<Feedback>(initialFeedback);
+  const [formData, setFormData] = useState(initialRegisterUserForm);
+  const [feedback, setFeedback] = useState(initialFeedback);
+  const user = getUserSessionData();
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -44,7 +46,7 @@ const RegisterUser = () => {
     if (isEmptyObject(formData)) {
       setFeedback({
         ...feedback,
-        error: FM.userRegistered,
+        error: FM.pleaseFillNecessaryInformation,
       });
       return;
     }
@@ -54,9 +56,13 @@ const RegisterUser = () => {
         ...feedback,
         success: FM.registerFormAdded,
       });
+      await sendNotification({
+        title: `${user.name} - Pendaftaran baru`,
+        remarks: `${user.name} telah membuat pendaftaran baru. Sila semak segera.`,
+      });
 
       setTimeout(() => {
-        setFeedback({ ...feedback, success: "" });
+        setFeedback(initialFeedback);
       }, 3000);
       setFormData(initialRegisterUserForm);
       navigate("/login");

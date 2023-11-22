@@ -154,16 +154,16 @@ export interface IComplaint extends ComplaintForModel, Document {
 
 export type Notification = {
   _id?: string;
-  sender: string;
-  receiver: string;
-  userType: UserType;
+  senderId?: string;
+  receiverId?: string;
+  senderUserType: UserType;
   title: string;
   remarks: string;
   isRead: boolean;
   timestamp: number | null;
 };
 
-export type INotification = Notification & Document
+export type INotification = Notification & Document;
 
 export type DeleteControllerItem =
   | "complaint"
@@ -182,3 +182,16 @@ export type FormState<T> = Record<
   keyof T,
   string | number | null | boolean | null
 >;
+
+export type SendNotification = Pick<
+  Notification,
+  "title" | "receiverId" | "remarks"
+>;
+
+export type ChangePasswordForm = {
+  email: string,
+  newPassword: string,
+  repeatPassword: string,
+}
+
+export type EmptyObject<T> = Record<keyof T, unknown>;

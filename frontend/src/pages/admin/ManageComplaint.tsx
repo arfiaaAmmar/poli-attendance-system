@@ -56,9 +56,9 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
         adminResponse: complaint?.adminResponse!,
       });
       await sendNotification(
-        complaintAuthorId,
         complaint?.title,
-        "Response has been submitted by admin"
+        "Response has been submitted by admin",
+        complaintAuthorId
       );
 
       setTimeout(() => {

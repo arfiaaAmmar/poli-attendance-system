@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  useState,
-  useEffect,
-  useContext
-} from "react";
+import { useState, useEffect, useContext } from "react";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -11,7 +7,7 @@ import {
   Checkbox,
   CssBaseline,
   FormControlLabel,
-  Typography
+  Typography,
 } from "@mui/material";
 import { getAuthorisedUser, loginUser } from "../api/user-api";
 import { AuthContext } from "../context/AuthContext";
@@ -25,7 +21,8 @@ import {
 } from "shared-library/src/declarations/constants";
 import { User } from "shared-library/src/declarations/types";
 import { firstLetterUppercase } from "../helpers/shared-helpers";
-import IMAGES from "../assets/assets";
+import IMAGES from "../assets/_assets";
+import FeedbackMessage from "../components/ResponseMessage";
 
 export const Login = () => {
   const [loginType, setLoginType] = useState("");
@@ -107,6 +104,9 @@ export const Login = () => {
       </div>
       <CssBaseline />
       <div className="w-3/5 h-max text-center bg-neutral-100 rounded-md p-6 mx-auto my-40 bg-opacity-50 backdrop-blur-0">
+        <div className="w-1/3 mx-auto mt-4 mb-8">
+          <img src={IMAGES.uniLogo} alt="" />
+        </div>
         <p className="font-bold text-3xl">
           Polytechnic Technology Hostel (PiTecH)
         </p>
@@ -140,20 +140,14 @@ export const Login = () => {
               <Link
                 to={SHARED_PAGES.registerUser.path}
                 type="submit"
-                style={{
-                  backgroundColor: "#59e899",
-                  width: "80%",
-                }}
+                className="bg-green-300 font-bold text-lg border-2 border-black w-3/4"
               >
                 Pengguna Baru
               </Link>
               <Link
                 to={SHARED_PAGES.forgotPassword.path}
                 type="submit"
-                style={{
-                  backgroundColor: "#E85969",
-                  width: "80%",
-                }}
+                className="bg-red-300 font-bold text-lg border-2 border-black w-3/4"
               >
                 Lupa Kata Kunci
               </Link>
@@ -195,6 +189,7 @@ export const Login = () => {
               }
               label="Remember me"
             />
+            <FeedbackMessage className="text-lg font-bold" error={error} />
             <div className="flex justify-center gap-4">
               <Button
                 type="submit"
@@ -221,7 +216,6 @@ export const Login = () => {
                 Kembali
               </Button>
             </div>
-            {error && <Typography sx={{ color: "red" }}>{error}</Typography>}
           </>
         )}
       </div>

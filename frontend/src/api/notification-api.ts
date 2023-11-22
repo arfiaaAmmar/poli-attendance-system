@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   API_BASE_URL,
   ENDPOINTS,
@@ -9,60 +9,65 @@ import {
   CurrentUser,
   Notification,
 } from "shared-library/src/declarations/types";
+import { getUserSessionData } from "./user-api";
 
 export const getAllNotifications = async () => {
-  const currentUserData: CurrentUser = JSON.parse(
-    sessionStorage.getItem("userData")!
-  );
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/get-all-notifications/${currentUserData._id}`,
-      {
-        headers: HEADER_TYPE,
-      }
+    const userData = getUserSessionData();
+    const { userType, _id } = userData;
+
+    const response = await axios.get(
+      `${API_BASE_URL}/get-all-notifications/${userType}/${_id}`,
+      { headers: HEADER_TYPE }
     );
-    const data = await response.json();
-    if (!response.ok) {
-      const error = data.error || FM.default;
-      throw new Error(error);
-    }
-    return data;
-  } catch (error: any) {
+
+    return response.data;
+  } catch (error) {
+    console.error(FM.default, error);
     throw new Error(FM.default);
+  }
+};
+
+export const getNotification = async (id: string) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/get-notification/${id}`);
+    return response.data;
+  } catch (error) {
+    throw new Error(FM.notificationNotFound);
   }
 };
 
 export const postNotification = async (input: Notification) => {
   try {
-    console.log(JSON.stringify(input, null, 2));
-    const response = await axios.post(
+    const response = await fetch(
       `${API_BASE_URL}${ENDPOINTS.postNotification}`,
-      input
+      {
+        method: "POST",
+        headers: HEADER_TYPE,
+        body: JSON.stringify(input),
+      }
     );
-    if (!response.data.success) {
-      throw new Error(response.data.message);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
     }
-    return response.data.data;
+
+    return response.json;
   } catch (error: any) {
-    throw new Error(
-      error.message || "An error occurred while sending the notification."
-    );
+    throw new Error(error.message || FM.default);
   }
 };
 
-
 export const updateNotificationIsRead = async (id: string) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/update-notification/${id}`, {
-      method: "PUT",
-      headers: HEADER_TYPE,
-      body: JSON.stringify({ isRead: true }),
-    });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || FM.notificationUpdateFailed);
-    }
+    const response = await axios.put(
+      `${API_BASE_URL}/update-notification/${id}`,
+      { isRead: true },
+      { headers: HEADER_TYPE }
+    );
+    return response.data;
   } catch (error) {
     console.error(FM.notificationUpdateFailed, error);
+    throw new Error(FM.notificationUpdateFailed);
   }
 };

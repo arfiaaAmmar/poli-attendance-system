@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   CurrentUser,
+  EmptyObject,
   Notification,
+  SendNotification,
 } from "shared-library/src/declarations/types";
 import { postNotification } from "../api/notification-api";
+import { getUserSessionData } from "../api/user-api";
 
 /**
  * Format timestamp according to locale
@@ -33,32 +36,26 @@ export const timeStampFormatter = (timestamp: number | string | null) => {
 /**
  * Sends notification to student or admin
  *
- * @param {string} receiverId
- * @param {string} title
- * @param {string} remarks
+ * @param {SendNotification} input
+ *
  */
-export const sendNotification = async (
-  receiverId: string,
-  title: string,
-  remarks: string
-) => {
+export async function sendNotification(input: SendNotification) {
   try {
-    const currentUserData: CurrentUser = JSON.parse(
-      sessionStorage.getItem("userData")!
-    );
+    const { title, remarks, receiverId } = input;
+    const currentUser: CurrentUser = getUserSessionData();
     await postNotification({
-      sender: currentUserData._id!,
-      receiver: receiverId,
-      userType: currentUserData.userType,
-      title,
-      remarks,
+      senderId: currentUser._id,
+      receiverId: receiverId!,
+      senderUserType: currentUser.userType,
+      title: title!,
+      remarks: remarks!,
       isRead: false,
       timestamp: Date.now(),
     });
   } catch (error) {
     console.error(error);
   }
-};
+}
 
 /**
  * Handle fetch response
@@ -96,6 +93,7 @@ export const isEmpty = (value: any): boolean =>
  */
 export const isEmptyObject = (obj: Record<string, any>): boolean =>
   Object.values(obj).some((value) => isEmpty(value));
+
 
 // TODO: Not yet working
 /**

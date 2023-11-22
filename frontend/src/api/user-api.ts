@@ -5,7 +5,11 @@ import {
   HEADER_TYPE,
   STORAGE,
 } from "shared-library/src/declarations/constants";
-import { User } from "shared-library/src/declarations/types";
+import {
+  ChangePasswordForm,
+  CurrentUser,
+  User,
+} from "shared-library/src/declarations/types";
 
 const { userData, token } = STORAGE;
 
@@ -94,7 +98,7 @@ export const getAuthorisedUser = async () => {
   }
 };
 
-export const getUserSessionData = (): User => {
+export const getUserSessionData = (): CurrentUser => {
   return JSON.parse(sessionStorage.getItem(userData!)!);
 };
 
@@ -113,5 +117,33 @@ export const getAllUsers = async () => {
     return data;
   } catch (error: any) {
     throw new Error(FM.default);
+  }
+};
+
+export const changeUserPassword = async (
+  email: string,
+  newPassword: string
+) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}${ENDPOINTS.changeUserPassword}`,
+      {
+        method: "PUT",
+        headers: HEADER_TYPE,
+        body: JSON.stringify({
+          email,
+          newPassword,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
+
+    return response.json;
+  } catch (error) {
+    throw (error as Error).message;
   }
 };

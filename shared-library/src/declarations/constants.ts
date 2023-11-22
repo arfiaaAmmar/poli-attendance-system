@@ -7,7 +7,7 @@ import {
   CheckoutForm,
   CheckInForm,
   User,
-  CurrentUser,
+  ChangePasswordForm,
 } from "./types";
 
 // export const API_BASE_URL = "https://poli-attendance-system.onrender.com" // For deploy
@@ -15,9 +15,9 @@ export const API_BASE_URL = "http://localhost:8888"; // For dev
 export const HEADER_TYPE = { "Content-Type": "application/json" };
 
 export const STORAGE = {
-  token: 'token',
-  userData: 'userData',
-} as const
+  token: "token",
+  userData: "userData",
+} as const;
 
 export const FORM_TYPE = {
   default: "default",
@@ -40,11 +40,11 @@ export const RELATIONSHIP = {
 } as const;
 
 export const ETHNICITY = {
-  melayu: 'Melayu',
-  cina: 'Cina',
-  india: 'India',
-  lainLain: 'Lain-lain',
-} as const
+  melayu: "Melayu",
+  cina: "Cina",
+  india: "India",
+  lainLain: "Lain-lain",
+} as const;
 
 export const GENDER = {
   lelaki: "Lelaki",
@@ -56,7 +56,7 @@ export const USER_TYPE = {
   pelajar: "pelajar",
 } as const;
 
-export const USER_TYPE_ARR = Object.values(USER_TYPE)
+export const USER_TYPE_ARR = Object.values(USER_TYPE);
 
 export const STATES_IN_MALAYSIA = [
   "Perlis",
@@ -149,6 +149,7 @@ export const ENDPOINTS = {
   login: "/login",
   authoriseUser: "/authorise-user",
   getAllUsers: "/get-all-users",
+  changeUserPassword: "/change-user-password",
   deleteUser: "/delete-user/:id",
   uploads: "/uploads",
   postCheckInForm: "/post-checkin-form",
@@ -163,7 +164,7 @@ export const ENDPOINTS = {
   updateComplaint: "/update-complaint/:id",
   deleteComplaint: "/delete-complaint/:id",
   postNotification: "/post-notification",
-  getAllNotifications: "/get-all-notifications/:userId",
+  getAllNotifications: "/get-all-notifications/:userType/:userId",
   getNotification: "/get-notification/:id",
   updateNotification: "/update-notification/:id",
   deleteNotification: "/delete-notification/:id",
@@ -195,6 +196,8 @@ export const FM = {
   pleaseFillNecessaryInformation: "Please fill the necessary information",
   noFileUploaded: "No file uploaded",
   internalServerError: "Internal server error",
+  passwordChangeSuccess: "Password changed successful",
+  passwordChangeFailed: "Password updated failed",
   default: "An error occurred",
 } as const;
 
@@ -208,7 +211,7 @@ export const CHECKOUT_REASONS = {
 };
 
 export const initialComplaint: Complaint = {
-  authorId: '',
+  authorId: "",
   email: "",
   name: "",
   title: "",
@@ -258,7 +261,7 @@ export const initialEmergencyContact: Contact = {
 };
 
 export const initialCheckInForm: CheckInForm = {
-  authorId: '',
+  authorId: "",
   tenantInfo: initialTenantInfo,
   roomNo: "",
   blockNo: "",
@@ -272,7 +275,7 @@ export const initialCheckInForm: CheckInForm = {
 };
 
 export const initialCheckoutForm: CheckoutForm = {
-  authorId: '',
+  authorId: "",
   name: "",
   phone: "",
   roomNo: "",
@@ -296,4 +299,10 @@ export const initialRegisterUserForm: User = {
   race: "Melayu",
   gender: "Lelaki",
   illness: "",
+};
+
+export const initialChangePasswordFormState: ChangePasswordForm = {
+  email: "",
+  newPassword: "",
+  repeatPassword: "",
 };

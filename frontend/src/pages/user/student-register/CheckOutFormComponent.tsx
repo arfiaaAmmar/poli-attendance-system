@@ -1,9 +1,11 @@
 import { Button, Typography } from "@mui/material";
-import { CheckoutForm } from "shared-library/src/declarations/types";
+import { CheckoutForm, Feedback } from "shared-library/src/declarations/types";
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction } from "react";
-import { CHECKOUT_REASONS } from "shared-library/src/declarations/constants";
+import { CHECKOUT_REASONS, initialCheckoutForm } from "shared-library/src/declarations/constants";
+import FeedbackMessage from "../../../components/ResponseMessage";
 
 type CheckOutFormProp = {
+  feedback: Feedback;
   checkOutForm: CheckoutForm;
   fileUploaded: boolean;
   setCheckOutForm: Dispatch<SetStateAction<CheckoutForm>>;
@@ -13,13 +15,14 @@ type CheckOutFormProp = {
 };
 
 const CheckoutFormComponent = ({
+  feedback,
   checkOutForm,
   fileUploaded,
   setCheckOutForm,
-  setFileUploaded,
   handleSubmit,
   handleFileChange,
 }: CheckOutFormProp) => {
+  const [form, setForm ] = useState(initialCheckoutForm)
   const handleCheckoutReasons = (checkoutReason: string) => {
     setCheckOutForm({ ...checkOutForm, checkoutReason: checkoutReason });
   };
@@ -218,6 +221,7 @@ const CheckoutFormComponent = ({
           <li>- Telah mengeluarkan semua barangan peribadi dari bilik.</li>
           <li>- Tidak berada di dalam bilik selepas kunci dipulangkan.</li>
         </ul>
+        <FeedbackMessage success={feedback.success} error={feedback.error} />
         <Button
           variant="contained"
           color="primary"

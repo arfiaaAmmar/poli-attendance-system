@@ -2,6 +2,7 @@ import { Button, Typography } from "@mui/material";
 import {
   CheckInForm,
   Contact,
+  Feedback,
   Gender,
   TenantInfo,
 } from "shared-library/src/declarations/types";
@@ -19,8 +20,11 @@ import {
 import EmergencyContactInput from "./EmergencyContactInput";
 import { Ethnicity } from "shared-library/src/declarations/types.js";
 import { ETHNICITY } from "shared-library/src/declarations/constants.js";
+import FeedbackMessage from "../../../components/ResponseMessage";
+import { useNavigate } from "react-router-dom";
 
 type CheckInFormProp = {
+  feedback: Feedback;
   checkInForm: CheckInForm;
   tenantInfo: TenantInfo;
   emergencyContact: Contact;
@@ -34,6 +38,7 @@ type CheckInFormProp = {
 };
 
 const CheckInFormComponent = ({
+  feedback,
   checkInForm,
   tenantInfo,
   emergencyContact,
@@ -375,6 +380,7 @@ const CheckInFormComponent = ({
             className="mt-1 p-2 border rounded w-full"
           />
         </div>
+        <FeedbackMessage success={feedback.success} error={feedback.error} />
         <Button
           variant="contained"
           color="primary"

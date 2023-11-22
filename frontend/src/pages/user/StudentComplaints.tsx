@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { postComplaint } from "../../api/complaint-api";
-import { isEmptyObject } from "../../helpers/shared-helpers";
+import { isEmptyObject, sendNotification } from "../../helpers/shared-helpers";
 import {
   Button,
   TextField,
@@ -11,7 +11,7 @@ import {
   TableRow,
   TableCell,
   Paper,
-  Typography
+  Typography,
 } from "@mui/material";
 import { getUserSessionData } from "../../api/user-api";
 import { useAllComplaints } from "../../hooks/hooks";
@@ -23,7 +23,7 @@ import {
 } from "shared-library/src/declarations/constants";
 import {
   Complaint,
-  ComplaintType
+  ComplaintType,
 } from "shared-library/src/declarations/types";
 import {
   COMPLAINT_TYPE,
@@ -36,7 +36,8 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
   const [feedback, setFeedback] = useState(initialFeedback);
   const userData = getUserSessionData();
   const allComplaints = useAllComplaints();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const user = getUserSessionData();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e?.target?.files?.[0];
@@ -54,14 +55,18 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
       return;
     }
     try {
-      await postComplaint({
-        ...complaint,
-        email: userData?.email ?? "",
-      }, complaintType);
-      setFeedback({
-        ...feedback,
-        success: FM.complaintAdded,
+      await postComplaint(
+        {
+          ...complaint,
+          email: userData?.email ?? "",
+        },
+        complaintType
+      );
+      await sendNotification({
+        title: `Aduan ${complaintType}`,
+        remarks: `${user.name} has submitted a complaint form.`,
       });
+      setFeedback({ ...feedback, success: FM.complaintAdded });
 
       setTimeout(() => {
         setFeedback({ ...feedback, success: "" });
@@ -134,7 +139,9 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
                   navigate(STUDENT_PAGES_PATH.disiplinPelajar);
                 }}
               >
-                <p className="font-bold text-lg">ADUAN MASALAH DISIPLIN PELAJAR</p>
+                <p className="font-bold text-lg">
+                  ADUAN MASALAH DISIPLIN PELAJAR
+                </p>
                 <img
                   src="https://cdn.vectorstock.com/i/preview-1x/35/93/admin-administration-people-icon-vector-47263593.jpg"
                   alt=""
@@ -236,7 +243,11 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
                 {feedback.success}
               </Typography>
             ) : null}
-            <Button variant="contained" color="primary" onClick={() => handleComplaintSubmit("kerosakan fasiliti" )}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleComplaintSubmit("kerosakan fasiliti")}
+            >
               Submit
             </Button>
           </Paper>
@@ -333,7 +344,11 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
                 {feedback.success}
               </Typography>
             ) : null}
-            <Button variant="contained" color="primary" onClick={() => handleComplaintSubmit("disiplin pelajar")}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleComplaintSubmit("disiplin pelajar")}
+            >
               Submit
             </Button>
           </Paper>
