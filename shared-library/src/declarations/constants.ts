@@ -1,4 +1,3 @@
-import { getUserSessionData } from "../../../frontend/src/api/user-api";
 import {
   Address,
   Complaint,
@@ -12,8 +11,8 @@ import {
   RestOfCheckInForm,
 } from "./types";
 
-// export const API_BASE_URL = "https://poli-attendance-system.onrender.com" // For deploy
-export const API_BASE_URL = "http://localhost:8888"; // For dev
+export const API_BASE_URL = "https://poli-attendance-system.onrender.com" // For deploy
+// export const API_BASE_URL = "http://localhost:8888"; // For dev
 export const HEADER_TYPE = { "Content-Type": "application/json" };
 
 export const STORAGE = {
