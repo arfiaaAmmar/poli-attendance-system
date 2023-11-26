@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { postComplaint } from "../../api/complaint-api";
-import { isEmptyObject, sendNotification } from "../../helpers/shared-helpers";
+import { postComplaint } from "../../../api/complaint-api.js";
+import { isEmptyObject, sendNotification } from "../../../helpers/shared-helpers.js";
 import {
   Button,
   TextField,
@@ -13,8 +13,8 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { getUserSessionData } from "../../api/user-api";
-import { useAllComplaints } from "../../hooks/hooks";
+import { getUserSessionData } from "../../../api/user-api.js";
+import { useAllComplaints } from "../../../hooks/hooks.js";
 import {
   initialComplaint,
   initialFeedback,
@@ -30,9 +30,10 @@ import {
   STUDENT_PAGES_PATH,
 } from "shared-library/src/declarations/constants.js";
 import { useNavigate } from "react-router-dom";
+import { ComplaintTypeThumbnailBtn } from "./ComplaintTypeThumbnailBtn.js";
 
 const StudentComplaints = ({ page }: { page: ComplaintType }) => {
-  const [complaint, setComplaint] = useState<Complaint>(initialComplaint);
+  const [complaint, setComplaint] = useState(initialComplaint);
   const [feedback, setFeedback] = useState(initialFeedback);
   const userData = getUserSessionData();
   const allComplaints = useAllComplaints();
@@ -47,13 +48,11 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
   };
 
   const handleComplaintSubmit = async (complaintType: ComplaintType) => {
-    if (isEmptyObject(complaint)) {
-      setFeedback({
-        ...feedback,
-        error: FM.pleaseFillNecessaryInformation,
-      });
-      return;
-    }
+    console.log(complaint);
+    // if (isEmptyObject(complaint)) {
+    //   setFeedback({ ...feedback, error: FM.pleaseFillNecessaryInformation });
+    //   return;
+    // }
     try {
       await postComplaint(
         {
@@ -120,34 +119,16 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
               </TableBody>
             </Table>
             <div className="flex gap-4 justify-center mt-8">
-              <div
-                className="bg-white text-center rounded-lg p-4 cursor-pointer m-auto transform hover:scale-105 transition duration-300 ease-in-out"
-                onClick={() => {
-                  navigate(STUDENT_PAGES_PATH.kerosakanFasiliti);
-                }}
-              >
-                <p className="font-bold text-lg">ADUAN KEROSAKAN FASILITI</p>
-                <img
-                  src="https://logowik.com/content/uploads/images/student5651.jpg"
-                  alt=""
-                  className="w-80 h-80 object-contain hover:cursor-pointer"
-                />
-              </div>
-              <div
-                className="bg-white rounded-lg text-center p-4 cursor-pointer m-auto transform hover:scale-105 transition duration-300 ease-in-out"
-                onClick={() => {
-                  navigate(STUDENT_PAGES_PATH.disiplinPelajar);
-                }}
-              >
-                <p className="font-bold text-lg">
-                  ADUAN MASALAH DISIPLIN PELAJAR
-                </p>
-                <img
-                  src="https://cdn.vectorstock.com/i/preview-1x/35/93/admin-administration-people-icon-vector-47263593.jpg"
-                  alt=""
-                  className="w-80 h-80 object-contain hover:cursor-pointer"
-                />
-              </div>
+              <ComplaintTypeThumbnailBtn
+                path={STUDENT_PAGES_PATH.kerosakanFasiliti}
+                title="ADUAN KEROSAKAN FASILITI"
+                logo="https://logowik.com/content/uploads/images/student5651.jpg"
+              />
+              <ComplaintTypeThumbnailBtn
+                path={STUDENT_PAGES_PATH.disiplinPelajar}
+                title="ADUAN MASALAH DISIPLIN PELAJAR"
+                logo="https://cdn.vectorstock.com/i/preview-1x/35/93/admin-administration-people-icon-vector-47263593.jpg"
+              />
             </div>
           </div>
         </>
@@ -164,56 +145,26 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
           </Typography>
           <Paper className="p-4">
             <div className="flex flex-wrap -mx-2 mb-4">
-              <div className="w-full md:w-1/2 px-2 mb-4">
+              {[
+                { label: "Email", stateKey: "email" },
+                { label: "Name", stateKey: "name" },
+                { label: "Title", stateKey: "title" },
+                { label: "Room No", stateKey: "roomNo" },
+                { label: "Block No", stateKey: "blockNo" },
+              ].map((field, index) => (
                 <TextField
-                  label="Email"
+                  key={index}
+                  className="w-full md:w-1/2 px-2 mb-4"
+                  label={field.label}
                   required
                   onChange={(e) =>
-                    setComplaint({ ...complaint, email: e.target.value })
+                    setComplaint({
+                      ...complaint,
+                      [field.stateKey]: e.target.value,
+                    })
                   }
-                  className="w-full"
                 />
-              </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <TextField
-                  label="Name"
-                  required
-                  onChange={(e) =>
-                    setComplaint({ ...complaint, name: e.target.value })
-                  }
-                  className="w-full"
-                />
-              </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <TextField
-                  label="Title"
-                  required
-                  onChange={(e) =>
-                    setComplaint({ ...complaint, title: e.target.value })
-                  }
-                  className="w-full"
-                />
-              </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <TextField
-                  label="Room No"
-                  required
-                  onChange={(e) =>
-                    setComplaint({ ...complaint, roomNo: e.target.value })
-                  }
-                  className="w-full"
-                />
-              </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <TextField
-                  label="Block No"
-                  required
-                  onChange={(e) =>
-                    setComplaint({ ...complaint, blockNo: e.target.value })
-                  }
-                  className="w-full"
-                />
-              </div>
+              ))}
             </div>
             <div className="mb-4 border rounded-lg p-2">
               <TextareaAutosize
@@ -265,56 +216,26 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
           </Typography>
           <Paper className="p-4">
             <div className="flex flex-wrap -mx-2 mb-4">
-              <div className="w-full md:w-1/2 px-2 mb-4">
+              {[
+                { label: "Email", stateKey: "email" },
+                { label: "Name", stateKey: "name" },
+                { label: "Title", stateKey: "title" },
+                { label: "Room No", stateKey: "roomNo" },
+                { label: "Block No", stateKey: "blockNo" },
+              ].map((field, index) => (
                 <TextField
-                  label="Email"
+                  key={index}
+                  className="w-full md:w-1/2 px-2 mb-4"
+                  label={field.label}
                   required
                   onChange={(e) =>
-                    setComplaint({ ...complaint, email: e.target.value })
+                    setComplaint({
+                      ...complaint,
+                      [field.stateKey]: e.target.value,
+                    })
                   }
-                  className="w-full"
                 />
-              </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <TextField
-                  label="Name"
-                  required
-                  onChange={(e) =>
-                    setComplaint({ ...complaint, name: e.target.value })
-                  }
-                  className="w-full"
-                />
-              </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <TextField
-                  label="Title"
-                  required
-                  onChange={(e) =>
-                    setComplaint({ ...complaint, title: e.target.value })
-                  }
-                  className="w-full"
-                />
-              </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <TextField
-                  label="Room No"
-                  required
-                  onChange={(e) =>
-                    setComplaint({ ...complaint, roomNo: e.target.value })
-                  }
-                  className="w-full"
-                />
-              </div>
-              <div className="w-full md:w-1/2 px-2 mb-4">
-                <TextField
-                  label="Block No"
-                  required
-                  onChange={(e) =>
-                    setComplaint({ ...complaint, blockNo: e.target.value })
-                  }
-                  className="w-full"
-                />
-              </div>
+              ))}
             </div>
             <div className="mb-4 border rounded-lg p-2">
               <TextareaAutosize

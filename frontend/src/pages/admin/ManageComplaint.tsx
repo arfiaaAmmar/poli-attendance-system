@@ -29,6 +29,7 @@ import { updateComplaint } from "../../api/complaint-api";
 import {
   isEmpty,
   sendNotification,
+  timeStampFormatter,
   truncateText,
 } from "../../helpers/shared-helpers";
 import { useAllComplaints } from "../../hooks/hooks";
@@ -36,11 +37,11 @@ import { postNotification } from "../../api/notification-api";
 
 type ComplaintCurrentPage = "default" | "viewComplaint" | "adminResponse";
 
-const ManageComplaint = ({ type }: { type: ComplaintType }) => {
+const ManageComplaint = () => {
   const [currentPage, setCurrentPage] =
     useState<ComplaintCurrentPage>("default");
   const [feedback, setFeedback] = useState<Feedback>(initialFeedback);
-  const [complaint, setComplaint] = useState<Complaint>(initialComplaint);
+  const [selectedComplaint, setSelectedComplaint] = useState(initialComplaint);
   const fetchedComplaints = useAllComplaints();
 
   const handleSubmitResponse = async (
@@ -48,23 +49,23 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
     complaintAuthorId: string
   ) => {
     try {
-      if (isEmpty(complaint.adminResponse)) {
+      if (isEmpty(selectedComplaint.adminResponse)) {
         setFeedback({ ...feedback, error: FM.pleaseFillTheResponse });
         return;
       }
       await updateComplaint(complaintId, {
-        adminResponse: complaint?.adminResponse!,
+        adminResponse: selectedComplaint?.adminResponse!,
       });
-      await sendNotification(
-        complaint?.title,
-        "Response has been submitted by admin",
-        complaintAuthorId
-      );
+      await sendNotification({
+        title: selectedComplaint?.title,
+        remarks: "Response has been submitted by admin",
+        receiverId: complaintAuthorId,
+      });
 
       setTimeout(() => {
         setFeedback({ ...feedback, success: "" });
       }, 3000);
-      setComplaint(initialComplaint);
+      setSelectedComplaint(initialComplaint);
       setCurrentPage("default");
       setFeedback({ ...feedback, success: FM.complaintAdded });
       fetchedComplaints.refetch();
@@ -90,7 +91,6 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
               <TableCell className="font-semibold">Nama</TableCell>
               <TableCell className="font-semibold">Tajuk</TableCell>
               <TableCell className="font-semibold">Tarikh</TableCell>
-              {/* <TableCell>Download</TableCell> */}
               <TableCell className="font-semibold">Penjelasan</TableCell>
               <TableCell className="font-semibold">Respon Penyelia</TableCell>
             </TableRow>
@@ -103,17 +103,8 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
                   <TableCell>{complaint.name}</TableCell>
                   <TableCell>{complaint.title}</TableCell>
                   <TableCell>
-                    {new Date(complaint?.timestamp).toLocaleDateString("en-GB")}
+                    {timeStampFormatter(complaint?.timestamp).date}
                   </TableCell>
-                  {/* <TableCell>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => downloadPDF(complaint, "complaint")}
-                  >
-                    Download
-                  </Button>
-                </TableCell> */}
                   <TableCell>
                     {truncateText(complaint.elaboration, 30)}
                   </TableCell>
@@ -129,7 +120,7 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
                       style={{ cursor: "pointer" }}
                       className="text-sm"
                       onClick={() => {
-                        setComplaint(complaint);
+                        setSelectedComplaint(complaint);
                         setCurrentPage("viewComplaint");
                       }}
                     />
@@ -157,10 +148,10 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
           Menghantar Maklum Balas Kepada Pelajar dibawah :
         </Typography>
         <ul className="text-lg font-semibold">
-          <li>Nama : {complaint.name}</li>
-          <li>No Bilik : {complaint.roomNo}</li>
-          <li>No Telefon : {complaint.phone}</li>
-          <li>No Bilik : {complaint.blockNo}</li>
+          <li>Nama : {selectedComplaint.name}</li>
+          <li>No Bilik : {selectedComplaint.roomNo}</li>
+          <li>No Telefon : {selectedComplaint.phone}</li>
+          <li>No Bilik : {selectedComplaint.blockNo}</li>
         </ul>
         <Typography className="font-semibold text-lg mt-4">
           Penjelasan Pelajar
@@ -175,7 +166,7 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
             maxHeight: "200px", // Same value for fixed height
           }}
         >
-          {complaint.elaboration}
+          {selectedComplaint.elaboration}
         </Typography>
         {feedback.error ? (
           <Typography variant="body1" color="error" fontWeight="bold">
@@ -190,26 +181,25 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
           <div>
             <Checkbox
               id="adminActionTaken"
-              checked={complaint.adminActionTaken}
+              checked={selectedComplaint.adminActionTaken}
               onChange={(e) =>
-                setComplaint({
-                  ...complaint,
-                  adminActionTaken: e.target.checked,
-                })
+                setSelectedComplaint({
+                  ...selectedComplaint,
+                  adminActionTaken: selectedComplaint.adminActionTaken })
               }
             />
-            <label htmlFor="adminActionTaken">Admin Action Taken</label>
+            <label htmlFor="adminActionTaken">Tindakan telah diambil</label>
           </div>
           <div>
             <Checkbox
               id="adminCheck"
-              checked={complaint.adminCheck}
-              onChange={(e) =>
-                setComplaint({
-                  ...complaint,
-                  adminCheck: e.target.checked,
-                })
-              }
+              checked={selectedComplaint.adminCheck}
+              onChange={(e) => {
+                setSelectedComplaint({
+                  ...selectedComplaint,
+                  adminCheck: selectedComplaint.adminCheck ?? e.target.checked,
+                });
+              }}
             />
             <label htmlFor="adminCheck">Admin Check</label>
           </div>
@@ -233,7 +223,7 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
             className="mt-4 bg-red-500 text-white absolute bottom-2 right-2"
             style={{ cursor: "pointer", fontWeight: "bold" }}
             onClick={async () => {
-              await handleDelete(complaint._id, "complaint");
+              await handleDelete(selectedComplaint._id, "complaint");
               setCurrentPage("default");
               fetchedComplaints.refetch();
             }}
@@ -254,16 +244,16 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
         </Typography>
         <p>Menghantar Maklum Balas Kepada Pelajar dibawah :</p>
         <ul className="text-lg font-semibold">
-          <li>Nama: {complaint.name}</li>
-          <li>No Bilik: {complaint.roomNo}</li>
-          <li>No Telefon: {complaint.phone}</li>
-          <li>No Bilik: {complaint.blockNo}</li>
+          <li>Nama: {selectedComplaint.name}</li>
+          <li>No Bilik: {selectedComplaint.roomNo}</li>
+          <li>No Telefon: {selectedComplaint.phone}</li>
+          <li>No Bilik: {selectedComplaint.blockNo}</li>
         </ul>
         <TextareaAutosize
-          value={complaint?.adminResponse}
+          value={selectedComplaint?.adminResponse}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            setComplaint({
-              ...complaint,
+            setSelectedComplaint({
+              ...selectedComplaint,
               adminResponse: e.target.value,
             })
           }
@@ -285,7 +275,7 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
           variant="contained"
           color="success"
           onClick={() => {
-            handleSubmitResponse(complaint._id, complaint.authorId);
+            handleSubmitResponse(selectedComplaint._id, selectedComplaint.authorId);
           }}
           className="mt-4"
         >

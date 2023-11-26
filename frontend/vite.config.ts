@@ -1,5 +1,5 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import autoprefixer from "autoprefixer";
 import tailwindcss from "tailwindcss";
 import purgeIcons from "vite-plugin-purge-icons";
@@ -9,10 +9,7 @@ export default defineConfig({
   plugins: [react(), purgeIcons()],
   css: {
     postcss: {
-      plugins: [
-        tailwindcss,
-        autoprefixer
-      ],
+      plugins: [tailwindcss, autoprefixer],
     },
   },
   build: {
@@ -23,7 +20,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
-      "shared-library": path.resolve(__dirname, "../shared-library")
+      "@api": path.resolve(__dirname, "./src/api/*"),
+      "shared-library": path.resolve(__dirname, "../shared-library"),
     },
   },
 });

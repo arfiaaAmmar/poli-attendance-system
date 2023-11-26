@@ -80,6 +80,7 @@ export const handleFetchResponse = async (response: Response) => {
 export const isEmpty = (value: any): boolean =>
   value === "" ||
   value === "" ||
+  value === false ||
   value === null ||
   value === undefined ||
   (Array.isArray(value) && value.length === 0);
@@ -231,3 +232,4 @@ export const truncateText = (txt: string, maxLength: number): string => {
 export const firstLetterUppercase = (txt: string) => {
   return txt.charAt(0).toUpperCase() + txt.slice(1);
 };
+

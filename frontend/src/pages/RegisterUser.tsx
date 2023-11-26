@@ -13,7 +13,7 @@ import { useState } from "react";
 import { isEmptyObject, sendNotification } from "../helpers/shared-helpers";
 import { getUserSessionData, registerUser } from "../api/user-api";
 import IMAGES from "../assets/_assets";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useFormAction, useNavigate } from "react-router-dom";
 import FeedbackMessage from "../components/ResponseMessage";
 
 const RegisterUser = () => {

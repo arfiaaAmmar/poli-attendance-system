@@ -13,7 +13,6 @@ import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ManageProfile from "./pages/shared/UserProfile";
 import Notifications from "./pages/shared/Notification";
-import StudentComplaints from "./pages/user/StudentComplaints";
 import StudentRegistrationForm from "./pages/user/student-register/StudentRegisterForm";
 import { AuthContext } from "./context/AuthContext";
 import { getUserSessionData } from "./api/user-api";
@@ -28,6 +27,7 @@ import {
 import ForgotPassword from "./pages/ForgotPassword";
 import RegisterUser from "./pages/RegisterUser";
 import HomePage from './pages/shared/HomePage';
+import StudentComplaints from "./pages/user/student-complaints/StudentComplaints.js";
 
 function App(): JSX.Element {
   const [sidebar, setSidebar] = useState(true);
