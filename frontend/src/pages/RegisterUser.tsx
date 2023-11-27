@@ -43,13 +43,13 @@ const RegisterUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isEmptyObject(formData)) {
-      setFeedback({
-        ...feedback,
-        error: FM.pleaseFillNecessaryInformation,
-      });
-      return;
-    }
+    // if (isEmptyObject(formData)) {
+    //   setFeedback({
+    //     ...feedback,
+    //     error: FM.pleaseFillNecessaryInformation,
+    //   });
+    //   return;
+    // }
     try {
       await registerUser(formData);
       setFeedback({

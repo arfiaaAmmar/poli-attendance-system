@@ -222,14 +222,12 @@ export const useDataFetching = <T>(fetchFunction: () => Promise<T | null>) => {
 // STRING RELATED FUNCTIONS
 
 export const truncateText = (txt: string, maxLength: number): string => {
-  if (txt.length <= maxLength) {
-    return txt;
-  } else {
-    return txt.substring(0, maxLength) + "...";
-  }
+  if (txt.length <= maxLength) return txt;
+  else return txt.substring(0, maxLength) + "...";
 };
 
 export const firstLetterUppercase = (txt: string) => {
   return txt.charAt(0).toUpperCase() + txt.slice(1);
 };
+
 
