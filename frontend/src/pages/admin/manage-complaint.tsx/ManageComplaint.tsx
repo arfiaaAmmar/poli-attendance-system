@@ -24,15 +24,16 @@ import {
   ComplaintType,
 } from "shared-library/src/declarations/types";
 import { useSessionStorage } from "usehooks-ts";
-import { handleDelete } from "../../api/_shared-api";
-import { updateComplaint } from "../../api/complaint-api";
+import { handleDelete } from "../../../api/_shared-api";
+import { updateComplaint } from "../../../api/complaint-api";
 import {
+  firstLetterUppercase,
   isEmpty,
   sendNotification,
   timeStampFormatter,
   truncateText,
-} from "../../helpers/shared-helpers";
-import { useAllComplaints } from "../../hooks/hooks";
+} from "../../../helpers/shared-helpers";
+import { useAllComplaints } from "../../../hooks/hooks";
 
 const ManageComplaint = ({ type }: { type: ComplaintType }) => {
   const [modal, setModal] = useState("default");
@@ -42,6 +43,10 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
     initialComplaint
   );
   const fetchedComplaints = useAllComplaints();
+  const filteredComplaints = fetchedComplaints.data?.filter(
+    (complaint) => complaint.complaintType === type
+  );
+
 
   const handleSubmitResponse = async (
     complaintId: string,
@@ -81,7 +86,7 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
           variant="h4"
           className="mb-4 bg-blue-800 text-white rounded-2xl p-2"
         >
-          Complaint Report
+          Complaint Report {'>'} {firstLetterUppercase(type)}
         </Typography>
         <Table>
           <TableHead>
@@ -95,7 +100,7 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {fetchedComplaints?.data?.map(
+            {filteredComplaints?.map(
               (complaint: Complaint, index: number) => (
                 <TableRow key={complaint._id}>
                   <TableCell className="text-center">{index + 1}</TableCell>

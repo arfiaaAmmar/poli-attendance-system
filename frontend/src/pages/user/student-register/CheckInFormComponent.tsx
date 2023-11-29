@@ -1,12 +1,26 @@
 import { Button, Typography } from "@mui/material";
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { getUserSessionData } from "../../../api/user-api";
-import { ETHNICITY, FM, GENDER, STATES_IN_MALAYSIA, initialCheckInForm, initialEmergencyContact, initialFeedback, initialRestOfCheckInForm, initialTenantInfo } from "shared-library/src/declarations/constants";
-import { RestOfCheckInForm, Ethnicity, Gender } from "shared-library/src/declarations/types";
+import {
+  ETHNICITY,
+  FM,
+  GENDER,
+  STATES_IN_MALAYSIA,
+  initialCheckInForm,
+  initialEmergencyContact,
+  initialFeedback,
+  initialRestOfCheckInForm,
+  initialTenantInfo,
+} from "shared-library/src/declarations/constants";
+import {
+  RestOfCheckInForm,
+  Ethnicity,
+  Gender,
+} from "shared-library/src/declarations/types";
 import { postCheckInForm } from "../../../api/registration-api";
 import FeedbackMessage from "../../../components/ResponseMessage";
 import { sendNotification } from "../../../helpers/shared-helpers";
-import EmergencyContactInput from './EmergencyContactInput';
+import EmergencyContactInput from "./EmergencyContactInput";
 
 const formFormComponent = () => {
   const user = getUserSessionData();
@@ -21,7 +35,7 @@ const formFormComponent = () => {
   });
   const [fileUploaded, setFileUploaded] = useState(false);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const offerLetterFile = e?.target?.files?.[0];
     const paymentReceiptFile = e?.target?.files?.[1];
     if (offerLetterFile) {

@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   CurrentUser,
-  EmptyObject,
-  Notification,
   SendNotification,
 } from "shared-library/src/declarations/types";
 import { postNotification } from "../api/notification-api";
@@ -94,7 +92,6 @@ export const isEmpty = (value: any): boolean =>
  */
 export const isEmptyObject = (obj: Record<string, any>): boolean =>
   Object.values(obj).some((value) => isEmpty(value));
-
 
 // TODO: Not yet working
 /**
@@ -229,5 +226,3 @@ export const truncateText = (txt: string, maxLength: number): string => {
 export const firstLetterUppercase = (txt: string) => {
   return txt.charAt(0).toUpperCase() + txt.slice(1);
 };
-
-

@@ -2,13 +2,19 @@ import "tailwindcss/tailwind.css";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Sidebar from "./components/sidebar/Sidebar";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   adminSidebarRoutes,
   studentSidebarRoutes,
 } from "./components/sidebar/routes";
 import ManageRegisterForm from "./pages/admin/ManageRegistration";
-import ManageComplaint from "./pages/admin/ManageComplaint";
+import ManageComplaint from "./pages/admin/manage-complaint.tsx/ManageComplaint.js";
 import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ManageProfile from "./pages/shared/UserProfile";
@@ -26,8 +32,9 @@ import {
 } from "shared-library/src/declarations/constants";
 import ForgotPassword from "./pages/ForgotPassword";
 import RegisterUser from "./pages/RegisterUser";
-import HomePage from './pages/shared/HomePage';
+import HomePage from "./pages/shared/HomePage";
 import StudentComplaints from "./pages/user/student-complaints/StudentComplaints.js";
+import ComplaintForm from "./pages/user/student-complaints/ComplaintForm.js";
 
 function App(): JSX.Element {
   const [sidebar, setSidebar] = useState(true);
@@ -155,11 +162,11 @@ const UserRoutes = ({ sidebar, setSidebar }: UserRoutesProps): JSX.Element => {
       case STUDENT_PAGES_PATH.borangPendaftaranKeluar:
         return <StudentRegistrationForm page={FORM_TYPE.keluar} />;
       case STUDENT_PAGES_PATH.aduanPelajar:
-        return <StudentComplaints page={COMPLAINT_TYPE.default} />;
+        return <StudentComplaints />;
       case STUDENT_PAGES_PATH.kerosakanFasiliti:
-        return <StudentComplaints page={COMPLAINT_TYPE.kerosakanFasiliti} />;
+        return <ComplaintForm type={COMPLAINT_TYPE.kerosakanFasiliti} />;
       case STUDENT_PAGES_PATH.disiplinPelajar:
-        return <StudentComplaints page={COMPLAINT_TYPE.disiplinPelajar} />;
+        return <ComplaintForm type={COMPLAINT_TYPE.disiplinPelajar} />;
       case STUDENT_PAGES_PATH.notifikasi:
         return <Notifications />;
       default:
