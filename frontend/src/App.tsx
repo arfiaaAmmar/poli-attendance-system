@@ -2,7 +2,7 @@ import "tailwindcss/tailwind.css";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Sidebar from "./components/sidebar/Sidebar";
-import { useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import {
   adminSidebarRoutes,
   studentSidebarRoutes,
@@ -80,7 +80,7 @@ function App(): JSX.Element {
 
 type AdminRoutesProps = {
   sidebar: boolean;
-  setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+  setSidebar: Dispatch<SetStateAction<boolean>>;
 };
 
 const AdminRoutes = ({
