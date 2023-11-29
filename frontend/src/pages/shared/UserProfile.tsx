@@ -33,10 +33,10 @@ const UserProfile = () => {
               Address
             </Typography>
             <Paper elevation={3} className="p-4 rounded-md bg-gray-100">
-              <p>Street: {data?.address?.street!}</p>
-              <p>City: {data?.address?.city!}</p>
-              <p>State: {data?.address?.state!}</p>
-              <p>Postal Code: {data?.address?.postalCode!}</p>
+              <p>Street: {data?.address?.street}</p>
+              <p>City: {data?.address?.city}</p>
+              <p>State: {data?.address?.state}</p>
+              <p>Postal Code: {data?.address?.postalCode}</p>
             </Paper>
           </div>
         </div>

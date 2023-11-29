@@ -83,7 +83,7 @@ export const postCheckOutForm = async (
   }
 };
 
-export const getRegisterForm = async (req: Request, res: Response) => {
+export const getCheckInForm = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const registrationForm = await CheckInFormModel.findById(id);
@@ -95,7 +95,19 @@ export const getRegisterForm = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllRegisterForms = async (req: Request, res: Response) => {
+export const getCheckOutForm = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const registrationForm = await CheckOutFormModel.findById(id);
+    if (!registrationForm)
+      return res.status(201).json({ message: FM.registerFormNotFound });
+    return res.json(registrationForm);
+  } catch (error) {
+    handleCatchError(res, error);
+  }
+};
+
+export const getAllCheckInForms = async (req: Request, res: Response) => {
   try {
     const registerForms = await CheckInFormModel.find();
     const registerFormsWithDownloadUrls = registerForms.map((registerForm) => {
@@ -108,7 +120,20 @@ export const getAllRegisterForms = async (req: Request, res: Response) => {
   }
 };
 
-export const updateRegisterForm = async (req: Request, res: Response) => {
+export const getAllCheckOutForms = async (req: Request, res: Response) => {
+  try {
+    const registerForms = await CheckOutFormModel.find();
+    const registerFormsWithDownloadUrls = registerForms.map((registerForm) => {
+      const downloadUrl = `/uploads/${registerForm}`;
+      return { ...registerForm.toObject(), downloadUrl };
+    });
+    return res.json(registerFormsWithDownloadUrls);
+  } catch (error) {
+    handleCatchError(res, error);
+  }
+};
+
+export const updateCheckInForm = async (req: Request, res: Response) => {
   const { id } = req.params;
   const input = req.body as ICheckInForm;
   try {
@@ -124,7 +149,23 @@ export const updateRegisterForm = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteRegisterForm = async (req: Request, res: Response) => {
+export const updateCheckOutForm = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const input = req.body as ICheckInForm;
+  try {
+    const updatedRegistrationForm = await CheckOutFormModel.findByIdAndUpdate(
+      id,
+      input
+    );
+    if (!updatedRegistrationForm)
+      return res.status(404).json({ message: FM.registerFormNotFound });
+    res.status(200).json(updatedRegistrationForm);
+  } catch (error) {
+    handleCatchError(res, error);
+  }
+};
+
+export const deleteCheckInForm = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const existingForm = await CheckInFormModel.findById(id);
@@ -137,3 +178,19 @@ export const deleteRegisterForm = async (req: Request, res: Response) => {
     handleCatchError(res, error);
   }
 };
+
+export const deleteCheckOutForm = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const existingForm = await CheckOutFormModel.findById(id);
+    if (!existingForm) {
+      return res.status(404).json({ message: FM.registerFormNotFound });
+    }
+    await CheckInFormModel.findByIdAndDelete(id);
+    res.status(200).json({ message: FM.registerFormDeleted });
+  } catch (error) {
+    handleCatchError(res, error);
+  }
+};
+
+

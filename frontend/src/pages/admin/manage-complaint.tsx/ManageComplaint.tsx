@@ -11,8 +11,8 @@ import {
   TextareaAutosize,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   ADMIN_PAGES_PATH,
   FM,
@@ -43,10 +43,14 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
     initialComplaint
   );
   const fetchedComplaints = useAllComplaints();
+  const location = useLocation();
   const filteredComplaints = fetchedComplaints.data?.filter(
     (complaint) => complaint.complaintType === type
   );
 
+  useEffect(() => {
+    setModal("default");
+  }, [location.pathname]);
 
   const handleSubmitResponse = async (
     complaintId: string,
@@ -58,11 +62,13 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
         return;
       }
       await updateComplaint(complaintId, {
-        adminResponse: selected?.adminResponse!,
+        adminResponse: selected?.adminResponse,
+        adminActionTaken: selected?.adminActionTaken,
+        adminCheck: selected?.adminCheck,
       });
       await sendNotification({
         title: selected?.title,
-        remarks: "Response has been submitted by admin",
+        remarks: selected?.adminResponse,
         receiverId: complaintAuthorId,
       });
 
@@ -86,7 +92,7 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
           variant="h4"
           className="mb-4 bg-blue-800 text-white rounded-2xl p-2"
         >
-          Complaint Report {'>'} {firstLetterUppercase(type)}
+          Complaint Report {">"} {firstLetterUppercase(type)}
         </Typography>
         <Table>
           <TableHead>
@@ -100,38 +106,34 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredComplaints?.map(
-              (complaint: Complaint, index: number) => (
-                <TableRow key={complaint._id}>
-                  <TableCell className="text-center">{index + 1}</TableCell>
-                  <TableCell>{complaint.name}</TableCell>
-                  <TableCell>{complaint.title}</TableCell>
-                  <TableCell>
-                    {timeStampFormatter(complaint?.timestamp).date}
-                  </TableCell>
-                  <TableCell>
-                    {truncateText(complaint.elaboration, 30)}
-                  </TableCell>
-                  <TableCell className="flex justify-between">
-                    {complaint && complaint?.adminResponse !== "" ? (
-                      <Typography color="GrayText">
-                        {complaint.adminResponse}
-                      </Typography>
-                    ) : (
-                      <Typography color="primary">Add Response</Typography>
-                    )}
-                    <VisibilityIcon
-                      style={{ cursor: "pointer" }}
-                      className="text-sm"
-                      onClick={() => {
-                        setSelected(complaint);
-                        setModal("viewComplaint");
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-              )
-            )}
+            {filteredComplaints?.map((complaint: Complaint, index: number) => (
+              <TableRow key={complaint._id}>
+                <TableCell className="text-center">{index + 1}</TableCell>
+                <TableCell>{complaint.name}</TableCell>
+                <TableCell>{complaint.title}</TableCell>
+                <TableCell>
+                  {timeStampFormatter(complaint?.timestamp).date}
+                </TableCell>
+                <TableCell>{truncateText(complaint.elaboration, 30)}</TableCell>
+                <TableCell className="flex justify-between">
+                  {complaint && complaint?.adminResponse !== "" ? (
+                    <Typography color="GrayText">
+                      {complaint.adminResponse}
+                    </Typography>
+                  ) : (
+                    <Typography color="primary">Add Response</Typography>
+                  )}
+                  <VisibilityIcon
+                    style={{ cursor: "pointer" }}
+                    className="text-sm"
+                    onClick={() => {
+                      setSelected(complaint);
+                      setModal("viewComplaint");
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>
@@ -181,7 +183,7 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
             {feedback.success}
           </Typography>
         ) : null}
-        <div className="w-full flex justify-between">
+        <div className="w-full flex justify-end">
           <div>
             <Checkbox
               id="adminActionTaken"
@@ -189,7 +191,7 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
               onChange={(e) =>
                 setSelected({
                   ...selected,
-                  adminActionTaken: selected.adminActionTaken,
+                  adminActionTaken: e.target.checked,
                 })
               }
             />
@@ -202,58 +204,14 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
               onChange={(e) => {
                 setSelected({
                   ...selected,
-                  adminCheck: selected.adminCheck ?? e.target.checked,
+                  adminCheck: e.target.checked,
                 });
               }}
             />
             <label htmlFor="adminCheck">Admin Check</label>
           </div>
-          <div className="flex items-center gap-2">
-            <MessageIcon
-              fontSize="large"
-              className="mt-4 hover:cursor"
-              onClick={() => setModal("adminResponse")}
-            ></MessageIcon>
-            <p>Maklum Balas</p>
-          </div>
-          <Button
-            variant="contained"
-            color="secondary"
-            className="mt-4"
-            onClick={() => setModal("default")}
-          >
-            Keluar
-          </Button>
-          <Button
-            className="mt-4 bg-red-500 text-white absolute bottom-2 right-2"
-            style={{ cursor: "pointer", fontWeight: "bold" }}
-            onClick={async () => {
-              await handleDelete(selected._id, "complaint");
-              setModal("default");
-              fetchedComplaints.refetch();
-            }}
-          >
-            Delete Complaint
-          </Button>
         </div>
-      </div>
-    );
-  }
-
-  if (modal === "adminResponse") {
-    return (
-      <div className="p-8 h-screen bg-yellow-50">
-        <Typography className="bg-blue-800 text-white rounded-2xl p-2">
-          <Link to={ADMIN_PAGES_PATH.pengurusanAduan}>Complaint Report</Link>{" "}
-          {">"} Maklum Balas Aduan Pelajar
-        </Typography>
-        <p>Menghantar Maklum Balas Kepada Pelajar dibawah :</p>
-        <ul className="text-lg font-semibold">
-          <li>Nama: {selected.name}</li>
-          <li>No Bilik: {selected.roomNo}</li>
-          <li>No Telefon: {selected.phone}</li>
-          <li>No Bilik: {selected.blockNo}</li>
-        </ul>
+        <p className="text-xl font-bold">Maklum Balas</p>
         <TextareaAutosize
           value={selected?.adminResponse}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -265,43 +223,40 @@ const ManageComplaint = ({ type }: { type: ComplaintType }) => {
           name="response"
           id="response"
           cols={30}
+          className="mt-8"
           style={{ border: "2px solid #ccc", width: "100%", padding: "8px" }}
         />
-        {feedback.error ? (
-          <Typography variant="body1" color="error" fontWeight="bold">
-            {feedback.error}
-          </Typography>
-        ) : feedback.success ? (
-          <Typography variant="body1" color="success" fontWeight="bold">
-            {feedback.success}
-          </Typography>
-        ) : null}
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => {
-            handleSubmitResponse(selected._id, selected.authorId);
-          }}
-          className="mt-4"
-        >
-          Hantar
-        </Button>
-        <div className="flex items-center gap-2">
-          <MessageIcon
-            fontSize="large"
-            className="mt-4 hover:cursor"
-            onClick={() => setModal("adminResponse")}
-          ></MessageIcon>
-          <p>Maklum Balas</p>
+        <div className="absolute bottom-2 right-2 flex gap-4">
+          <Button
+            variant="contained"
+            color="secondary"
+            className="mt-4"
+            onClick={() => setModal("default")}
+          >
+            Keluar
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => {
+              handleSubmitResponse(selected._id, selected.authorId);
+            }}
+            className="mt-4"
+          >
+            Hantar
+          </Button>
+          <Button
+            className="mt-4 bg-red-500 text-white"
+            style={{ cursor: "pointer", fontWeight: "bold" }}
+            onClick={async () => {
+              await handleDelete(selected._id, "complaint");
+              setModal("default");
+              fetchedComplaints.refetch();
+            }}
+          >
+            Delete Complaint
+          </Button>
         </div>
-        <Button
-          variant="contained"
-          color="secondary"
-          className="mt-4"
-          onClick={() => setModal("default")}
-        >
-          Keluar
-        </Button>
       </div>
     );
   }

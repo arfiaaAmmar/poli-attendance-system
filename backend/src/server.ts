@@ -10,12 +10,16 @@ import {
   changeUserPassword,
 } from "./controllers/user-controllers";
 import {
-  deleteRegisterForm,
-  getAllRegisterForms,
-  getRegisterForm,
+  deleteCheckInForm,
+  deleteCheckOutForm,
+  getAllCheckInForms,
+  getAllCheckOutForms,
+  getCheckInForm,
+  getCheckOutForm,
   postCheckInForm,
   postCheckOutForm,
-  updateRegisterForm,
+  updateCheckInForm,
+  updateCheckOutForm,
 } from "./controllers/registration-controllers";
 import {
   getAllComplaints,
@@ -80,10 +84,14 @@ app.post(
   uploadCheckOutEvidence.single("checkoutEvidenceFile"),
   postCheckOutForm
 ); // Passed test
-app.get(ENDPOINTS.getAllRegisterForms, getAllRegisterForms); // Passed test
-app.get(ENDPOINTS.getRegisterForm, getRegisterForm); // Passed test
-app.patch(ENDPOINTS.updateRegisterForm, updateRegisterForm); // Passed test
-app.delete(ENDPOINTS.deleteRegisterForm, deleteRegisterForm); // Passed test
+app.get(ENDPOINTS.getAllCheckInForms, getAllCheckInForms); // Passed test
+app.get(ENDPOINTS.getAllCheckOutForms, getAllCheckOutForms); // Passed test
+app.get(ENDPOINTS.getCheckInForm, getCheckInForm); // Passed test
+app.get(ENDPOINTS.getCheckOutForm, getCheckOutForm); // Passed test
+app.patch(ENDPOINTS.updateCheckInForm, updateCheckInForm); // Passed test
+app.patch(ENDPOINTS.updateCheckOutForm, updateCheckOutForm); // Passed test
+app.delete(ENDPOINTS.deleteCheckInForm, deleteCheckInForm); // Passed test
+app.delete(ENDPOINTS.deleteCheckOutForm, deleteCheckOutForm); // Passed test
 
 // Complaints
 app.post(

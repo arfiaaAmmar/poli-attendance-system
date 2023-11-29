@@ -6,7 +6,6 @@ import { useAllNotifications } from "../../hooks/hooks";
 import { handleDelete } from "../../api/_shared-api";
 
 const Notifications = () => {
-  const user = getUserSessionData();
   const { data, isLoading, error, refetch } = useAllNotifications();
 
   const handleDeleteNotification = async (_id: string) => {

@@ -104,6 +104,7 @@ const ComplaintForm = ({ type }: { type: ComplaintType }) => {
           <TextareaAutosize
             placeholder="Elaboration"
             required
+            value={complaint?.elaboration}
             onChange={(e) =>
               setComplaint({ ...complaint, elaboration: e.target.value })
             }
