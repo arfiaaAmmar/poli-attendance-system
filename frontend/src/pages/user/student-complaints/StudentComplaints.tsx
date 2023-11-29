@@ -1,46 +1,32 @@
-import { useState } from "react";
-import { postComplaint } from "../../../api/complaint-api.js";
-import { isEmptyObject, sendNotification } from "../../../helpers/shared-helpers.js";
 import {
   Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
   TextareaAutosize,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
   Typography,
 } from "@mui/material";
-import { getUserSessionData } from "../../../api/user-api.js";
-import { useAllComplaints } from "../../../hooks/hooks.js";
-import {
-  initialComplaint,
-  initialFeedback,
-  FM,
-  STUDENT_PAGES_TITLE,
-} from "shared-library/src/declarations/constants";
-import {
-  Complaint,
-  ComplaintType,
-} from "shared-library/src/declarations/types";
-import {
-  COMPLAINT_TYPE,
-  STUDENT_PAGES_PATH,
-} from "shared-library/src/declarations/constants.js";
-import { useNavigate } from "react-router-dom";
-import { ComplaintTypeThumbnailBtn } from "./ComplaintTypeThumbnailBtn.js";
+import { ChangeEvent, useState } from "react";
+import { Complaint, ComplaintType } from 'shared-library/src/declarations/types';
+import { COMPLAINT_TYPE, FM, STUDENT_PAGES_PATH, STUDENT_PAGES_TITLE, initialComplaint, initialFeedback } from 'shared-library/src/declarations/constants';
+import { getUserSessionData } from '../../../api/user-api';
+import { useAllComplaints } from '../../../hooks/hooks';
+import { postComplaint } from "../../../api/complaint-api";
+import { sendNotification } from "../../../helpers/shared-helpers";
+import { MainPageOptionThumbnail } from '../../../components/MainPageOptionThumbnail';
 
 const StudentComplaints = ({ page }: { page: ComplaintType }) => {
   const [complaint, setComplaint] = useState(initialComplaint);
   const [feedback, setFeedback] = useState(initialFeedback);
   const userData = getUserSessionData();
   const allComplaints = useAllComplaints();
-  const navigate = useNavigate();
   const user = getUserSessionData();
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e?.target?.files?.[0];
     if (file) {
       setComplaint({ ...complaint, evidenceFile: file });
@@ -119,12 +105,12 @@ const StudentComplaints = ({ page }: { page: ComplaintType }) => {
               </TableBody>
             </Table>
             <div className="flex gap-4 justify-center mt-8">
-              <ComplaintTypeThumbnailBtn
+              <MainPageOptionThumbnail
                 path={STUDENT_PAGES_PATH.kerosakanFasiliti}
                 title="ADUAN KEROSAKAN FASILITI"
                 logo="https://logowik.com/content/uploads/images/student5651.jpg"
               />
-              <ComplaintTypeThumbnailBtn
+              <MainPageOptionThumbnail
                 path={STUDENT_PAGES_PATH.disiplinPelajar}
                 title="ADUAN MASALAH DISIPLIN PELAJAR"
                 logo="https://cdn.vectorstock.com/i/preview-1x/35/93/admin-administration-people-icon-vector-47263593.jpg"

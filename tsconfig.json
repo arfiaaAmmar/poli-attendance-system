@@ -1,15 +1,20 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
+    "moduleResolution": "NodeNext",
     "baseUrl": ".",
-    "moduleResolution": "Node16"
+    "paths": {
+      "@shared-library/": ["./shared-library/src"],
+      "@shared-library/*": ["./shared-library/src/*"],
+      "@frontend/": ["./frontend/src"],
+      "@frontend/*": ["./frontend/src/*"],
+      "@backend/": ["./backend/src"],
+      "@backend/*": ["./backend/src/*"]
+    }
   },
   "scripts": {
     "build:frontend": "yarn workspace shared-library build && vite build",
     "build:backend": "yarn workspace backend build"
-  },
-  "paths": {
-    "shared-library/*": ["./shared-library/**/*.ts"]
   },
   "exclude": ["./node_modules"],
   "references": [

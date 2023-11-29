@@ -22,8 +22,8 @@ import {
 import {
   Complaint,
   ComplaintType,
-  Feedback,
 } from "shared-library/src/declarations/types";
+import { useSessionStorage } from "usehooks-ts";
 import { handleDelete } from "../../api/_shared-api";
 import { updateComplaint } from "../../api/complaint-api";
 import {
@@ -33,15 +33,14 @@ import {
   truncateText,
 } from "../../helpers/shared-helpers";
 import { useAllComplaints } from "../../hooks/hooks";
-import { postNotification } from "../../api/notification-api";
 
-type ComplaintCurrentPage = "default" | "viewComplaint" | "adminResponse";
-
-const ManageComplaint = () => {
-  const [currentPage, setCurrentPage] =
-    useState<ComplaintCurrentPage>("default");
-  const [feedback, setFeedback] = useState<Feedback>(initialFeedback);
-  const [selectedComplaint, setSelectedComplaint] = useState(initialComplaint);
+const ManageComplaint = ({ type }: { type: ComplaintType }) => {
+  const [modal, setModal] = useState("default");
+  const [feedback, setFeedback] = useState(initialFeedback);
+  const [selected, setSelected] = useSessionStorage(
+    "selectedManagedComplaint",
+    initialComplaint
+  );
   const fetchedComplaints = useAllComplaints();
 
   const handleSubmitResponse = async (
@@ -49,15 +48,15 @@ const ManageComplaint = () => {
     complaintAuthorId: string
   ) => {
     try {
-      if (isEmpty(selectedComplaint.adminResponse)) {
+      if (isEmpty(selected.adminResponse)) {
         setFeedback({ ...feedback, error: FM.pleaseFillTheResponse });
         return;
       }
       await updateComplaint(complaintId, {
-        adminResponse: selectedComplaint?.adminResponse!,
+        adminResponse: selected?.adminResponse!,
       });
       await sendNotification({
-        title: selectedComplaint?.title,
+        title: selected?.title,
         remarks: "Response has been submitted by admin",
         receiverId: complaintAuthorId,
       });
@@ -65,8 +64,8 @@ const ManageComplaint = () => {
       setTimeout(() => {
         setFeedback({ ...feedback, success: "" });
       }, 3000);
-      setSelectedComplaint(initialComplaint);
-      setCurrentPage("default");
+      setSelected(initialComplaint);
+      setModal("default");
       setFeedback({ ...feedback, success: FM.complaintAdded });
       fetchedComplaints.refetch();
     } catch (error: any) {
@@ -75,7 +74,7 @@ const ManageComplaint = () => {
     }
   };
 
-  if (currentPage === "default") {
+  if (modal === "default") {
     return (
       <div className="p-8 h-screen bg-yellow-50">
         <Typography
@@ -120,8 +119,8 @@ const ManageComplaint = () => {
                       style={{ cursor: "pointer" }}
                       className="text-sm"
                       onClick={() => {
-                        setSelectedComplaint(complaint);
-                        setCurrentPage("viewComplaint");
+                        setSelected(complaint);
+                        setModal("viewComplaint");
                       }}
                     />
                   </TableCell>
@@ -134,7 +133,7 @@ const ManageComplaint = () => {
     );
   }
 
-  if (currentPage === "viewComplaint") {
+  if (modal === "viewComplaint") {
     return (
       <div className="p-8 h-screen bg-yellow-50">
         <Typography
@@ -148,10 +147,10 @@ const ManageComplaint = () => {
           Menghantar Maklum Balas Kepada Pelajar dibawah :
         </Typography>
         <ul className="text-lg font-semibold">
-          <li>Nama : {selectedComplaint.name}</li>
-          <li>No Bilik : {selectedComplaint.roomNo}</li>
-          <li>No Telefon : {selectedComplaint.phone}</li>
-          <li>No Bilik : {selectedComplaint.blockNo}</li>
+          <li>Nama : {selected.name}</li>
+          <li>No Bilik : {selected.roomNo}</li>
+          <li>No Telefon : {selected.phone}</li>
+          <li>No Bilik : {selected.blockNo}</li>
         </ul>
         <Typography className="font-semibold text-lg mt-4">
           Penjelasan Pelajar
@@ -162,11 +161,11 @@ const ManageComplaint = () => {
             border: "2px solid #ccc",
             width: "100%",
             padding: "8px",
-            minHeight: "200px", // Set the fixed height here
-            maxHeight: "200px", // Same value for fixed height
+            minHeight: "200px",
+            maxHeight: "200px",
           }}
         >
-          {selectedComplaint.elaboration}
+          {selected.elaboration}
         </Typography>
         {feedback.error ? (
           <Typography variant="body1" color="error" fontWeight="bold">
@@ -181,11 +180,12 @@ const ManageComplaint = () => {
           <div>
             <Checkbox
               id="adminActionTaken"
-              checked={selectedComplaint.adminActionTaken}
+              checked={selected.adminActionTaken}
               onChange={(e) =>
-                setSelectedComplaint({
-                  ...selectedComplaint,
-                  adminActionTaken: selectedComplaint.adminActionTaken })
+                setSelected({
+                  ...selected,
+                  adminActionTaken: selected.adminActionTaken,
+                })
               }
             />
             <label htmlFor="adminActionTaken">Tindakan telah diambil</label>
@@ -193,11 +193,11 @@ const ManageComplaint = () => {
           <div>
             <Checkbox
               id="adminCheck"
-              checked={selectedComplaint.adminCheck}
+              checked={selected.adminCheck}
               onChange={(e) => {
-                setSelectedComplaint({
-                  ...selectedComplaint,
-                  adminCheck: selectedComplaint.adminCheck ?? e.target.checked,
+                setSelected({
+                  ...selected,
+                  adminCheck: selected.adminCheck ?? e.target.checked,
                 });
               }}
             />
@@ -207,7 +207,7 @@ const ManageComplaint = () => {
             <MessageIcon
               fontSize="large"
               className="mt-4 hover:cursor"
-              onClick={() => setCurrentPage("adminResponse")}
+              onClick={() => setModal("adminResponse")}
             ></MessageIcon>
             <p>Maklum Balas</p>
           </div>
@@ -215,7 +215,7 @@ const ManageComplaint = () => {
             variant="contained"
             color="secondary"
             className="mt-4"
-            onClick={() => setCurrentPage("default")}
+            onClick={() => setModal("default")}
           >
             Keluar
           </Button>
@@ -223,8 +223,8 @@ const ManageComplaint = () => {
             className="mt-4 bg-red-500 text-white absolute bottom-2 right-2"
             style={{ cursor: "pointer", fontWeight: "bold" }}
             onClick={async () => {
-              await handleDelete(selectedComplaint._id, "complaint");
-              setCurrentPage("default");
+              await handleDelete(selected._id, "complaint");
+              setModal("default");
               fetchedComplaints.refetch();
             }}
           >
@@ -235,7 +235,7 @@ const ManageComplaint = () => {
     );
   }
 
-  if (currentPage === "adminResponse") {
+  if (modal === "adminResponse") {
     return (
       <div className="p-8 h-screen bg-yellow-50">
         <Typography className="bg-blue-800 text-white rounded-2xl p-2">
@@ -244,16 +244,16 @@ const ManageComplaint = () => {
         </Typography>
         <p>Menghantar Maklum Balas Kepada Pelajar dibawah :</p>
         <ul className="text-lg font-semibold">
-          <li>Nama: {selectedComplaint.name}</li>
-          <li>No Bilik: {selectedComplaint.roomNo}</li>
-          <li>No Telefon: {selectedComplaint.phone}</li>
-          <li>No Bilik: {selectedComplaint.blockNo}</li>
+          <li>Nama: {selected.name}</li>
+          <li>No Bilik: {selected.roomNo}</li>
+          <li>No Telefon: {selected.phone}</li>
+          <li>No Bilik: {selected.blockNo}</li>
         </ul>
         <TextareaAutosize
-          value={selectedComplaint?.adminResponse}
+          value={selected?.adminResponse}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            setSelectedComplaint({
-              ...selectedComplaint,
+            setSelected({
+              ...selected,
               adminResponse: e.target.value,
             })
           }
@@ -275,7 +275,7 @@ const ManageComplaint = () => {
           variant="contained"
           color="success"
           onClick={() => {
-            handleSubmitResponse(selectedComplaint._id, selectedComplaint.authorId);
+            handleSubmitResponse(selected._id, selected.authorId);
           }}
           className="mt-4"
         >
@@ -285,7 +285,7 @@ const ManageComplaint = () => {
           <MessageIcon
             fontSize="large"
             className="mt-4 hover:cursor"
-            onClick={() => setCurrentPage("adminResponse")}
+            onClick={() => setModal("adminResponse")}
           ></MessageIcon>
           <p>Maklum Balas</p>
         </div>
@@ -293,7 +293,7 @@ const ManageComplaint = () => {
           variant="contained"
           color="secondary"
           className="mt-4"
-          onClick={() => setCurrentPage("default")}
+          onClick={() => setModal("default")}
         >
           Keluar
         </Button>

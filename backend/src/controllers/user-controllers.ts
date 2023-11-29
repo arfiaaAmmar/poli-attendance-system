@@ -8,14 +8,16 @@ import { UserModel } from "../model/models";
 import { User } from "shared-library/src/declarations/types";
 import { FM } from "shared-library/src/declarations/constants";
 
-export const registerUser = async (req: Request, res: Response) => {
+export const registerUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const userData: User = req.body;
     const { email } = userData;
     const existingUser = await UserModel.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: FM.default });
-    }
+    if (existingUser) return res.status(409).json({ message: FM.default });
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     await UserModel.create({ ...userData, password: hashedPassword });
 
@@ -37,7 +39,6 @@ export const login = async (
     >;
     const user = await UserModel.findOne({ email });
     if (!user) return res.status(401).json({ message: FM.userNotFound });
-
     if (user.userType !== userType) {
       return res.status(401).json({
         message: "Anda menghantar kelayakan untuk jenis pengguna yang berbeza.",
@@ -46,7 +47,6 @@ export const login = async (
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch)
       return res.status(401).json({ message: FM.invalidEmailOrPassword });
-
     const token = jwt.sign({ userId: user._id }, JWT_SECRET!);
     return res.json({ message: FM.loggedInSuccessfully, token });
   } catch (error) {
@@ -61,9 +61,8 @@ export const authoriseUser = async (
 ) => {
   const token = req.headers.authorization?.split(" ")[1];
 
-  if (!token) {
+  if (!token)
     return res.status(401).json({ message: FM.authorizationTokenNotProvided });
-  }
 
   try {
     const decoded: any = jwt.verify(token, JWT_SECRET!);
@@ -88,9 +87,8 @@ export const authoriseUser = async (
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await UserModel.find({}, { password: 0 }).exec();
-    if (users.length === 0) {
+    if (users.length === 0)
       return res.status(404).json({ message: FM.userNotFound });
-    }
 
     return res.json(users);
   } catch (error) {

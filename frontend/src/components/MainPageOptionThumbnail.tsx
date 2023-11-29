@@ -6,7 +6,7 @@ type PageTypeThumbnailButtonProp = {
   logo: string;
 };
 
-export const ComplaintTypeThumbnailBtn = ({
+export const MainPageOptionThumbnail = ({
   path,
   title,
   logo,

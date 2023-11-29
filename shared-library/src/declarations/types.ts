@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Document, ObjectId } from "mongoose";
+import { Document } from "mongoose";
 
 export type Ethnicity = "Melayu" | "Cina" | "India" | "Lain";
 export type Gender = "Lelaki" | "Perempuan";

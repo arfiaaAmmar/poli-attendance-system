@@ -1,30 +1,5 @@
 import { Button, Typography } from "@mui/material";
-import {
-  Gender,
-  RestOfCheckInForm,
-} from "shared-library/src/declarations/types";
-import { FormEvent } from "react";
-import {
-  GENDER,
-  STATES_IN_MALAYSIA,
-  initialEmergencyContact,
-  initialFeedback,
-  initialTenantInfo,
-  FM,
-  initialCheckInForm,
-  initialRestOfCheckInForm,
-} from "shared-library/src/declarations/constants";
-import EmergencyContactInput from "./EmergencyContactInput";
-import { Ethnicity } from "shared-library/src/declarations/types";
-import { ETHNICITY } from "shared-library/src/declarations/constants";
-import FeedbackMessage from "../../../components/ResponseMessage";
-import { useState } from "react";
-import { getUserSessionData } from "../../../api/user-api";
-import {
-  isEmptyObject,
-  sendNotification,
-} from "../../../helpers/shared-helpers";
-import { postCheckInForm } from "../../../api/registration-api";
+import { FormEvent, useState } from "react";
 
 const formFormComponent = () => {
   const user = getUserSessionData();

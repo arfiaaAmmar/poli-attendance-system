@@ -1,15 +1,11 @@
 import {
+  STORAGE,
   API_BASE_URL,
   ENDPOINTS,
-  FM,
   HEADER_TYPE,
-  STORAGE,
+  FM,
 } from "shared-library/src/declarations/constants";
-import {
-  ChangePasswordForm,
-  CurrentUser,
-  User,
-} from "shared-library/src/declarations/types";
+import { User, CurrentUser } from "shared-library/src/declarations/types";
 
 const { userData, token } = STORAGE;
 
@@ -21,12 +17,14 @@ export const registerUser = async (input: User) => {
       body: JSON.stringify(input),
     });
 
+    const data = response.json();
+
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message);
     }
 
-    return response.json;
+    return data;
   } catch (error) {
     throw (error as Error).message;
   }
@@ -137,12 +135,14 @@ export const changeUserPassword = async (
       }
     );
 
+    const data = response.json();
+
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.message);
     }
 
-    return response.json;
+    return data
   } catch (error) {
     throw (error as Error).message;
   }

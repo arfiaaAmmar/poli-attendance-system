@@ -9,11 +9,11 @@ import {
   initialRegisterUserForm,
   initialFeedback,
 } from "shared-library/src/declarations/constants";
-import { useState } from "react";
-import { isEmptyObject, sendNotification } from "../helpers/shared-helpers";
+import { FormEvent, useState } from "react";
+import { sendNotification } from "../helpers/shared-helpers";
 import { getUserSessionData, registerUser } from "../api/user-api";
 import IMAGES from "../assets/_assets";
-import { Link, useFormAction, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FeedbackMessage from "../components/ResponseMessage";
 
 const RegisterUser = () => {
@@ -24,24 +24,25 @@ const RegisterUser = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+    const isAddressField = name in formData.address;
 
-  const handleAddressChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      address: {
-        ...formData.address,
+    if (isAddressField) {
+      setFormData({
+        ...formData,
+        address: {
+          ...formData.address,
+          [name]: value,
+        },
+      });
+    } else {
+      setFormData({
+        ...formData,
         [name]: value,
-      },
-    });
+      });
+    }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     // if (isEmptyObject(formData)) {
     //   setFeedback({
@@ -65,7 +66,7 @@ const RegisterUser = () => {
         setFeedback(initialFeedback);
       }, 3000);
       setFormData(initialRegisterUserForm);
-      navigate("/login");
+      navigate(SHARED_PAGES.login.path);
     } catch (error: any) {
       setFeedback({ ...feedback, error: error });
     }
@@ -186,7 +187,7 @@ const RegisterUser = () => {
               <input
                 type="text"
                 name="street"
-                onChange={handleAddressChange}
+                onChange={handleInputChange}
                 value={formData.address.street}
                 className="mt-1 p-2 border rounded w-full"
                 placeholder="Street"
@@ -197,7 +198,7 @@ const RegisterUser = () => {
                 <input
                   type="text"
                   name="city"
-                  onChange={handleAddressChange}
+                  onChange={handleInputChange}
                   value={formData.address.city}
                   className="mt-1 p-2 border rounded w-full"
                   placeholder="City"
@@ -206,7 +207,7 @@ const RegisterUser = () => {
               <div className="items-center mb-2 col-span-2">
                 <select
                   name="state"
-                  onChange={handleAddressChange}
+                  onChange={handleInputChange}
                   value={formData.address.state}
                   className="mt-1 p-2 border rounded w-full"
                 >
@@ -219,7 +220,7 @@ const RegisterUser = () => {
                 <input
                   type="text"
                   name="postalCode"
-                  onChange={handleAddressChange}
+                  onChange={handleInputChange}
                   value={formData.address.postalCode}
                   className="mt-1 p-2 border rounded w-full"
                   placeholder="Postal Code"

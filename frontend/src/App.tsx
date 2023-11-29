@@ -35,15 +35,16 @@ function App(): JSX.Element {
   const user = getUserSessionData();
   const userSession = sessionStorage.getItem("");
   const navigate = useNavigate();
+  const { penyelia, pelajar } = USER_TYPE;
 
   useEffect(() => {
     if (!userSession || !isLoggedIn) {
       navigate("/login");
     }
-    if (user?.userType === USER_TYPE.penyelia) {
+    if (user?.userType === penyelia) {
       navigate(ADMIN_PAGES_PATH.pengurusanProfil);
     }
-    if (user?.userType === USER_TYPE.pelajar) {
+    if (user?.userType === pelajar) {
       navigate(STUDENT_PAGES_PATH.pengurusanProfil);
     }
   }, []);
@@ -54,7 +55,7 @@ function App(): JSX.Element {
       <Route path={SHARED_PAGES.registerUser.path} element={<RegisterUser />} />
       <Route path={SHARED_PAGES.forgotPassword.path} element={<ForgotPassword />} />
 
-      {user?.userType === USER_TYPE.penyelia && (
+      {user?.userType === penyelia && (
         <>
           <Route
             path="/penyelia/*"
@@ -63,7 +64,7 @@ function App(): JSX.Element {
         </>
       )}
 
-      {user?.userType === USER_TYPE.pelajar && (
+      {user?.userType === pelajar && (
         <>
           <Route
             path="/pelajar/*"
