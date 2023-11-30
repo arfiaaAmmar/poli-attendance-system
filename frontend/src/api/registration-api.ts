@@ -12,10 +12,10 @@ import {
   RestOfCheckInForm,
 } from "shared-library/src/declarations/types";
 
-export const getAllRegistrationForms = async () => {
+export const getAllCheckInForms = async () => {
   try {
     const response = await fetch(
-      `${API_BASE_URL}${ENDPOINTS.getAllRegisterForms}`,
+      `${API_BASE_URL}${ENDPOINTS.getAllCheckInForms}`,
       {
         headers: HEADER_TYPE,
       }
@@ -31,10 +31,45 @@ export const getAllRegistrationForms = async () => {
   }
 };
 
-export const getRegistrationForm = async (formId: string) => {
+export const getAllCheckOutForms = async () => {
   try {
     const response = await fetch(
-      `${API_BASE_URL}/get-registration-form/${formId}`,
+      `${API_BASE_URL}${ENDPOINTS.getAllCheckOutForms}`,
+      {
+        headers: HEADER_TYPE,
+      }
+    );
+    const data = await response.json();
+    if (!response.ok) {
+      const error = data.error || FM.default;
+      throw new Error(error);
+    }
+    return data;
+  } catch (error: any) {
+    throw new Error(FM.default);
+  }
+};
+
+export const getCheckInForm = async (formId: string) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/get-checkin-form/${formId}`, {
+      headers: HEADER_TYPE,
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      const error = data.error || FM.default;
+      throw new Error(error);
+    }
+    return data;
+  } catch (error: any) {
+    throw new Error(FM.default);
+  }
+};
+
+export const getCheckOutForm = async (formId: string) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/get-checkout-form/${formId}`,
       {
         headers: HEADER_TYPE,
       }
@@ -177,18 +212,33 @@ export const postCheckOutForm = async (input: CheckoutForm) => {
   }
 };
 
-export const updateRegisterForm = async (id: string, input: CheckInForm) => {
+export const updateCheckInForm = async (id: string, input: CheckInForm) => {
   const updatedForm = input;
 
   try {
-    const response = await fetch(
-      `${API_BASE_URL}/update-registration-form/${id}`,
-      {
-        method: "PUT",
-        headers: HEADER_TYPE,
-        body: JSON.stringify(updatedForm),
-      }
-    );
+    const response = await fetch(`${API_BASE_URL}/update-checkin-form/${id}`, {
+      method: "PUT",
+      headers: HEADER_TYPE,
+      body: JSON.stringify(updatedForm),
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || FM.notificationUpdateFailed);
+    }
+  } catch (error) {
+    console.error(FM.notificationUpdateFailed, error);
+  }
+};
+
+export const updateCheckOutForm = async (id: string, input: CheckInForm) => {
+  const updatedForm = input;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/update-checkout-form/${id}`, {
+      method: "PUT",
+      headers: HEADER_TYPE,
+      body: JSON.stringify(updatedForm),
+    });
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || FM.notificationUpdateFailed);
