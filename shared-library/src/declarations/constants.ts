@@ -13,7 +13,7 @@ import {
 
 export const API_BASE_URL = "https://poli-attendance-system.onrender.com" // For deploy
 // export const API_BASE_URL = "http://localhost:8888"; // For dev
-export const HEADER_TYPE = { "Content-Type": "application/json" } as const
+export const HEADER_TYPE = { "Content-Type": "application/json" } as const;
 
 export const STORAGE = {
   token: "token",
@@ -155,10 +155,14 @@ export const ENDPOINTS = {
   uploads: "/uploads",
   postCheckInForm: "/post-checkin-form",
   postCheckOutForm: "/post-checkout-form",
-  getAllRegisterForms: "/get-all-register-forms",
-  getRegisterForm: "/get-register-form/:id",
-  updateRegisterForm: "/update-register-form/:id",
-  deleteRegisterForm: "/delete-register-form",
+  getAllCheckInForms: "/get-all-checkin-forms",
+  getAllCheckOutForms: "/get-all-checkout-forms",
+  getCheckInForm: "/get-checkin-form/:id",
+  getCheckOutForm: "/get-checkout-form/:id",
+  updateCheckInForm: "/update-checkin-form/:id",
+  updateCheckOutForm: "/update-checkout-form/:id",
+  deleteCheckInForm: "/delete-checkin-form",
+  deleteCheckOutForm: "/delete-checkout-form",
   postComplaint: "/post-complaint",
   getAllComplaints: "/get-all-complaints",
   getComplaint: "/get-complaint/:id",
